@@ -1,0 +1,6 @@
+/* Test styling to verify css is applied */
+* {
+    background-color: grey;
+    color: white;
+    font-size: xx-large;
+}
