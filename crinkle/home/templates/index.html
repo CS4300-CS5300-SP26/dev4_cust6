@@ -4,21 +4,67 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Jersey+10&family=Lato:wght@500&display=swap" rel="stylesheet">
+
     <link rel="stylesheet" href="{% static 'styles.css' %}">
     <title>Crinkle</title>
 </head>
 
 <body>
-    <header>
-        Header: Placeholder
-    </header>
-
     <main>
-        Main: The current formatting is just to test if the css file is working, modify as needed
+        <div class="page">
+            <div class="hero-wrap">
+                <div class="hero-bg">
+                    <div class="hero-overlay"></div>
+                    <img style="width: 100%; height: 100%; left: 0px; top: 0px; position: absolute; opacity: 0.20; object-fit: cover;"src="{% static 'pokemon.jpg' %}" alt=""/>
+                    <div class="hero-content">
+                        <div class="hero-card">
+                            <div class="hero-pill">
+                                <span>Used by Collectors Worldwide</span>
+                            </div>
+
+                            <h1 class="hero-title">Your Collection's Value.</h1>
+
+                            <p class="hero-subtitle">
+                                Professional card grading for Pokemon and collectibles. Certified authentication from experts.
+                            </p>
+
+                            <div class="hero-stats">
+                                <div class="stat">
+                                    <div class="stat-number">10K+</div>
+                                    <div class="stat-label">Cards Graded</div>
+                                </div>
+                                <div class="stat">
+                                    <div class="stat-number">24hr</div>
+                                    <div class="stat-label">Results</div>
+                                </div>
+                                <div class="stat">
+                                    <div class="stat-number">99.8%</div>
+                                    <div class="stat-label">Satisfaction</div>
+                                </div>
+                            </div>
+
+                            <div class="hero-actions">
+                                <a class="btn btn-primary" href="#">Start Grading</a>
+                                <a class="btn btn-secondary" href="#">Learn More</a>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="hero-nav">
+                        <div class="brand">Crinkle</div>
+                        <a class="btn btn-nav" href="#">Login</a>
+                    </div>
+                </div>
+            </div>
+        </div>
     </main>
 
-    <footer>
-        Footer: Created by Tara Prasad, Nazanin Siavash, Joshua D. Jones, Jeffrey Kotz, and Bryce Holland - 3/3/2026
+    <footer class="page-footer">
+        Created by Tara Prasad, Nazanin Siavash, Joshua D. Jones, Jeffrey Kotz, and Bryce Holland - 3/3/2026
     </footer>
+
 </body>
 </html>

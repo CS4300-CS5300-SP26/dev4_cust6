@@ -1,5 +1,5 @@
 """
-ASGI config for crinkle project.
+ASGI config for myproject project.
 
 It exposes the ASGI callable as a module-level variable named ``application``.
 
