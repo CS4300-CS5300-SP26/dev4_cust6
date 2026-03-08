@@ -3,5 +3,5 @@ from . import views
 
 app_name = 'cards'
 urlpatterns = [
-    path('', views.cards_view, name='base_view')
+    path('accounts/profile/collection/', views.collection_view, name='collection'),
 ]

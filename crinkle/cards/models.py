@@ -18,4 +18,7 @@ class Card(models.Model):
 
 class CardCollection(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE)
-    cards = models.ForeignKey(Card, on_delete=models.CASCADE)
+    cards = models.ForeignKey(Card, on_delete=models.CASCADE, null=True)
+
+    def __str__(self):
+        return f'Collection of {self.user.username}'

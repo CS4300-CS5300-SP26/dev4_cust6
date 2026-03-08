@@ -1,0 +1,32 @@
+{% load static %}
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Jersey+10&family=Lato:wght@500&display=swap" rel="stylesheet">
+    <title>My Collection - Crinkle</title>
+</head>
+
+<body>
+    <header class="top-bar">
+        <a class="back-btn" href="{% url 'profile' %}"> < </a>
+        <span class="screen-title"> My Collection </span>
+    </header>
+
+    <main>
+        {% block title %} 
+        <h1> Collection </h1>
+        {{ collection }}
+        {% endblock %}
+        
+        {% block content %}
+        <h2 > Stuff </h2 >
+        {% endblock %}
+    </main>
+
+    <footer>
+    </footer>
+    
+</body>
+</html>
