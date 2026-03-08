@@ -33,10 +33,10 @@ jobs:
 
     # Install project dependencies and openai/PyGithub
     - name: Install Dependencies
-    run: |
-      python -m pip install --upgrade pip
-      pip install -r requirements.txt
-      pip install openai PyGithub
+      run: |
+        python -m pip install --upgrade pip
+        pip install -r requirements.txt
+        pip install openai PyGithub
 
     # Obtain the diff and store it with the ai review script in diff.txt
     - name: Get PR Diff
