@@ -28,6 +28,7 @@ jobs:
         do_not_skip: '["pull_request"]'
 
   test-and-coverage:
+    needs: check-duplicate
     # if no duplicate actions are occuring then run tests and coverage
     if: needs.check-duplicate.outputs.should_skip != 'true'
     runs-on: ubuntu-latest
