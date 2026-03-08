@@ -5,8 +5,13 @@ on:
   pull_request: # test on pull request to main branch
     branches: [ "main" ] 
 
+# Minimum permissions required by skip-duplicate-actions
+permissions:
+  actions: write
+  contents: read
+
 jobs:
-  test:
+  test-and-coverage:
 
     runs-on: ubuntu-latest
     strategy:
@@ -15,6 +20,13 @@ jobs:
         python-version: [3.12]
 
     steps:
+    # First thing if there are any duplicate actions skip them
+    # otherwise it runs twice on pull requests
+    - name: Skip Duplicate Actions
+      uses: fkirc/skip-duplicate-actions@v5.3.1
+      with:
+        concurrent_skipping: 'always'
+
     - uses: actions/checkout@v4
 
     - name: Set up Python ${{ matrix.python-version }}
