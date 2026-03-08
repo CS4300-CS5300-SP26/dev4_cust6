@@ -11,8 +11,25 @@ permissions:
   contents: read
 
 jobs:
-  test-and-coverage:
+  check-duplicate:
+    # First thing if there are any duplicate actions skip them
+    # otherwise it runs twice on pull requests
+    runs-on: ubuntu-latest
 
+    # Track should skip status
+    outputs:
+      should_skip: ${{ steps.skip-check.outputs.should_skip }}
+
+    steps:
+    - id: skip-check
+      uses: fkirc/skip-duplicate-actions@v5.3.1
+      with:
+        concurrent_skipping: 'always'
+        do_not_skip: '["pull_request"]'
+
+  test-and-coverage:
+    # if no duplicate actions are occuring then run tests and coverage
+    if: needs.check-duplicate.outputs.should_skip != 'true'
     runs-on: ubuntu-latest
     strategy:
       max-parallel: 4
@@ -20,13 +37,6 @@ jobs:
         python-version: [3.12]
 
     steps:
-    # First thing if there are any duplicate actions skip them
-    # otherwise it runs twice on pull requests
-    - name: Skip Duplicate Actions
-      uses: fkirc/skip-duplicate-actions@v5.3.1
-      with:
-        concurrent_skipping: 'always'
-
     - uses: actions/checkout@v4
 
     - name: Set up Python ${{ matrix.python-version }}
