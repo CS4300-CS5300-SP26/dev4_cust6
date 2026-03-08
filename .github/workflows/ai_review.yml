@@ -9,8 +9,9 @@ permissions:
   pull-requests: write
 
 jobs:
-  ai_code_review:
+  ai-code-review:
 
+    # Specify running environment and python version
     runs-on: ubuntu-latest
     strategy:
       max-parallel: 4
