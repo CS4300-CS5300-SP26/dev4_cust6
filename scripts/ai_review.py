@@ -23,6 +23,7 @@ try:
              },
         ],
         model='o3',
+        max_tokens=50,
     )
     feedback = completion.choices[0].message.content
     print(feedback)
@@ -44,9 +45,19 @@ except openai.APIStatusError as e:
     print(e.message)
     feedback = f'***{e.message}***\n\nNo AI code review available.'
 
-# remove beginning code block
-feedback = feedback.replace('```markdown', '')  # remove code markdown code blocks
-feedback = feedback.replace('```', '')  # remove instances of code blocks
+# remove beginning code block if AI provides response in that form
+if feedback.startswith('```markdown'):
+    feedback = feedback.replace('```markdown', '', 1)  # remove code markdown code blocks
+
+    # only remove ending code block if it begins as one
+    feedback = feedback.rstrip()
+    feedback = feedback.rstrip('```')
+elif feedback.startswith('```'):
+    feedback = feedback.replace('```', '')  # remove instances of code blocks
+
+    # only remove ending code block if it begins as one
+    feedback = feedback.rstrip()
+    feedback = feedback.rstrip('```')
 
 with open("feedback.md", "w") as file:
     file.write(f'## AI Code Review Feedback\n{feedback}')
