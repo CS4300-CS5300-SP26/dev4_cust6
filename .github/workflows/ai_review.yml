@@ -64,7 +64,7 @@ jobs:
     - name: Attach Feedback to Pull Request
       uses: thollander/actions-comment-pull-request@v3.0.1
       with:
-        file-path: feedback.md
+        file-path: scripts/feedback.md
 
     - name: Cleanup generated files
       run: rm scripts/diff.txt scripts/feedback.md
