@@ -4,28 +4,15 @@ from .models import GradeReport, Card, CardCollection
 from datetime import datetime
 
 
-
 @login_required
 def collection_view(request):
+    """View for user's saved cards
+    """
     collection = CardCollection.objects.get_or_create(user=request.user)[0]
     cards = collection.cards.all()
 
     if 'order' in request.GET:
-        match request.GET['order']:
-            case 'date':
-                cards = cards.order_by('date_scanned')
-                print(cards.first().date_scanned)
-            case 'date-dsc':
-                cards = cards.order_by('-date_scanned')
-                print(cards.first().date_scanned)
-            case 'name':
-                cards = cards.order_by('name')
-            case 'name-dsc':
-                cards = cards.order_by('-name')
-            case 'grade':
-                cards = cards.order_by('grading_notes')
-            case 'grade-dsc':
-                cards = cards.order_by('-grading_notes')
+        cards = cards.order_by(request.GET['order'])
 
     return render(request,
                   template_name='cards/collection.html',
@@ -37,6 +24,8 @@ def collection_view(request):
 
 @login_required
 def card_view(request, card_pk):
+    """View for singular card
+    """
     card = get_object_or_404(Card, pk=card_pk)
 
     return render(request,
@@ -48,6 +37,8 @@ def card_view(request, card_pk):
 
 @login_required
 def save_card_view(request, card_pk):
+    """View to save a card
+    """
     card = get_object_or_404(Card, pk=card_pk)
 
     card.user_notes = request.POST['user_notes']
@@ -60,6 +51,8 @@ def save_card_view(request, card_pk):
 
 @login_required
 def scan_report_view(request):
+    """mock view for card report
+    """
     return render(request,
                   template_name='cards/card_report.html',
                   context={'user': request.user},

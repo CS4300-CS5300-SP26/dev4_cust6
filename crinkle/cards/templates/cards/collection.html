@@ -9,12 +9,12 @@
 {% block content %}
 <form method="get">
     <select id='order' name="order" class="select-order">
-        <option value="grade"> Grade </option>
+        <option value="grading_notes"> Grade </option>
         <option value="name"> Name </option>
-        <option value="date"> Date </option>
-        <option value="grade-dsc"> Grade Descending </option>
-        <option value="grade-dsc"> Name Descending </option>
-        <option value="grade-dsc"> Date Descending </option>
+        <option value="date_scanned"> Date </option>
+        <option value="-grading_notes"> Grade Descending </option>
+        <option value="-name"> Name Descending </option>
+        <option value="-date_scanned"> Date Descending </option>
     </select>
     <input type="submit" class="submit-btn" value="Sort Collection">
 <form>
