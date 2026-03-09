@@ -12,6 +12,49 @@ html, body {
     -webkit-text-size-adjust: 100%;
 }
 
+/* Me */
+.card-collection {
+    display: flex;
+    flex-direction: column;
+    background: rgb(255, 255, 255);
+
+    border: black;
+    border-style: solid;
+    border-width: 3px;
+    border-radius: 5px;
+    
+    width: 100%;
+}
+
+.card-panel {
+    background-color: white;
+    display: flex;
+    border: black;
+    border-style: solid;
+    border-width: 1px;
+
+    font-size: large;
+}
+.card-panel:hover { 
+    background: #dbdbdb; 
+}
+.card-panel:active { 
+    background: #c7e6ff; 
+}
+
+.card-thumbnail {
+    margin: 5px;
+    max-height: 15%;
+    max-width: 15%;
+}
+
+.card-info {
+    display: flex;
+    flex-direction: column;
+    text-align: left;
+}
+
+/* Nazanin Siavash */
 
 .app-shell {
     display: flex;
@@ -44,13 +87,11 @@ html, body {
     color: #101828;
 }
 
-
 .screen-body {
     flex: 1;
     overflow-y: auto; 
     padding: 28px 20px 100px; 
 } 
-
 
 .screen-heading {
     font-family: 'Lato', sans-serif;

@@ -7,12 +7,24 @@
 {% endblock %}
 
 {% block content %}
-{% for card in cards %}
-    <p> this is a card </p>
-{% endfor %}
-
 
 {{ collection }}
 <h2> Stuff </h2>
+
+
+<div class="card-collection">
+    {% for card in cards %}
+    <button class="card-panel">
+        <img src="{% static 'invalid.png' %}" class="card-thumbnail">
+
+        <div class="card-info">
+            <p class="card-info"> Name: {{card.name}} </p>
+            <p class="card-info"> Grade: {{card.grading_notes.grade}} </p>
+            <p class="card-info"> Date Added: {{card.date_scanned}} </p>
+        </div>
+    </button>
+    {% endfor %}
+</div>
+
 {% endblock %}   
 
