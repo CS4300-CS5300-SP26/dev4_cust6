@@ -11,6 +11,14 @@ urlpatterns = [
          views.save_report_view,
          name='save_report'
          ),
+    path('accounts/profile/collection/<int:card_pk>/',
+         views.card_view,
+         name='view_card'
+         ),
+    path('accounts/profile/collection/<int:card_pk>/save',
+         views.save_card_view,
+         name='save_card'
+         ),
     path('scan/report/',
          views.scan_report_view,
          name='scan_report'
