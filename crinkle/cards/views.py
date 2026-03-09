@@ -1,6 +1,6 @@
 from django.shortcuts import render, get_object_or_404
 from django.contrib.auth.decorators import login_required
-from cards.models import GradeReport, Card, CardCollection
+from .models import GradeReport, Card, CardCollection
 
 
 @login_required
@@ -20,7 +20,8 @@ def card_view(request, card_pk):
 
     return render(request,
                   template_name='cards/card.html',
-                  context={'card': card},
+                  context={'card': card,
+                           },
                   )
 
 
@@ -28,12 +29,12 @@ def card_view(request, card_pk):
 def save_card_view(request, card_pk):
     card = get_object_or_404(Card, pk=card_pk)
 
-    print(request)
+    card.user_notes = request.POST['user_notes']
 
-    return render(request,
-                  template_name='cards/card.html',
-                  context={'card': card},
-                  )
+    print(card.user_notes)
+
+    card.save()
+    return card_view(request, card_pk=card_pk)
 
 
 @login_required
