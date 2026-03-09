@@ -79,7 +79,7 @@ def save_report_view(request):
     card = Card.objects.create(user=request.user,
                                name="Invalid Card",
                                grading_notes=report,
-                               picture_path="/static/invalid.png",
+                               picture_path="/static/invalid.jpg",
                                )
     card.name += f'-{card.pk}'
     card.save()
