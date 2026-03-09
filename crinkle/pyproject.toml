@@ -2,16 +2,19 @@
 source = ["."] 
 
 # Exclude files that shouldn't be included in coverage
+# We are testing our is covered, not tests/auto generated configuration
 omit = [
     "*/migrations/*",
-    "*/admin.py",
-    "*/apps.py",
-    "*/conf.py",
-    "*/wsgi.py",
-    "*/asgi.py",
-    "*/__init__.py",
+    "admin.py",
+    "apps.py",
+    "conf.py",
+    "wsgi.py",
+    "asgi.py",
+    "__init__.py",
     "manage.py",
     "settings.py",
+    "urls.py",
+    "tests.py",
 ]
 
 [tool.behave]
