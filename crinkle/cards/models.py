@@ -7,9 +7,8 @@ class GradeReport(models.Model):
 
 
 class Card(models.Model):
-    user = models.OneToOneField(User, on_delete=models.CASCADE)
     name = models.CharField(max_length=400)
-    date_scanned = models.DateField()
+    date_scanned = models.DateField(auto_now=True)
     grading_notes = models.OneToOneField(GradeReport, on_delete=models.CASCADE)
 
     picture_path = models.CharField(max_length=400)
@@ -18,7 +17,7 @@ class Card(models.Model):
 
 class CardCollection(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE)
-    cards = models.ForeignKey(Card, on_delete=models.CASCADE, null=True)
+    cards = models.ManyToManyField(Card)
 
     def __str__(self):
         return f'Collection of {self.user.username}'

@@ -1,14 +1,18 @@
 from django.shortcuts import render
 from django.contrib.auth.decorators import login_required
-from cards.models import CardCollection
+from cards.models import GradeReport, Card, CardCollection
+from django.utils import timezone
+
 
 
 @login_required
 def collection_view(request):
-    collection = CardCollection.objects.get_or_create(user=request.user)
+    collection = CardCollection.objects.get_or_create(user=request.user)[0]
     return render(request,
                   template_name='cards/collection.html',
-                  context={'collection': collection[0]},
+                  context={'collection': collection,
+                           'cards': collection.cards.all()
+                           },
                   )
 
 
@@ -17,4 +21,24 @@ def scan_report_view(request):
     return render(request,
                   template_name='cards/card_report.html',
                   context={'user': request.user},
+                  )
+
+
+@login_required
+def save_report_view(request):
+    """mocking function to save report with default info
+    """
+
+    report = GradeReport.objects.create(grade="No Grade")
+    card = Card.objects.create(name="Invalid Card",
+                               grading_notes=report,
+                               picture_path="static/invalid.png",
+                               )
+    collection = CardCollection.objects.get_or_create(user=request.user)[0]
+    collection.cards.add(card)
+    collection.save()
+
+    return render(request,
+                  template_name='cards/collection.html',
+                  context={'collection': collection},
                   )

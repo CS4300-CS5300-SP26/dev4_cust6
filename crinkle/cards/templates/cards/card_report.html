@@ -7,5 +7,17 @@
 {% endblock %}
 
 {% block content %}
-<h2> Stuff </h2 >
+<h1> Grading Report </h1>
+
+<img src="{% static 'invalid.png' %}" style="max-width:95%;">
+
+{% comment %} grade info {% endcomment %}
+<div>
+    <h3> User: {{ user }} </h3>
+    <h3> Card Name: Invalid </h3>
+    <h3> Grade: None</h3>
+    <h3> Date: {% now "jS F Y" %} </h3>
+</div>
+
+<a class="btn-save" href="{% url 'cards:save_report' %}"> Save To Collection </a>
 {% endblock %}
