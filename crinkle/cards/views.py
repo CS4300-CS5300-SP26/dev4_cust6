@@ -1,8 +1,6 @@
 from django.shortcuts import render
 from django.contrib.auth.decorators import login_required
 from cards.models import GradeReport, Card, CardCollection
-from django.utils import timezone
-
 
 
 @login_required
@@ -38,7 +36,4 @@ def save_report_view(request):
     collection.cards.add(card)
     collection.save()
 
-    return render(request,
-                  template_name='cards/collection.html',
-                  context={'collection': collection},
-                  )
+    return collection_view(request)

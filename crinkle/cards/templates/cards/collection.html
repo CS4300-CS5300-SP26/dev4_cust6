@@ -4,14 +4,14 @@
 {% block top_bar %}
 <a class="back-btn" href="{% url 'profile' %}"> ‹ </a>
 <span class="screen-title"> My Collection </span>
-
-{% for card in cards %}
-    THIS IS A CARD
-{% endfor %}
-
 {% endblock %}
 
 {% block content %}
+{% for card in cards %}
+    <p> this is a card </p>
+{% endfor %}
+
+
 {{ collection }}
 <h2> Stuff </h2>
 {% endblock %}   
