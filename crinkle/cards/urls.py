@@ -7,6 +7,10 @@ urlpatterns = [
          views.collection_view,
          name='collection'
          ),
+    path('accounts/profile/collection/<str:sort_order>',
+         views.collection_view,
+         name='collection'
+         ),
     path('accounts/profile/collection/save',
          views.save_report_view,
          name='save_report'

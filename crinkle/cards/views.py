@@ -4,12 +4,23 @@ from .models import GradeReport, Card, CardCollection
 
 
 @login_required
-def collection_view(request):
+def collection_view(request, sort_order=None):
     collection = CardCollection.objects.get_or_create(user=request.user)[0]
+    cards = collection.cards.all()
+
+    if sort_order:
+        match sort_order:
+            case 'order-date':
+                cards.order_by('date_scanned')
+            case 'order-name':
+                cards.order_by('name')
+            case 'order-grade':
+                cards.order_by('grading_notes')
+
     return render(request,
                   template_name='cards/collection.html',
                   context={'collection': collection,
-                           'cards': collection.cards.all()
+                           'cards': cards,
                            },
                   )
 

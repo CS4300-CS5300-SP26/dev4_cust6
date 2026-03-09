@@ -8,9 +8,10 @@
 
 {% block content %}
 
-{{ collection }}
-<h2> Stuff </h2>
-
+<h3> Order By: </h3>
+<a href="{% url 'cards:collection' %}order-grade" class="order-btn">Grade</a>
+<a href="{% url 'cards:collection' %}order-name" class="order-btn">Name</a>
+<a href="{% url 'cards:collection' %}order-date" class="order-btn">Date Added</a>
 
 <div class="card-collection">
     {% for card in cards %}

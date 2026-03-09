@@ -13,6 +13,12 @@ html, body {
 }
 
 /* Me */
+
+.order-btn {
+    margin-right: 10px;
+    font-size: larger;
+}
+
 .card-collection {
     display: flex;
     flex-direction: column;    
