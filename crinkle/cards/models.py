@@ -5,6 +5,9 @@ from django.contrib.auth.models import User
 class GradeReport(models.Model):
     grade = models.TextField()
 
+    def __str__(self):
+        return self.grade
+
 
 class Card(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE, null=True)
@@ -14,6 +17,9 @@ class Card(models.Model):
 
     picture_path = models.CharField(max_length=400)
     user_notes = models.TextField()
+
+    def __str__(self):
+        return self.name
 
 
 class CardCollection(models.Model):

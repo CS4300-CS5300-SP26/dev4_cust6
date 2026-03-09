@@ -7,10 +7,6 @@ urlpatterns = [
          views.CardCollectionViewSet.as_view({'get': 'retrieve'}),
          name='collection'
          ),
-    path('accounts/profile/collection/save',
-         views.save_report_view,
-         name='save_report'
-         ),
     path('accounts/profile/collection/<int:pk>/',
          views.CardViewSet.as_view({'get': 'retrieve'}),
          name='view_card'
@@ -22,5 +18,9 @@ urlpatterns = [
     path('scan/report/',
          views.scan_report_view,
          name='scan_report'
+         ),
+    path('accounts/profile/collection/save',
+         views.save_report_view,
+         name='save_report'
          ),
 ]
