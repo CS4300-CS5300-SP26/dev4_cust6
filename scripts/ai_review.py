@@ -22,8 +22,7 @@ try:
                         f'file name and line number for the suggestion. Here\'s the pull request diff:\n{diff}',
              },
         ],
-        model='o3',
-        max_tokens=50,
+        model='gpt-5.1-codex-mini',
     )
     feedback = completion.choices[0].message.content
     print(feedback)
