@@ -53,6 +53,6 @@ jobs:
     - name: Run Tests
       run: |
         cd crinkle
-        coverage run --source='.' manage.py test
-        coverage run -a --source='.' manage.py behave
+        coverage run manage.py test
+        coverage run -a manage.py behave
         coverage report -m --fail-under=80

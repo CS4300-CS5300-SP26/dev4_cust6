@@ -1,0 +1,20 @@
+[tool.coverage.run]
+source = ["."] 
+
+# Exclude files that shouldn't be included in coverage
+omit = [
+    "*/migrations/*",
+    "*/admin.py",
+    "*/apps.py",
+    "*/conf.py",
+    "*/wsgi.py",
+    "*/asgi.py",
+    "*/__init__.py",
+    "manage.py",
+    "settings.py",
+]
+
+[tool.behave]
+junit = true
+junit_directory = "tests"
+paths = ["tests"]
