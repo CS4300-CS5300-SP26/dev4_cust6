@@ -52,7 +52,7 @@ html, body {
 
 .card-thumbnail {
     margin: 5px;
-    max-height: 15%;
+    max-height: 64px;
     max-width: 15%;
     border-radius: 5px;
 }

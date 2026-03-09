@@ -21,7 +21,7 @@
 
 <div class="card-collection">
     {% for card in cards %}
-    
+    {{ card.date_scanned|date }} {{ card.date_scanned|time:"H:i" }}
     <div class="card-panel">
         <img src="{{card.picture_path}}" class="card-thumbnail">
 

@@ -2,10 +2,7 @@ from django.shortcuts import render, get_object_or_404
 from django.contrib.auth.decorators import login_required
 from rest_framework import viewsets, status, permissions
 from rest_framework.response import Response
-from rest_framework.renderers import (TemplateHTMLRenderer,
-                                      BrowsableAPIRenderer,
-                                      JSONRenderer,
-                                      )
+from rest_framework.renderers import TemplateHTMLRenderer
 
 from .models import GradeReport, Card, CardCollection
 from .serializers import GradeReportSerializer, CardSerializer, CardCollectionSerializer

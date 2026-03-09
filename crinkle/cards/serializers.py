@@ -9,9 +9,11 @@ class GradeReportSerializer(serializers.ModelSerializer):
 
 
 class CardSerializer(serializers.ModelSerializer):
+    date_scanned = serializers.DateTimeField(format="%D %H:%M")
+
     class Meta:
         model = Card
-        fields = '__all__'
+        fields = ['user', 'name', 'date_scanned', 'grading_notes', 'picture_path', 'user_notes']
 
 
 class CardCollectionSerializer(serializers.ModelSerializer):
