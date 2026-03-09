@@ -7,15 +7,17 @@
 {% endblock %}
 
 {% block content %}
-
-<h3> Order: </h3>
-<a href="{% url 'cards:collection' %}sort/grade" class="order-btn">Grade</a>
-<a href="{% url 'cards:collection' %}sort/name" class="order-btn">Name</a>
-<a href="{% url 'cards:collection' %}sort/date" class="order-btn">Date Scanned</a>
-<h3> Descending: </h3>
-<a href="{% url 'cards:collection' %}sort/grade-dsc" class="order-btn">Grade</a>
-<a href="{% url 'cards:collection' %}sort/name-dsc" class="order-btn">Name</a>
-<a href="{% url 'cards:collection' %}sort/date-dsc" class="order-btn">Date Scanned</a>
+<form method="get">
+    <select id='order' name="order" class="select-order">
+        <option value="grade"> Grade </option>
+        <option value="name"> Name </option>
+        <option value="date"> Date </option>
+        <option value="grade-dsc"> Grade Descending </option>
+        <option value="grade-dsc"> Name Descending </option>
+        <option value="grade-dsc"> Date Descending </option>
+    </select>
+    <input type="submit" class="submit-btn" value="Sort Collection">
+<form>
 
 <div class="card-collection">
     {% for card in cards %}

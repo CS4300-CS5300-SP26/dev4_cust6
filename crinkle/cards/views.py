@@ -6,12 +6,12 @@ from datetime import datetime
 
 
 @login_required
-def collection_view(request, sort_order=None):
+def collection_view(request):
     collection = CardCollection.objects.get_or_create(user=request.user)[0]
     cards = collection.cards.all()
 
-    if sort_order:
-        match sort_order:
+    if 'order' in request.GET:
+        match request.GET['order']:
             case 'date':
                 cards = cards.order_by('date_scanned')
                 print(cards.first().date_scanned)

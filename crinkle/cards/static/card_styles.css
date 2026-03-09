@@ -14,9 +14,19 @@ html, body {
 
 /* Me */
 
-.order-btn {
-    margin-right: 10px;
-    font-size: larger;
+.select-order {
+    font-size: large;
+    border-radius: 2px;
+    border-width: 1px;
+}
+
+.submit-btn {
+    padding-left: 2px;
+    padding-right: 2px;
+    background-color: white;
+    border-radius: 2px;
+    border-width: 1px;
+    font-size: large;
 }
 
 .card-collection {
