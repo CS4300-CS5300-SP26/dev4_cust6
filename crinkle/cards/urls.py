@@ -4,7 +4,7 @@ from . import views
 app_name = 'cards'
 urlpatterns = [
     path('accounts/profile/collection/',
-         views.collection_view,
+         views.CardCollectionViewSet.as_view({'get': 'retrieve'}),
          name='collection'
          ),
     path('accounts/profile/collection/save',
