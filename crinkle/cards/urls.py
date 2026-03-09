@@ -7,7 +7,7 @@ urlpatterns = [
          views.collection_view,
          name='collection'
          ),
-    path('accounts/profile/collection/<str:sort_order>',
+    path('accounts/profile/collection/sort/<str:sort_order>',
          views.collection_view,
          name='collection'
          ),

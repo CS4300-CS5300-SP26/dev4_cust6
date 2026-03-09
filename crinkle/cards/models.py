@@ -1,14 +1,13 @@
 from django.db import models
 from django.contrib.auth.models import User
 
-
 class GradeReport(models.Model):
     grade = models.TextField()
 
 
 class Card(models.Model):
     name = models.CharField(max_length=400)
-    date_scanned = models.DateField(auto_now=True)
+    date_scanned = models.DateTimeField(auto_now_add=True)
     grading_notes = models.OneToOneField(GradeReport, on_delete=models.CASCADE)
 
     picture_path = models.CharField(max_length=400)

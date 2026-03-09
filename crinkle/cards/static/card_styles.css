@@ -32,8 +32,6 @@ html, body {
     border-style: solid;
     border-radius: 12px;
     border-width: 1px;
-
-    font-size: large;
 }
 .card-panel:hover { 
     background: #dbdbdb; 
@@ -53,6 +51,7 @@ html, body {
     display: flex;
     flex-direction: column;
     text-align: left;
+    font-size: large;
 }
 
 .notes-area {
