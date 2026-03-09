@@ -11,12 +11,12 @@ urlpatterns = [
          views.save_report_view,
          name='save_report'
          ),
-    path('accounts/profile/collection/<int:card_pk>/',
-         views.card_view,
+    path('accounts/profile/collection/<int:pk>/',
+         views.CardViewSet.as_view({'get': 'retrieve'}),
          name='view_card'
          ),
-    path('accounts/profile/collection/<int:card_pk>/save',
-         views.save_card_view,
+    path('accounts/profile/collection/<int:pk>/save',
+         views.CardViewSet.as_view({'post': 'update'}),
          name='save_card'
          ),
     path('scan/report/',

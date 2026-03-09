@@ -50,34 +50,20 @@ class CardViewSet(viewsets.ModelViewSet):
     permission_classes = [permissions.IsAuthenticated]
     renderer_classes = [TemplateHTMLRenderer]
 
+    def retrieve(self, request, pk=None):
+        response = super(CardViewSet, self).retrieve(request, pk=pk)
+        response.template_name = 'cards/card.html'
+        print(response.data)
+        return response
 
-@login_required
-def card_view(request, card_pk):
-    """View for singular card
-    """
-    card = get_object_or_404(Card, pk=card_pk)
-
-    return render(request,
-                  template_name='cards/card.html',
-                  context={'card': card,
-                           },
-                  )
-
-
-@login_required
-def save_card_view(request, card_pk):
-    """View to save a card
-    """
-    card = get_object_or_404(Card, pk=card_pk)
-
-    card.user_notes = request.POST['user_notes']
-
-    print(card.user_notes)
-
-    card.save()
-    return card_view(request, card_pk=card_pk)
+    def update(self, request, pk=None):
+        card = get_object_or_404(Card, pk=pk)
+        card.user_notes = request.POST['user_notes']
+        card.save()
+        return self.retrieve(request, pk=pk)
 
 
+# Mock functions, would put them inside a viewset, but that wouldn't be very useful
 @login_required
 def scan_report_view(request):
     """mock view for card report
@@ -105,4 +91,10 @@ def save_report_view(request):
     collection.cards.add(card)
     collection.save()
 
-    return collection_view(request)
+    return render(request,
+                  template_name='cards/collection.html',
+                  context={
+                      'collection': collection,
+                      'cards': collection.cards.all(),
+                  }
+                  )

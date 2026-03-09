@@ -41,7 +41,7 @@ html, body {
     border: black;
     border-style: solid;
     border-radius: 12px;
-    border-width: 1px;
+    border-width: 0.5px;
 }
 .card-panel:hover { 
     background: #dbdbdb; 

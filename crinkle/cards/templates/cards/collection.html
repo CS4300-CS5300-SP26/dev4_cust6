@@ -29,7 +29,7 @@
             <p class="card-info"> {{card.name}} </p>
             <p class="card-info"> {{card.grading_notes.grade}} </p>
             <p class="card-info"> {{card.date_scanned}} </p>
-            <a href="{% url 'cards:collection' %}{{card.pk}}/"> View/Edit Notes</a>
+            <a href="{% url 'cards:collection' %}{{card.id}}/"> View/Edit Notes</a>
         </div>
     </div>
     {% endfor %}
