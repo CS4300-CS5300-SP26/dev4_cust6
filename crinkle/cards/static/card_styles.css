@@ -42,26 +42,62 @@ html, body {
     border-style: solid;
     border-radius: 12px;
     border-width: 0.5px;
-}
-.card-panel:hover { 
-    background: #dbdbdb; 
-}
-.card-panel:active { 
-    background: #c7e6ff; 
+    margin-bottom: 2px;
 }
 
 .card-thumbnail {
     margin: 5px;
+    min-height: 64px;
     max-height: 64px;
-    max-width: 15%;
     border-radius: 5px;
 }
 
 .card-info {
     display: flex;
+    flex-grow: 1;
     flex-direction: column;
     text-align: left;
     font-size: large;
+}
+
+.card-title {
+    font-weight: bold;
+}
+
+.card-date {
+    color: rgb(79, 79, 79);
+}
+
+.card-grade {
+    flex-grow: 0;
+    text-align: right;
+    align-self: center;
+
+    background-color: rgb(52, 52, 130);
+    border-radius: 8px;
+
+    padding: 8px;
+    
+
+    
+    margin-right: 8px;
+    color: white;
+}
+
+.card-btn {
+    color: black;
+    text-decoration: none;
+    border: black;
+    border-style: solid;
+
+    border-radius: 8px;
+    text-align: center;
+}
+.card-btn:hover { 
+    background: #dbdbdb;
+}
+.card-btn:active { 
+    background: #c7e6ff;
 }
 
 .notes-area {

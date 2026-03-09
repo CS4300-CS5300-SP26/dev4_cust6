@@ -32,7 +32,7 @@ class CardCollectionViewSet(viewsets.ModelViewSet):
 
         data = {
             'collection': self.serializer_class(collection).data,
-            'cards': CardSerializer(cards, many=True).data,
+            'cards': CardSerializer(cards, many=True).data,  # cards in order
         }
 
         response = Response(data=data,
@@ -50,7 +50,6 @@ class CardViewSet(viewsets.ModelViewSet):
     def retrieve(self, request, pk=None):
         response = super(CardViewSet, self).retrieve(request, pk=pk)
         response.template_name = 'cards/card.html'
-        print(response.data)
         return response
 
     def update(self, request, pk=None):
@@ -91,7 +90,7 @@ def save_report_view(request):
     return render(request,
                   template_name='cards/collection.html',
                   context={
-                      'collection': collection,
-                      'cards': collection.cards.all(),
+                      'collection': CardCollectionSerializer(collection).data,
+                      'cards': CardSerializer(collection.cards, many=True).data,
                   }
                   )

@@ -7,7 +7,7 @@
 {% endblock %}
 
 {% block content %}
-<form method="get">
+<form method="get" action="{% url 'cards:collection' %}">
     <select id='order' name="order" class="select-order">
         <option value="grading_notes"> Grade </option>
         <option value="name"> Name </option>
@@ -21,15 +21,17 @@
 
 <div class="card-collection">
     {% for card in cards %}
-    {{ card.date_scanned|date }} {{ card.date_scanned|time:"H:i" }}
     <div class="card-panel">
         <img src="{{card.picture_path}}" class="card-thumbnail">
 
         <div class="card-info">
-            <p class="card-info"> {{card.name}} </p>
-            <p class="card-info"> {{card.grading_notes.grade}} </p>
-            <p class="card-info"> {{card.date_scanned}} </p>
-            <a href="{% url 'cards:collection' %}{{card.id}}/"> View/Edit Notes</a>
+            <p class="card-info card-title"> {{card.name}} </p>
+            <p class="card-info card-date"> {{card.date_scanned}} </p>
+            <a href="{% url 'cards:collection' %}{{card.id}}/" class="card-btn"> View/Edit Notes</a>
+        </div>
+
+        <div class="card-grade">
+            {{card.grading_notes.grade}}
         </div>
     </div>
     {% endfor %}
