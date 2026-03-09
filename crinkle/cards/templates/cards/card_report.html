@@ -1,32 +1,11 @@
 {% extends "cards/base.html" %}
 {% load static %}
-<!doctype html>
-<html lang="en">
-<head>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Jersey+10&family=Lato:wght@500&display=swap" rel="stylesheet">
-    <link href="{% static 'collection_styles.css' %}" rel="stylesheet">
 
-    <title>Card Report - Crinkle</title>
-</head>
+{% block top_bar %}
+<a class="back-btn" href="{% url 'profile' %}"> ‹ </a>
+<span class="screen-title"> Scan Report </span>
+{% endblock %}
 
-<body>
-    <div class="app-shell">
-        {% block top_bar %}
-        <a class="back-btn" href="{% url 'profile' %}"> ‹ </a>
-        <span class="screen-title"> Scan Report </span>
-        {% endblock %}
-
-        <div class="screen-body">
-            {% block title %}
-            {% endblock %}
-            
-            {% block content %}
-            <h2> Stuff </h2 >
-            {% endblock %}
-        </div>
-
-    </div>
-</body>
-</html>
+{% block content %}
+<h2> Stuff </h2 >
+{% endblock %}
