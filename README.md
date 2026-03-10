@@ -77,4 +77,10 @@ python manage.py behave
 
 ---
 
+## AI Disclosure
+
+In preparing this work, we used generative AI models and tools, including the OpenAI GPT and Claude models, to assist with generating and revising content, including code and text.
+
+---
+
 *Crinkle — know your grade before you pay for it.*
