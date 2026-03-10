@@ -45,13 +45,13 @@ except openai.APIStatusError as e:
     feedback = f'***{e.message}***\n\nNo AI code review available.'
 
 # remove beginning code block if AI provides response in that form
-if feedback.startswith('```markdown'):
+if feedback.lstrip().startswith('```markdown'):
     feedback = feedback.replace('```markdown', '', 1)  # remove code markdown code blocks
 
     # only remove ending code block if it begins as one
     feedback = feedback.rstrip()
     feedback = feedback.rstrip('```')
-elif feedback.startswith('```'):
+elif feedback.lstrip().startswith('```'):
     feedback = feedback.replace('```', '')  # remove instances of code blocks
 
     # only remove ending code block if it begins as one
