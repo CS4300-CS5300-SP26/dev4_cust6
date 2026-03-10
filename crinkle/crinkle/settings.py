@@ -25,7 +25,7 @@ SECRET_KEY = 'django-insecure-v6apk9l#igpq(9@%stou5&o75hmsgoiezmu+wm*-(@)l%46872
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['app-bholland-21.devedu.io']
 
 
 # Application definition
