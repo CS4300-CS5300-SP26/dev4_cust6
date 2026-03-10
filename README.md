@@ -38,15 +38,6 @@ Collectors currently pay significant fees and wait weeks, sometimes months, only
 
 ---
 
-## Tech Stack
-
-- **Backend:** Django 4.2
-- **Frontend:** Mobile-first HTML/CSS (no native app required)
-- **Database:** SQLite (development)
-- **Testing:** Django TestCase + Behave BDD
-
----
-
 ## Team
 
 **CS 4300/5300 — Spring 2026 — Team 4 (dev4 → cust6)**
