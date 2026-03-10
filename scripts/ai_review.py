@@ -10,8 +10,8 @@ with open('diff.txt', 'r') as file:
 client = OpenAI()
 
 try:
-    completion = client.chat.completions.create(
-        messages=[
+    response = client.responses.create(
+        input=[
             {'role': 'system',
              'content': 'Act as a senior software engineer conducting a code review on a django project.'
                         'Provide concise and actionable feedback.',
@@ -24,7 +24,7 @@ try:
         ],
         model='gpt-5.1-codex-mini',
     )
-    feedback = completion.choices[0].message.content
+    feedback = response.output_text  # response.choices[0].message.content
     print(feedback)
 
 # Handle potential errors when querying OpenAI
