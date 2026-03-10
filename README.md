@@ -51,13 +51,6 @@ Collectors currently pay significant fees and wait weeks, sometimes months, only
 
 **CS 4300/5300 — Spring 2026 — Team 4 (dev4 → cust6)**
 
-| Name | Feature |
-|---|---|
-| Nazanin Siavash | Account Management |
-| Jeffrey Kotz | Collection |
-| Tara Prasad | Camera / Card Scan |
-| Bryce Holland | Grading History |
-| Joshuah Jones | Price Tracking |
 
 ---
 
