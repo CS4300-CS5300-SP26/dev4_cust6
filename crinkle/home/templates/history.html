@@ -219,7 +219,7 @@
                                 <span class="card-badge grade-high">⭐ Grade: {{ card.grade|default:"—" }}</span>
                                 <span class="card-badge">{{ card.set_name|default:"Unknown Set" }}</span>
                             </div>
-                            <div class="card-date">Scanned {{ card.scanned_at|date:"M d, Y · g:i A" }}</div>
+                            <div class="card-date">Scanned {{ card.date_scanned|date:"M d, Y · g:i A" }}</div>
                         </div>
                         <div class="card-arrow">›</div>
                     </a>

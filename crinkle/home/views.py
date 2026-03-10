@@ -6,5 +6,5 @@ def index(request):
     return render(request, 'index.html')
 
 def history(request):
-    cards = Card.objects.all().order_by('-scanned_at')
+    cards = Card.objects.all().order_by('-date_scanned')
     return render(request, 'history.html', {'cards': cards})
