@@ -4,81 +4,294 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
-    <!-- Google Fonts -->
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Jersey+10&family=Lato:wght@500&display=swap" rel="stylesheet">
-
     <link rel="stylesheet" href="{% static 'styles.css' %}">
     <title>Crinkle – History</title>
-</head>
+    <style>
+        .history-page {
+            min-height: 100vh;
+            background: linear-gradient(180deg, #2C4BFB 0%, #D9111D 70%, #E7DB00 100%);
+            position: relative;
+            overflow: hidden;
+        }
 
+        .history-bg-img {
+            position: absolute;
+            inset: 0;
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            opacity: 0.20;
+        }
+
+        .history-overlay {
+            position: absolute;
+            inset: 0;
+            background: rgba(0,0,0,0.20);
+        }
+
+        .history-inner {
+            position: relative;
+            z-index: 2;
+            max-width: 600px;
+            margin: 0 auto;
+            padding: 100px 20px 48px;
+        }
+
+        .history-header {
+            margin-bottom: 24px;
+        }
+
+        .history-title {
+            font-family: 'Lato', sans-serif;
+            font-weight: 500;
+            font-size: 36px;
+            color: #ffffff;
+            margin: 12px 0 4px;
+        }
+
+        .history-subtitle {
+            font-size: 14px;
+            color: rgba(255,255,255,0.70);
+        }
+
+        /* Scrollable list */
+        .card-list {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+            max-height: calc(100vh - 220px);
+            overflow-y: auto;
+            padding-right: 4px;
+        }
+
+        .card-list::-webkit-scrollbar {
+            width: 4px;
+        }
+        .card-list::-webkit-scrollbar-track {
+            background: rgba(255,255,255,0.05);
+            border-radius: 4px;
+        }
+        .card-list::-webkit-scrollbar-thumb {
+            background: rgba(255,255,255,0.25);
+            border-radius: 4px;
+        }
+
+        /* Each card row */
+        .card-entry {
+            background: rgba(255,255,255,0.10);
+            border: 1px solid rgba(255,255,255,0.20);
+            border-radius: 16px;
+            padding: 14px;
+            display: flex;
+            align-items: center;
+            gap: 14px;
+            cursor: pointer;
+            transition: background 0.18s, transform 0.15s;
+            text-decoration: none;
+        }
+
+        .card-entry:hover {
+            background: rgba(255,255,255,0.18);
+            transform: translateY(-1px);
+        }
+
+        .card-thumbnail {
+            width: 56px;
+            height: 78px;
+            object-fit: cover;
+            border-radius: 8px;
+            flex-shrink: 0;
+            background: rgba(255,255,255,0.08);
+        }
+
+        .card-thumbnail-placeholder {
+            width: 56px;
+            height: 78px;
+            border-radius: 8px;
+            flex-shrink: 0;
+            background: rgba(255,255,255,0.08);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 22px;
+        }
+
+        .card-info {
+            flex: 1;
+            min-width: 0;
+        }
+
+        .card-name {
+            font-family: 'Jersey 10', cursive;
+            font-size: 20px;
+            color: #ffffff;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        .card-meta {
+            display: flex;
+            gap: 10px;
+            margin-top: 6px;
+            flex-wrap: wrap;
+        }
+
+        .card-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 4px;
+            padding: 3px 10px;
+            border-radius: 9999px;
+            font-size: 12px;
+            font-weight: 500;
+            background: rgba(255,255,255,0.12);
+            color: rgba(255,255,255,0.90);
+        }
+
+        .card-badge.grade-high {
+            background: rgba(166,255,252,0.20);
+            color: #A6FFFC;
+        }
+
+        .card-badge.grade-mid {
+            background: rgba(255,200,80,0.20);
+            color: #FFD166;
+        }
+
+        .card-badge.grade-low {
+            background: rgba(255,100,100,0.18);
+            color: #FF9999;
+        }
+
+        .card-date {
+            font-size: 12px;
+            color: rgba(255,255,255,0.50);
+            margin-top: 5px;
+        }
+
+        .card-arrow {
+            color: rgba(255,255,255,0.40);
+            font-size: 18px;
+            flex-shrink: 0;
+        }
+
+        /* Empty state */
+        .empty-state {
+            background: rgba(255,255,255,0.08);
+            border: 1px solid rgba(255,255,255,0.15);
+            border-radius: 16px;
+            padding: 48px 24px;
+            text-align: center;
+            color: rgba(255,255,255,0.60);
+            font-size: 15px;
+        }
+    </style>
+</head>
 <body>
     <main>
-        <div class="page">
-            <div class="hero-wrap">
-                <div class="hero-bg">
-                    <div class="hero-overlay"></div>
-                    <img style="width: 100%; height: 100%; left: 0px; top: 0px; position: absolute; opacity: 0.20; object-fit: cover;" src="{% static 'pokemon.jpg' %}" alt=""/>
+        <div class="history-page">
+            <img class="history-bg-img" src="{% static 'pokemon.jpg' %}" alt="">
+            <div class="history-overlay"></div>
 
-                    <!-- Nav -->
-                    <div class="hero-nav">
-                        <div class="brand">Crinkle</div>
-                        <a class="btn btn-nav" href="#">Login</a>
-                    </div>
+            <!-- Nav -->
+            <div class="hero-nav" style="position:absolute; left:20px; right:20px; top:16px; display:flex; justify-content:space-between; align-items:center; z-index:3;">
+                <div class="brand">Crinkle</div>
+                <a class="btn btn-nav" href="#">Login</a>
+            </div>
 
-                    <!-- Page title -->
-                    <div class="hero-content" style="align-items: flex-start; padding-top: 100px;">
-                        <div style="width: 100%; max-width: 600px; margin: 0 auto;">
-                            <div class="hero-pill" style="margin-bottom: 16px;">
-                                <span>Your Scan History</span>
+            <div class="history-inner">
+                <div class="history-header">
+                    <div class="hero-pill"><span>Scan History</span></div>
+                    <h1 class="history-title">Your Cards</h1>
+                    <p class="history-subtitle">Tap a card to view its full results</p>
+                </div>
+
+                <div class="card-list">
+
+                    {% for card in cards %}
+                    <a class="card-entry" href="/results/{{ card.id }}/">
+                        <img class="card-thumbnail" src="{{ card.image.url }}" alt="{{ card.name }}">
+                        <div class="card-info">
+                            <div class="card-name">{{ card.name|default:"Unknown Card" }}</div>
+                            <div class="card-meta">
+                                <span class="card-badge grade-high">⭐ Grade: {{ card.grade|default:"—" }}</span>
+                                <span class="card-badge">{{ card.set_name|default:"Unknown Set" }}</span>
                             </div>
-                            <h1 class="hero-title" style="text-align: left;">Cards Scanned</h1>
-
-                            <!-- Card list -->
-                            <div style="display: flex; flex-direction: column; gap: 16px; margin-top: 24px; padding-bottom: 48px;">
-                                {% for card in cards %}
-                                <div style="
-                                    background: rgba(255,255,255,0.10);
-                                    border: 1px solid rgba(255,255,255,0.20);
-                                    border-radius: 16px;
-                                    padding: 16px;
-                                    display: flex;
-                                    align-items: center;
-                                    gap: 16px;
-                                ">
-                                    <img src="{{ card.image.url }}" alt="{{ card.name }}" style="
-                                        width: 72px;
-                                        height: 100px;
-                                        object-fit: cover;
-                                        border-radius: 8px;
-                                        flex-shrink: 0;
-                                    ">
-                                    <div>
-                                        <div style="font-family: 'Jersey 10', cursive; font-size: 22px; color: #ffffff;">
-                                            {{ card.name|default:"Unknown Card" }}
-                                        </div>
-                                        <div style="font-size: 13px; color: rgba(255,255,255,0.70); margin-top: 4px;">
-                                            Scanned: {{ card.scanned_at|date:"M d, Y – g:i A" }}
-                                        </div>
-                                    </div>
-                                </div>
-                                {% empty %}
-                                <div style="
-                                    background: rgba(255,255,255,0.10);
-                                    border: 1px solid rgba(255,255,255,0.20);
-                                    border-radius: 16px;
-                                    padding: 32px;
-                                    text-align: center;
-                                    color: rgba(255,255,255,0.70);
-                                    font-size: 16px;
-                                ">
-                                    No cards scanned yet.
-                                </div>
-                                {% endfor %}
-                            </div>
-
+                            <div class="card-date">Scanned {{ card.scanned_at|date:"M d, Y · g:i A" }}</div>
                         </div>
-                    </div>
+                        <div class="card-arrow">›</div>
+                    </a>
+                    {% empty %}
+
+                    <!-- SAMPLE DATA (remove once real data is flowing) -->
+                    <a class="card-entry" href="#">
+                        <div class="card-thumbnail-placeholder">🃏</div>
+                        <div class="card-info">
+                            <div class="card-name">Charizard VMAX</div>
+                            <div class="card-meta">
+                                <span class="card-badge grade-high">⭐ Grade: 9.5</span>
+                                <span class="card-badge">Sword & Shield</span>
+                            </div>
+                            <div class="card-date">Scanned Mar 7, 2026 · 2:14 PM</div>
+                        </div>
+                        <div class="card-arrow">›</div>
+                    </a>
+
+                    <a class="card-entry" href="#">
+                        <div class="card-thumbnail-placeholder">🃏</div>
+                        <div class="card-info">
+                            <div class="card-name">Pikachu Illustrator</div>
+                            <div class="card-meta">
+                                <span class="card-badge grade-high">⭐ Grade: 10</span>
+                                <span class="card-badge">Promo</span>
+                            </div>
+                            <div class="card-date">Scanned Mar 6, 2026 · 11:02 AM</div>
+                        </div>
+                        <div class="card-arrow">›</div>
+                    </a>
+
+                    <a class="card-entry" href="#">
+                        <div class="card-thumbnail-placeholder">🃏</div>
+                        <div class="card-info">
+                            <div class="card-name">Mewtwo EX</div>
+                            <div class="card-meta">
+                                <span class="card-badge grade-mid">⭐ Grade: 7.0</span>
+                                <span class="card-badge">Base Set</span>
+                            </div>
+                            <div class="card-date">Scanned Mar 5, 2026 · 4:45 PM</div>
+                        </div>
+                        <div class="card-arrow">›</div>
+                    </a>
+
+                    <a class="card-entry" href="#">
+                        <div class="card-thumbnail-placeholder">🃏</div>
+                        <div class="card-info">
+                            <div class="card-name">Blastoise Holo</div>
+                            <div class="card-meta">
+                                <span class="card-badge grade-low">⭐ Grade: 4.5</span>
+                                <span class="card-badge">Base Set</span>
+                            </div>
+                            <div class="card-date">Scanned Mar 3, 2026 · 9:30 AM</div>
+                        </div>
+                        <div class="card-arrow">›</div>
+                    </a>
+
+                    <a class="card-entry" href="#">
+                        <div class="card-thumbnail-placeholder">🃏</div>
+                        <div class="card-info">
+                            <div class="card-name">Umbreon VMAX Alt Art</div>
+                            <div class="card-meta">
+                                <span class="card-badge grade-high">⭐ Grade: 9.0</span>
+                                <span class="card-badge">Evolving Skies</span>
+                            </div>
+                            <div class="card-date">Scanned Mar 1, 2026 · 6:18 PM</div>
+                        </div>
+                        <div class="card-arrow">›</div>
+                    </a>
+
+                    {% endfor %}
 
                 </div>
             </div>
@@ -88,6 +301,5 @@
     <footer class="page-footer">
         Created by Tara Prasad, Nazanin Siavash, Joshua D. Jones, Jeffrey Kotz, and Bryce Holland - 3/3/2026
     </footer>
-
 </body>
 </html>
