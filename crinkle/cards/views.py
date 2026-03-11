@@ -22,7 +22,7 @@ class CardCollectionViewSet(viewsets.ModelViewSet):
     renderer_classes = [TemplateHTMLRenderer]
 
     def retrieve(self, request):
-        """Override super's retrieve if one doesn't exist create one
+        """If the user is authenticated, retrieve their collection in the order (if specified)
         """
         collection = self.queryset.get_or_create(user=request.user)[0]
         cards = collection.cards.all()
@@ -48,11 +48,16 @@ class CardViewSet(viewsets.ModelViewSet):
     renderer_classes = [TemplateHTMLRenderer]
 
     def retrieve(self, request, pk=None):
+        """Retrieve a card of a given primary key, uses super retrieve method,
+        simply attaching the template to the super's response.
+        """
         response = super(CardViewSet, self).retrieve(request, pk=pk)
         response.template_name = 'cards/card.html'
         return response
 
     def update(self, request, pk=None):
+        """update a card, only allows changes to the user notes, other fields should not change
+        """
         card = get_object_or_404(Card, pk=pk)
         card.user_notes = request.POST['user_notes']
         card.save()

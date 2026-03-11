@@ -1,6 +1,7 @@
 from django.test import TestCase
 from django.urls import reverse
 from django.contrib.auth.models import User
+from parameterized import parameterized
 
 from .models import GradeReport, Card, CardCollection
 
@@ -50,6 +51,8 @@ class CollectionTestCase(TestCase):
         self.assertEqual(response.data['detail'].code, 'not_authenticated')
 
     def test_retrieve_no_cards_in_collection(self):
+        """With no cards or collection the user should retrieve an empty collection
+        """
         self.set_up_user()
         response = self.client.get(reverse('cards:collection'))
 
@@ -83,7 +86,15 @@ class CollectionTestCase(TestCase):
             self.assertEqual(card['name'], f'Card-{card['id']}')
         self.assertEqual(response.data['collection']['user'], self.user.pk)
 
-    def test_retrieve_cards_ordered_name(self):
+    @parameterized.expand([
+        ('name'),
+        ('-name'),
+        ('date_scanned'),
+        ('-date_scanned'),
+        ('grading_notes'),
+        ('-grading_notes')
+    ])
+    def test_retrieve_cards_ordered_name(self, sort_order):
         """test that cards can be sorted in varying orderings
         """
         self.set_up_user()
@@ -92,36 +103,20 @@ class CollectionTestCase(TestCase):
         self.set_up_add_card()
 
         # make a request where the specified order is name
-        response = self.client.get(reverse('cards:collection'), data={'order': 'name'})
+        response = self.client.get(reverse('cards:collection'), data={'order': sort_order})
 
         self.assertEqual(response.status_code, 200)
         self.assertIsNotNone(response.data['collection'])
+
+        # order the cards by the intended order
+        ordered_cards = self.cards.order_by(sort_order)
 
         # The ordered cards should be in the same order as the collection's cards
         for card in range(len(response.data['cards'])):
-            ordered_card = response.data['cards'][card]
-            unorded_card = response.data['collection']['cards'][card]
-            self.assertEqual(ordered_card, unorded_card)
-
-    def test_retrieve_cards_ordered_date_scanned_descending(self):
-        self.set_up_user()
-        self.set_up_collection()
-        self.set_up_add_card()
-        self.set_up_add_card()
-
-        # make a request where the specified order is by date descending
-        response = self.client.get(reverse('cards:collection'), data={'order': '-date_scanned'})
-
-        self.assertEqual(response.status_code, 200)
-        self.assertIsNotNone(response.data['collection'])
-
-        # The ordered cards should be in reverse order compared to the collection cards
-        reversed_collection = response.data['collection']['cards']
-        reversed_collection.reverse()
-        for card in range(len(response.data['cards'])):
-            ordered_card = response.data['cards'][card]
-            unorded_card = reversed_collection[card]
-            self.assertEqual(ordered_card, unorded_card)
+            # The cards of the responses should be in the same ordering
+            response_card = response.data['cards'][card]['id']
+            ordered_card = ordered_cards[card].id
+            self.assertEqual(response_card, ordered_card)
 
 
 class CardTestCase(TestCase):
@@ -148,18 +143,24 @@ class CardTestCase(TestCase):
         self.cards = Card.objects.all()
 
     def test_retrieve_no_login(self):
+        """The user must be logged in to view cards
+        """
         response = self.client.get(reverse('cards:view_card', args=[1]))
         # No response should be given, not authenticated should recieved 403 response
         self.assertEqual(response.status_code, 403)
         self.assertEqual(response.data['detail'].code, 'not_authenticated')
 
     def test_retrieve_no_cards(self):
+        """If there is no card to retrieve nothing should be found
+        """
         self.set_up_user()
         response = self.client.get(reverse('cards:view_card', args=[1]))
         # No response to recieve give 404
         self.assertEqual(response.status_code, 404)
 
     def test_retrieve(self):
+        """With the user logged in and cards existing, the user should be able to retrieve a card
+        """
         self.set_up_user()
         self.set_up_add_card()
         response = self.client.get(reverse('cards:view_card', args=[self.cards.first().pk]))
@@ -172,6 +173,8 @@ class CardTestCase(TestCase):
         self.assertEqual(response.data['name'], self.cards.first().name)
 
     def test_save_notes(self):
+        """The user should be able to write and save notes to cards
+        """
         self.set_up_user()
         self.set_up_add_card()
         self.assertEqual(self.cards.first().user_notes, '')  # no notes yet
