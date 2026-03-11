@@ -25,13 +25,11 @@ class CardCollectionViewSet(viewsets.ModelViewSet):
         """If the user is authenticated, retrieve their collection in the order (if specified)
         """
         collection = self.queryset.get_or_create(user=request.user)[0]
-        cards = collection.cards.all()
+        cards = collection.cards
 
+        # if order argument is given apply it
         if 'order' in request.GET:
-            sort_order = request.GET['order']
-            # check if order is an attribute of cards before applying
-            if hasattr(Card, sort_order.lstrip('-')):
-                cards = cards.order_by(request.GET['order'])
+            cards = collection.order_collection(request.GET['order'])
 
         data = {
             'collection': self.serializer_class(collection).data,

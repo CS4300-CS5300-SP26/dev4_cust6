@@ -111,10 +111,7 @@ class CollectionTestCase(TestCase):
         self.assertIsNotNone(response.data['collection'])
 
         # order the cards by the intended order
-        if hasattr(Card, sort_order.lstrip('-')):
-            ordered_cards = self.cards.order_by(sort_order)
-        else:  # otherwise the cards are unordered
-            ordered_cards = self.cards.all()
+        ordered_cards = self.collection.order_collection(sort_order)
 
         # The ordered cards should be in the same order as the collection's cards
         for card in range(len(response.data['cards'])):

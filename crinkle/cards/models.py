@@ -28,3 +28,21 @@ class CardCollection(models.Model):
 
     def __str__(self):
         return f'Collection of {self.user.username}'
+
+    def order_collection(self, sort_order):
+        """order card collection by sort_order parameter
+
+        Args:
+            sort_order (str): order of sort
+
+        Returns:
+            QS_: query set of ordered_cards
+        """
+        cards = self.cards.all()
+
+        # if the card model has the attribute in sort order
+        # then apply it
+        if hasattr(Card, sort_order.lstrip('-')):
+            cards = cards.order_by(sort_order)
+
+        return cards
