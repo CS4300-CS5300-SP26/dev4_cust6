@@ -1,0 +1,103 @@
+<testsuite name="features.collection_sorting.Collection Sorting" tests="6" errors="0" failures="0" skipped="0" time="0.465982" timestamp="2026-03-11T01:06:19.532901" hostname="d0abc473e8ef"><testcase classname="features.collection_sorting.Collection Sorting" name="Sort collection by card name" status="passed" time="0.093859"><system-out>
+<![CDATA[
+@scenario.begin
+  Scenario: Sort collection by card name
+    Given I have a collection of cards ... passed in 0.028s
+    When I sort by card "name" ... passed in 0.053s
+    Then my cards will be ordered by "name" ... passed in 0.012s
+
+@scenario.end
+--------------------------------------------------------------------------------
+
+Captured stdout:
+<QuerySet [<Card: Card-1>, <Card: Card-10>, <Card: Card-2>, <Card: Card-3>, <Card: Card-4>, <Card: Card-5>, <Card: Card-6>, <Card: Card-7>, <Card: Card-8>, <Card: Card-9>]>
+###########
+[{'id': 1, 'user': 1, 'name': 'Card-1', 'date_scanned': '03/11/26', 'grading_notes': {'id': 1, 'grade': 'Grade'}, 'picture_path': '/', 'user_notes': ''}, {'id': 10, 'user': 1, 'name': 'Card-10', 'date_scanned': '03/11/26', 'grading_notes': {'id': 10, 'grade': 'Grade'}, 'picture_path': '/', 'user_notes': ''}, {'id': 2, 'user': 1, 'name': 'Card-2', 'date_scanned': '03/11/26', 'grading_notes': {'id': 2, 'grade': 'Grade'}, 'picture_path': '/', 'user_notes': ''}, {'id': 3, 'user': 1, 'name': 'Card-3', 'date_scanned': '03/11/26', 'grading_notes': {'id': 3, 'grade': 'Grade'}, 'picture_path': '/', 'user_notes': ''}, {'id': 4, 'user': 1, 'name': 'Card-4', 'date_scanned': '03/11/26', 'grading_notes': {'id': 4, 'grade': 'Grade'}, 'picture_path': '/', 'user_notes': ''}, {'id': 5, 'user': 1, 'name': 'Card-5', 'date_scanned': '03/11/26', 'grading_notes': {'id': 5, 'grade': 'Grade'}, 'picture_path': '/', 'user_notes': ''}, {'id': 6, 'user': 1, 'name': 'Card-6', 'date_scanned': '03/11/26', 'grading_notes': {'id': 6, 'grade': 'Grade'}, 'picture_path': '/', 'user_notes': ''}, {'id': 7, 'user': 1, 'name': 'Card-7', 'date_scanned': '03/11/26', 'grading_notes': {'id': 7, 'grade': 'Grade'}, 'picture_path': '/', 'user_notes': ''}, {'id': 8, 'user': 1, 'name': 'Card-8', 'date_scanned': '03/11/26', 'grading_notes': {'id': 8, 'grade': 'Grade'}, 'picture_path': '/', 'user_notes': ''}, {'id': 9, 'user': 1, 'name': 'Card-9', 'date_scanned': '03/11/26', 'grading_notes': {'id': 9, 'grade': 'Grade'}, 'picture_path': '/', 'user_notes': ''}]
+
+]]>
+</system-out></testcase><testcase classname="features.collection_sorting.Collection Sorting" name="Sort collection by card name descending" status="passed" time="0.070756"><system-out>
+<![CDATA[
+@scenario.begin
+  Scenario: Sort collection by card name descending
+    Given I have a collection of cards ... passed in 0.025s
+    When I sort by card "-name" ... passed in 0.034s
+    Then my cards will be ordered by "-name" ... passed in 0.012s
+
+@scenario.end
+--------------------------------------------------------------------------------
+
+Captured stdout:
+<QuerySet [<Card: Card-20>, <Card: Card-19>, <Card: Card-18>, <Card: Card-17>, <Card: Card-16>, <Card: Card-15>, <Card: Card-14>, <Card: Card-13>, <Card: Card-12>, <Card: Card-11>]>
+###########
+[{'id': 20, 'user': 2, 'name': 'Card-20', 'date_scanned': '03/11/26', 'grading_notes': {'id': 20, 'grade': 'Grade'}, 'picture_path': '/', 'user_notes': ''}, {'id': 19, 'user': 2, 'name': 'Card-19', 'date_scanned': '03/11/26', 'grading_notes': {'id': 19, 'grade': 'Grade'}, 'picture_path': '/', 'user_notes': ''}, {'id': 18, 'user': 2, 'name': 'Card-18', 'date_scanned': '03/11/26', 'grading_notes': {'id': 18, 'grade': 'Grade'}, 'picture_path': '/', 'user_notes': ''}, {'id': 17, 'user': 2, 'name': 'Card-17', 'date_scanned': '03/11/26', 'grading_notes': {'id': 17, 'grade': 'Grade'}, 'picture_path': '/', 'user_notes': ''}, {'id': 16, 'user': 2, 'name': 'Card-16', 'date_scanned': '03/11/26', 'grading_notes': {'id': 16, 'grade': 'Grade'}, 'picture_path': '/', 'user_notes': ''}, {'id': 15, 'user': 2, 'name': 'Card-15', 'date_scanned': '03/11/26', 'grading_notes': {'id': 15, 'grade': 'Grade'}, 'picture_path': '/', 'user_notes': ''}, {'id': 14, 'user': 2, 'name': 'Card-14', 'date_scanned': '03/11/26', 'grading_notes': {'id': 14, 'grade': 'Grade'}, 'picture_path': '/', 'user_notes': ''}, {'id': 13, 'user': 2, 'name': 'Card-13', 'date_scanned': '03/11/26', 'grading_notes': {'id': 13, 'grade': 'Grade'}, 'picture_path': '/', 'user_notes': ''}, {'id': 12, 'user': 2, 'name': 'Card-12', 'date_scanned': '03/11/26', 'grading_notes': {'id': 12, 'grade': 'Grade'}, 'picture_path': '/', 'user_notes': ''}, {'id': 11, 'user': 2, 'name': 'Card-11', 'date_scanned': '03/11/26', 'grading_notes': {'id': 11, 'grade': 'Grade'}, 'picture_path': '/', 'user_notes': ''}]
+
+]]>
+</system-out></testcase><testcase classname="features.collection_sorting.Collection Sorting" name="Sort collection by scan date" status="passed" time="0.071786"><system-out>
+<![CDATA[
+@scenario.begin
+  Scenario: Sort collection by scan date
+    Given I have a collection of cards ... passed in 0.023s
+    When I sort by card "date_scanned" ... passed in 0.037s
+    Then my cards will be ordered by "date_scanned" ... passed in 0.011s
+
+@scenario.end
+--------------------------------------------------------------------------------
+
+Captured stdout:
+<QuerySet [<Card: Card-21>, <Card: Card-22>, <Card: Card-23>, <Card: Card-24>, <Card: Card-25>, <Card: Card-26>, <Card: Card-27>, <Card: Card-28>, <Card: Card-29>, <Card: Card-30>]>
+###########
+[{'id': 21, 'user': 3, 'name': 'Card-21', 'date_scanned': '03/11/26', 'grading_notes': {'id': 21, 'grade': 'Grade'}, 'picture_path': '/', 'user_notes': ''}, {'id': 22, 'user': 3, 'name': 'Card-22', 'date_scanned': '03/11/26', 'grading_notes': {'id': 22, 'grade': 'Grade'}, 'picture_path': '/', 'user_notes': ''}, {'id': 23, 'user': 3, 'name': 'Card-23', 'date_scanned': '03/11/26', 'grading_notes': {'id': 23, 'grade': 'Grade'}, 'picture_path': '/', 'user_notes': ''}, {'id': 24, 'user': 3, 'name': 'Card-24', 'date_scanned': '03/11/26', 'grading_notes': {'id': 24, 'grade': 'Grade'}, 'picture_path': '/', 'user_notes': ''}, {'id': 25, 'user': 3, 'name': 'Card-25', 'date_scanned': '03/11/26', 'grading_notes': {'id': 25, 'grade': 'Grade'}, 'picture_path': '/', 'user_notes': ''}, {'id': 26, 'user': 3, 'name': 'Card-26', 'date_scanned': '03/11/26', 'grading_notes': {'id': 26, 'grade': 'Grade'}, 'picture_path': '/', 'user_notes': ''}, {'id': 27, 'user': 3, 'name': 'Card-27', 'date_scanned': '03/11/26', 'grading_notes': {'id': 27, 'grade': 'Grade'}, 'picture_path': '/', 'user_notes': ''}, {'id': 28, 'user': 3, 'name': 'Card-28', 'date_scanned': '03/11/26', 'grading_notes': {'id': 28, 'grade': 'Grade'}, 'picture_path': '/', 'user_notes': ''}, {'id': 29, 'user': 3, 'name': 'Card-29', 'date_scanned': '03/11/26', 'grading_notes': {'id': 29, 'grade': 'Grade'}, 'picture_path': '/', 'user_notes': ''}, {'id': 30, 'user': 3, 'name': 'Card-30', 'date_scanned': '03/11/26', 'grading_notes': {'id': 30, 'grade': 'Grade'}, 'picture_path': '/', 'user_notes': ''}]
+
+]]>
+</system-out></testcase><testcase classname="features.collection_sorting.Collection Sorting" name="Sort collection by scan date descending" status="passed" time="0.068411"><system-out>
+<![CDATA[
+@scenario.begin
+  Scenario: Sort collection by scan date descending
+    Given I have a collection of cards ... passed in 0.020s
+    When I sort by card "-date_scanned" ... passed in 0.033s
+    Then my cards will be ordered by "-date_scanned" ... passed in 0.016s
+
+@scenario.end
+--------------------------------------------------------------------------------
+
+Captured stdout:
+<QuerySet [<Card: Card-40>, <Card: Card-39>, <Card: Card-38>, <Card: Card-37>, <Card: Card-36>, <Card: Card-35>, <Card: Card-34>, <Card: Card-33>, <Card: Card-32>, <Card: Card-31>]>
+###########
+[{'id': 40, 'user': 4, 'name': 'Card-40', 'date_scanned': '03/11/26', 'grading_notes': {'id': 40, 'grade': 'Grade'}, 'picture_path': '/', 'user_notes': ''}, {'id': 39, 'user': 4, 'name': 'Card-39', 'date_scanned': '03/11/26', 'grading_notes': {'id': 39, 'grade': 'Grade'}, 'picture_path': '/', 'user_notes': ''}, {'id': 38, 'user': 4, 'name': 'Card-38', 'date_scanned': '03/11/26', 'grading_notes': {'id': 38, 'grade': 'Grade'}, 'picture_path': '/', 'user_notes': ''}, {'id': 37, 'user': 4, 'name': 'Card-37', 'date_scanned': '03/11/26', 'grading_notes': {'id': 37, 'grade': 'Grade'}, 'picture_path': '/', 'user_notes': ''}, {'id': 36, 'user': 4, 'name': 'Card-36', 'date_scanned': '03/11/26', 'grading_notes': {'id': 36, 'grade': 'Grade'}, 'picture_path': '/', 'user_notes': ''}, {'id': 35, 'user': 4, 'name': 'Card-35', 'date_scanned': '03/11/26', 'grading_notes': {'id': 35, 'grade': 'Grade'}, 'picture_path': '/', 'user_notes': ''}, {'id': 34, 'user': 4, 'name': 'Card-34', 'date_scanned': '03/11/26', 'grading_notes': {'id': 34, 'grade': 'Grade'}, 'picture_path': '/', 'user_notes': ''}, {'id': 33, 'user': 4, 'name': 'Card-33', 'date_scanned': '03/11/26', 'grading_notes': {'id': 33, 'grade': 'Grade'}, 'picture_path': '/', 'user_notes': ''}, {'id': 32, 'user': 4, 'name': 'Card-32', 'date_scanned': '03/11/26', 'grading_notes': {'id': 32, 'grade': 'Grade'}, 'picture_path': '/', 'user_notes': ''}, {'id': 31, 'user': 4, 'name': 'Card-31', 'date_scanned': '03/11/26', 'grading_notes': {'id': 31, 'grade': 'Grade'}, 'picture_path': '/', 'user_notes': ''}]
+
+]]>
+</system-out></testcase><testcase classname="features.collection_sorting.Collection Sorting" name="Sort collection by card grade" status="passed" time="0.089918"><system-out>
+<![CDATA[
+@scenario.begin
+  Scenario: Sort collection by card grade
+    Given I have a collection of cards ... passed in 0.029s
+    When I sort by card "grading_notes" ... passed in 0.045s
+    Then my cards will be ordered by "grading_notes" ... passed in 0.016s
+
+@scenario.end
+--------------------------------------------------------------------------------
+
+Captured stdout:
+<QuerySet [<Card: Card-41>, <Card: Card-42>, <Card: Card-43>, <Card: Card-44>, <Card: Card-45>, <Card: Card-46>, <Card: Card-47>, <Card: Card-48>, <Card: Card-49>, <Card: Card-50>]>
+###########
+[{'id': 41, 'user': 5, 'name': 'Card-41', 'date_scanned': '03/11/26', 'grading_notes': {'id': 41, 'grade': 'Grade'}, 'picture_path': '/', 'user_notes': ''}, {'id': 42, 'user': 5, 'name': 'Card-42', 'date_scanned': '03/11/26', 'grading_notes': {'id': 42, 'grade': 'Grade'}, 'picture_path': '/', 'user_notes': ''}, {'id': 43, 'user': 5, 'name': 'Card-43', 'date_scanned': '03/11/26', 'grading_notes': {'id': 43, 'grade': 'Grade'}, 'picture_path': '/', 'user_notes': ''}, {'id': 44, 'user': 5, 'name': 'Card-44', 'date_scanned': '03/11/26', 'grading_notes': {'id': 44, 'grade': 'Grade'}, 'picture_path': '/', 'user_notes': ''}, {'id': 45, 'user': 5, 'name': 'Card-45', 'date_scanned': '03/11/26', 'grading_notes': {'id': 45, 'grade': 'Grade'}, 'picture_path': '/', 'user_notes': ''}, {'id': 46, 'user': 5, 'name': 'Card-46', 'date_scanned': '03/11/26', 'grading_notes': {'id': 46, 'grade': 'Grade'}, 'picture_path': '/', 'user_notes': ''}, {'id': 47, 'user': 5, 'name': 'Card-47', 'date_scanned': '03/11/26', 'grading_notes': {'id': 47, 'grade': 'Grade'}, 'picture_path': '/', 'user_notes': ''}, {'id': 48, 'user': 5, 'name': 'Card-48', 'date_scanned': '03/11/26', 'grading_notes': {'id': 48, 'grade': 'Grade'}, 'picture_path': '/', 'user_notes': ''}, {'id': 49, 'user': 5, 'name': 'Card-49', 'date_scanned': '03/11/26', 'grading_notes': {'id': 49, 'grade': 'Grade'}, 'picture_path': '/', 'user_notes': ''}, {'id': 50, 'user': 5, 'name': 'Card-50', 'date_scanned': '03/11/26', 'grading_notes': {'id': 50, 'grade': 'Grade'}, 'picture_path': '/', 'user_notes': ''}]
+
+]]>
+</system-out></testcase><testcase classname="features.collection_sorting.Collection Sorting" name="Sort collection by card grade descending" status="passed" time="0.071252"><system-out>
+<![CDATA[
+@scenario.begin
+  Scenario: Sort collection by card grade descending
+    Given I have a collection of cards ... passed in 0.024s
+    When I sort by card "-grading_notes" ... passed in 0.033s
+    Then my cards will be ordered by "-grading_notes" ... passed in 0.015s
+
+@scenario.end
+--------------------------------------------------------------------------------
+
+Captured stdout:
+<QuerySet [<Card: Card-60>, <Card: Card-59>, <Card: Card-58>, <Card: Card-57>, <Card: Card-56>, <Card: Card-55>, <Card: Card-54>, <Card: Card-53>, <Card: Card-52>, <Card: Card-51>]>
+###########
+[{'id': 60, 'user': 6, 'name': 'Card-60', 'date_scanned': '03/11/26', 'grading_notes': {'id': 60, 'grade': 'Grade'}, 'picture_path': '/', 'user_notes': ''}, {'id': 59, 'user': 6, 'name': 'Card-59', 'date_scanned': '03/11/26', 'grading_notes': {'id': 59, 'grade': 'Grade'}, 'picture_path': '/', 'user_notes': ''}, {'id': 58, 'user': 6, 'name': 'Card-58', 'date_scanned': '03/11/26', 'grading_notes': {'id': 58, 'grade': 'Grade'}, 'picture_path': '/', 'user_notes': ''}, {'id': 57, 'user': 6, 'name': 'Card-57', 'date_scanned': '03/11/26', 'grading_notes': {'id': 57, 'grade': 'Grade'}, 'picture_path': '/', 'user_notes': ''}, {'id': 56, 'user': 6, 'name': 'Card-56', 'date_scanned': '03/11/26', 'grading_notes': {'id': 56, 'grade': 'Grade'}, 'picture_path': '/', 'user_notes': ''}, {'id': 55, 'user': 6, 'name': 'Card-55', 'date_scanned': '03/11/26', 'grading_notes': {'id': 55, 'grade': 'Grade'}, 'picture_path': '/', 'user_notes': ''}, {'id': 54, 'user': 6, 'name': 'Card-54', 'date_scanned': '03/11/26', 'grading_notes': {'id': 54, 'grade': 'Grade'}, 'picture_path': '/', 'user_notes': ''}, {'id': 53, 'user': 6, 'name': 'Card-53', 'date_scanned': '03/11/26', 'grading_notes': {'id': 53, 'grade': 'Grade'}, 'picture_path': '/', 'user_notes': ''}, {'id': 52, 'user': 6, 'name': 'Card-52', 'date_scanned': '03/11/26', 'grading_notes': {'id': 52, 'grade': 'Grade'}, 'picture_path': '/', 'user_notes': ''}, {'id': 51, 'user': 6, 'name': 'Card-51', 'date_scanned': '03/11/26', 'grading_notes': {'id': 51, 'grade': 'Grade'}, 'picture_path': '/', 'user_notes': ''}]
+
+]]>
+</system-out></testcase></testsuite>

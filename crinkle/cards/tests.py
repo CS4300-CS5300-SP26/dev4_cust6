@@ -83,7 +83,7 @@ class CollectionTestCase(TestCase):
             self.assertEqual(card['name'], f'Card-{card['id']}')
         self.assertEqual(response.data['collection']['user'], self.user.pk)
 
-    def test_retrieve_cards_different_orders(self):
+    def test_retrieve_cards_ordered_name(self):
         """test that cards can be sorted in varying orderings
         """
         self.set_up_user()
@@ -102,6 +102,12 @@ class CollectionTestCase(TestCase):
             ordered_card = response.data['cards'][card]
             unorded_card = response.data['collection']['cards'][card]
             self.assertEqual(ordered_card, unorded_card)
+
+    def test_retrieve_cards_ordered_date_scanned_descending(self):
+        self.set_up_user()
+        self.set_up_collection()
+        self.set_up_add_card()
+        self.set_up_add_card()
 
         # make a request where the specified order is by date descending
         response = self.client.get(reverse('cards:collection'), data={'order': '-date_scanned'})
