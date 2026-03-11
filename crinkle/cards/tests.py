@@ -92,7 +92,9 @@ class CollectionTestCase(TestCase):
         ('date_scanned'),
         ('-date_scanned'),
         ('grading_notes'),
-        ('-grading_notes')
+        ('-grading_notes'),
+        ('-what_is_this'),  # what happens when a user modifies the url parameter
+        ('date_scanne'),  # what happens if a user copies only part of the url and cuts off the sort
     ])
     def test_retrieve_cards_ordered_name(self, sort_order):
         """test that cards can be sorted in varying orderings
@@ -109,7 +111,10 @@ class CollectionTestCase(TestCase):
         self.assertIsNotNone(response.data['collection'])
 
         # order the cards by the intended order
-        ordered_cards = self.cards.order_by(sort_order)
+        if hasattr(Card, sort_order.lstrip('-')):
+            ordered_cards = self.cards.order_by(sort_order)
+        else:  # otherwise the cards are unordered
+            ordered_cards = self.cards.all()
 
         # The ordered cards should be in the same order as the collection's cards
         for card in range(len(response.data['cards'])):

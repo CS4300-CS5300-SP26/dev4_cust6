@@ -28,7 +28,10 @@ class CardCollectionViewSet(viewsets.ModelViewSet):
         cards = collection.cards.all()
 
         if 'order' in request.GET:
-            cards = cards.order_by(request.GET['order'])
+            sort_order = request.GET['order']
+            # check if order is an attribute of cards before applying
+            if hasattr(Card, sort_order.lstrip('-')):
+                cards = cards.order_by(request.GET['order'])
 
         data = {
             'collection': self.serializer_class(collection).data,
