@@ -50,18 +50,37 @@ class CollectionTestCase(TestCase):
         self.assertEqual(response.status_code, 403)
         self.assertEqual(response.data['detail'].code, 'not_authenticated')
 
-    def test_retrieve_no_cards_in_collection(self):
+    def test_retrieve_no_cards(self):
         """With no cards or collection the user should retrieve an empty collection
         """
         self.set_up_user()
         response = self.client.get(reverse('cards:collection'))
 
         self.assertEqual(response.status_code, 200)
-        self.assertIsNotNone(response.data['collection'])
-        self.assertEqual(response.data['collection']['cards'], [])
-        self.assertEqual(response.data['collection']['user'], self.user.pk)
+        self.assertEqual(response.data['cards'], [])
 
         # check the cards returned, given seperately for ordering
+        self.assertEqual(response.data['cards'], [])
+
+    def test_retrieve_no_cards_belonging_to_user(self):
+        """If there are cards but they don't belong to the user, they shouldn't be shown
+        """
+        user = User.objects.create(password="test_pass", username="inactive user")
+        notes = GradeReport.objects.create(grade='Grade')
+        card = Card.objects.create(user=user,
+                                   name='Card',
+                                   grading_notes=notes,
+                                   picture_path="/",
+                                   user_notes="",
+                                   )
+        card.save()  # save card not belonging to active user
+
+        self.set_up_user()
+        response = self.client.get(reverse('cards:collection'))
+
+        self.assertEqual(response.status_code, 200)
+
+        # check that no cards were returned as the only card belongs to another user
         self.assertEqual(response.data['cards'], [])
 
     def test_retrieve_collection_with_cards(self):
@@ -79,12 +98,11 @@ class CollectionTestCase(TestCase):
         response = self.client.get(reverse('cards:collection'))
 
         self.assertEqual(response.status_code, 200)
-        self.assertIsNotNone(response.data['collection'])
 
         # Check that all cards are present
-        for card in response.data['collection']['cards']:
+        for card in response.data['cards']:
             self.assertEqual(card['name'], f'Card-{card['id']}')
-        self.assertEqual(response.data['collection']['user'], self.user.pk)
+            self.assertEqual(card['user'], self.user.pk)
 
     @parameterized.expand([
         ('name'),
@@ -108,7 +126,6 @@ class CollectionTestCase(TestCase):
         response = self.client.get(reverse('cards:collection'), data={'order': sort_order})
 
         self.assertEqual(response.status_code, 200)
-        self.assertIsNotNone(response.data['collection'])
 
         # order the cards by the intended order
         ordered_cards = self.collection.order_collection(sort_order)

@@ -32,7 +32,6 @@ class CardCollectionViewSet(viewsets.ModelViewSet):
             cards = collection.order_collection(request.GET['order'])
 
         data = {
-            'collection': self.serializer_class(collection).data,
             'cards': CardSerializer(cards, many=True).data,  # cards in order
         }
 
