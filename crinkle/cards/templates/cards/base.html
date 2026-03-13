@@ -1,0 +1,55 @@
+{% load static %}
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Jersey+10&family=Lato:wght@500&display=swap" rel="stylesheet">
+    <link href="{% static 'card_styles.css' %}" rel="stylesheet">
+
+    <title>Card Report - Crinkle</title>
+</head>
+
+<body>
+    <div class="app-shell">
+        <!-- Top bar -->
+        <div class="top-bar">
+            {% block top_bar %}{% endblock %}
+        </div>
+
+        <!-- Main content -->
+        <div class="screen-body">
+            {% block content %}{% endblock %}
+        </div>
+
+        <!-- Bottom nav bar (matches mockup) Code from Nazanin Siavash -->
+        <nav class="bottom-nav">
+            <a class="nav-item {% block nav_home %}{% endblock %}" href="{% url 'index' %}">
+                <svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round"
+                        d="M3 12l2-2m0 0l7-7 7 7m-9 9V9m4 12V9"/>
+                </svg>
+                <span>Home</span>
+            </a>
+
+            <a class="nav-item scan-btn" href="{% url 'cards:scan_report' %}">
+                <div class="scan-circle">
+                    <svg fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round"
+                            d="M3 9V6a1 1 0 011-1h3M3 15v3a1 1 0 001 1h3m12-8V6a1 1 0 00-1-1h-3m4 9v3a1 1 0 01-1 1h-3"/>
+                    </svg>
+                </div>
+                <span>Scan</span>
+            </a>
+
+            <a class="nav-item {% block nav_user %}{% endblock %}" href="{% url 'profile' %}">
+                <svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round"
+                        d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"/>
+                </svg>
+                <span>Account</span>
+            </a>
+        </nav>
+    </div>
+</body>
+</html>

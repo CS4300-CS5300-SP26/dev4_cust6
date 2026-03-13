@@ -20,4 +20,7 @@ from home.views import index
 urlpatterns = [
     path('', index, name='index'),
     path('tracking/', include('tracking.urls')),
+    path('accounts/', include('accounts.urls')),
+    path('', include('cards.urls')),
+    path("scan/", include("scan.urls")),
 ]
