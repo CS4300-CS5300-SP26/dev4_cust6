@@ -1,0 +1,15 @@
+{% extends "tracking/base.html" %}
+
+{% block title %}Tracking — Crinkle{% endblock %}
+
+{% block header_left %}
+<a href="/" class="back-link">&larr;</a>
+<span class="page-title">Tracking</span>
+{% endblock %}
+
+{% block header_right %}
+<a href="{% url 'tracking:add' %}" class="btn-add">+ Add</a>
+{% endblock %}
+
+{% block content %}
+{% endblock %}
