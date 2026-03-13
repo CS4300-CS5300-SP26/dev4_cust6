@@ -1,7 +1,15 @@
 from behave import given, when, then
-from cards.models import CardCollection, Card, GradeReport
 from django.urls import reverse
+from django.contrib.auth.models import User
 
+from cards.models import CardCollection, Card, GradeReport
+
+@given('I am logged in')
+def login(context):
+    username = 'username'
+    password = 'p1234567890'
+    context.user = User.objects.create_user(username=username, password=password)
+    context.client.login(username=username, password=password)
 
 @given('I have a collection of cards')
 def start(context):
