@@ -106,11 +106,6 @@ def step_impl(context):
     # Assert retake option is visible
     pass
 
-@given('I am not logged in')
-def step_impl(context):
-    # Ensure user is not logged in
-    pass
-
 @when('I take a photo of the card')
 def step_impl(context):
     # Simulate taking a photo
