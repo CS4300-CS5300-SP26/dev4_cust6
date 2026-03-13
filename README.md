@@ -68,7 +68,7 @@ python manage.py runserver
 ## Running Tests
 ```bash
 # Unit + integration tests with coverage
-coverage run manage.py test accounts
+coverage run manage.py test
 coverage report
 
 # BDD tests
