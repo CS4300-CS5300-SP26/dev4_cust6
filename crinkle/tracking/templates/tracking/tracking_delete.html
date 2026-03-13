@@ -1,0 +1,20 @@
+{% extends "tracking/base.html" %}
+{% block title %}Remove {{ card.card_name }}?{% endblock %}
+{% block header_left %}
+<a href="{% url 'tracking:detail' card.pk %}" class="back-link">&larr;</a>
+<span class="page-title">Remove Card</span>
+{% endblock %}
+{% block content %}
+<div class="delete-confirm">
+    <h2>Stop tracking this card?</h2>
+    <p class="delete-card-name">{{ card.card_name }}</p>
+    <p class="muted">{{ card.get_grade_tier_display }} &middot; {{ card.get_status_display }}</p>
+    <form method="post">
+        {% csrf_token %}
+        <div class="form-actions">
+            <button type="submit" class="btn-tracking btn-tracking-danger">Yes, Remove</button>
+            <a href="{% url 'tracking:detail' card.pk %}" class="btn-tracking btn-tracking-secondary">Cancel</a>
+        </div>
+    </form>
+</div>
+{% endblock %}
