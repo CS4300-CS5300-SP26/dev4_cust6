@@ -14,8 +14,32 @@
     <a href="{% url 'tracking:list' %}?status={{ value }}" class="tab {% if current_filter == value %}active{% endif %}">{{ label }}</a>
     {% endfor %}
 </div>
+
+{% if tracked_cards %}
+<ul class="card-list">
+    {% for card in tracked_cards %}
+    <li class="card-item">
+        <a href="{% url 'tracking:detail' card.pk %}">
+            <div class="card-row">
+                <div class="card-info">
+                    <span class="card-name">{{ card.card_name }}</span>
+                    {% if card.card_set %}
+                    <span class="card-set">{{ card.card_set }}{% if card.card_year %} &middot; {{ card.card_year }}{% endif %}</span>
+                    {% endif %}
+                </div>
+                <div class="card-meta">
+                    <span class="grade-badge">{{ card.get_grade_tier_display }}</span>
+                    <span class="status-badge status-{{ card.status }}">{{ card.get_status_display }}</span>
+                </div>
+            </div>
+        </a>
+    </li>
+    {% endfor %}
+</ul>
+{% else %}
 <div class="empty-state">
     <p class="empty-text">No cards being tracked yet.</p>
     <a href="{% url 'tracking:add' %}" class="btn-tracking btn-tracking-primary">Track Your First Card</a>
 </div>
+{% endif %}
 {% endblock %}
