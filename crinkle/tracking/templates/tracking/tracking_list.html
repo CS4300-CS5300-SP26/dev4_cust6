@@ -1,15 +1,21 @@
 {% extends "tracking/base.html" %}
-
 {% block title %}Tracking — Crinkle{% endblock %}
-
 {% block header_left %}
 <a href="/" class="back-link">&larr;</a>
 <span class="page-title">Tracking</span>
 {% endblock %}
-
 {% block header_right %}
 <a href="{% url 'tracking:add' %}" class="btn-add">+ Add</a>
 {% endblock %}
-
 {% block content %}
+<div class="filter-tabs">
+    <a href="{% url 'tracking:list' %}" class="tab {% if current_filter == 'all' %}active{% endif %}">All</a>
+    {% for value, label in status_choices %}
+    <a href="{% url 'tracking:list' %}?status={{ value }}" class="tab {% if current_filter == value %}active{% endif %}">{{ label }}</a>
+    {% endfor %}
+</div>
+<div class="empty-state">
+    <p class="empty-text">No cards being tracked yet.</p>
+    <a href="{% url 'tracking:add' %}" class="btn-tracking btn-tracking-primary">Track Your First Card</a>
+</div>
 {% endblock %}
