@@ -5,6 +5,7 @@ source = ["."]
 # We are testing our is covered, not tests/auto generated configuration
 omit = [
     "*/migrations/*",
+    'features/*',
     "admin.py",
     "apps.py",
     "conf.py",
