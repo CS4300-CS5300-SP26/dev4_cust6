@@ -1,0 +1,73 @@
+<testsuite name="collection_sorting.Collection Sorting" tests="6" errors="0" failures="0" skipped="0" time="4.227351" timestamp="2026-03-13T23:26:10.792204" hostname="jjones-21-596646f8dc-xfzxd"><testcase classname="collection_sorting.Collection Sorting" name="Sort collection by card name" status="passed" time="0.829596"><system-out>
+<![CDATA[
+@scenario.begin
+  Scenario: Sort collection by card name
+    Given I am logged in ... passed in 0.732s
+    Given I have a collection of cards ... passed in 0.026s
+    When I sort by card "name" ... passed in 0.055s
+    Then my cards will be ordered by "name" ... passed in 0.016s
+
+@scenario.end
+--------------------------------------------------------------------------------
+]]>
+</system-out></testcase><testcase classname="collection_sorting.Collection Sorting" name="Sort collection by card name descending" status="passed" time="0.956949"><system-out>
+<![CDATA[
+@scenario.begin
+  Scenario: Sort collection by card name descending
+    Given I am logged in ... passed in 0.887s
+    Given I have a collection of cards ... passed in 0.023s
+    When I sort by card "-name" ... passed in 0.025s
+    Then my cards will be ordered by "-name" ... passed in 0.021s
+
+@scenario.end
+--------------------------------------------------------------------------------
+]]>
+</system-out></testcase><testcase classname="collection_sorting.Collection Sorting" name="Sort collection by scan date" status="passed" time="0.673"><system-out>
+<![CDATA[
+@scenario.begin
+  Scenario: Sort collection by scan date
+    Given I am logged in ... passed in 0.605s
+    Given I have a collection of cards ... passed in 0.024s
+    When I sort by card "date_scanned" ... passed in 0.027s
+    Then my cards will be ordered by "date_scanned" ... passed in 0.016s
+
+@scenario.end
+--------------------------------------------------------------------------------
+]]>
+</system-out></testcase><testcase classname="collection_sorting.Collection Sorting" name="Sort collection by scan date descending" status="passed" time="0.691595"><system-out>
+<![CDATA[
+@scenario.begin
+  Scenario: Sort collection by scan date descending
+    Given I am logged in ... passed in 0.623s
+    Given I have a collection of cards ... passed in 0.025s
+    When I sort by card "-date_scanned" ... passed in 0.029s
+    Then my cards will be ordered by "-date_scanned" ... passed in 0.015s
+
+@scenario.end
+--------------------------------------------------------------------------------
+]]>
+</system-out></testcase><testcase classname="collection_sorting.Collection Sorting" name="Sort collection by card grade" status="passed" time="0.571243"><system-out>
+<![CDATA[
+@scenario.begin
+  Scenario: Sort collection by card grade
+    Given I am logged in ... passed in 0.530s
+    Given I have a collection of cards ... passed in 0.017s
+    When I sort by card "grading_notes" ... passed in 0.015s
+    Then my cards will be ordered by "grading_notes" ... passed in 0.010s
+
+@scenario.end
+--------------------------------------------------------------------------------
+]]>
+</system-out></testcase><testcase classname="collection_sorting.Collection Sorting" name="Sort collection by card grade descending" status="passed" time="0.504968"><system-out>
+<![CDATA[
+@scenario.begin
+  Scenario: Sort collection by card grade descending
+    Given I am logged in ... passed in 0.454s
+    Given I have a collection of cards ... passed in 0.017s
+    When I sort by card "-grading_notes" ... passed in 0.019s
+    Then my cards will be ordered by "-grading_notes" ... passed in 0.014s
+
+@scenario.end
+--------------------------------------------------------------------------------
+]]>
+</system-out></testcase></testsuite>
