@@ -1,6 +1,86 @@
-# dev4_cust6
-Group project repo — dev4 → cust6
+#  Crinkle
+
+> AI-powered Pokémon card grading for collectors and traders
+
+---
+
+## What is Crinkle?
+
+Crinkle is a mobile web app that helps Pokémon card collectors estimate the grade of their cards **before** paying to submit them to professional grading services like PSA, Beckett, or CGC.
+
+Collectors currently pay significant fees and wait weeks, sometimes months, only to receive a lower grade than expected. Crinkle eliminates that uncertainty by letting users scan a card with their phone camera and instantly receive:
+
+- 📊 An estimated **PSA-scale grade (1–10)**
+- 🔍 Detailed notes on **corners, edges, centering, and surface condition**
+- 💡 Actionable insight on whether a card is worth professional grading
+
+---
+
+## Features
+
+| Feature | Description |
+|---|---|
+|  **Card Scanner** | Scan a card with your camera for instant AI grading |
+|  **Grading History** | Track all your past scans and results |
+|  **Price Market** | Live card pricing with history and comparison tools |
+|  **User Accounts** | Register, log in, and manage your profile |
+|  **Education Hub** | Learn what professional graders look for |
+|  **Guest Mode** | Try the app without creating an account |
+
+---
+
+## Who is it for?
+
+- **Casual collectors** who want to understand their collection's value
+- **Serious investors and traders** buying and selling cards at scale
+- **Beginners** new to the hobby who need grading guidance
+- **Professional graders and resellers** looking for a quick pre-screen tool
+
+---
+
+## Team
+
+**CS 4300/5300 — Spring 2026 — Team 4 (dev4 → cust6)**
 
 
-Crinkle is a mobile application designed to help Pokemon card collectors and traders estimate the grade of their cards before submitting them to professional grading services like PSA, Beckett, or CGC. Currently, collectors must pay significant fees and wait weeks or months only to discover their card receives a lower grade than expected, often losing money in the process. Crinkle solves this by allowing users to scan a card with their phone camera, after which the app analyzes the card’s corners, edges, centering, and surface condition to produce an estimated PSA-scale grade (1–10) along with detailed notes on specific imperfections.
-This empowers collectors to make informed decisions about which cards are worth the cost of professional grading. Beyond the core grading feature, Crinkle provides a user account system for tracking grading history, a dynamic in-app pricing market with card price history and comparison tools, and educational resources to help beginners learn what graders look for. The primary stakeholders include casual card collectors seeking to understand their collection’s value, serious investors and traders who buy and sell cards at scale, beginners new to the hobby who need guidance on grading criteria, and professional graders or resellers who want a quick pre-screen tool. Secondary stakeholders include app administrators responsible for maintaining pricing data and grading accuracy, and card marketplace platforms that may integrate with Crinkle’s pricing features.
+---
+
+## Getting Started
+```bash
+# Clone the repo
+git clone https://github.com/CS4300-CS5300-SP26/dev4_cust6.git
+cd dev4_cust6/crinkle
+
+# Install dependencies
+pip install -r requirements.txt
+
+# Run migrations
+python manage.py migrate
+
+# Start the server
+python manage.py runserver
+```
+
+
+
+---
+
+## Running Tests
+```bash
+# Unit + integration tests with coverage
+coverage run manage.py test
+coverage report
+
+# BDD tests
+python manage.py behave
+```
+
+---
+
+## AI Disclosure
+
+In preparing this work, we used generative AI models and tools, including the OpenAI GPT and Claude models, to assist with generating and revising content, including code and text.
+
+---
+
+*Crinkle — know your grade before you pay for it.*
