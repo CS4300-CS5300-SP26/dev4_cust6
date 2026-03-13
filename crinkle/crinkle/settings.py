@@ -42,6 +42,7 @@ INSTALLED_APPS = [
     'home',
     'accounts',
     'cards',
+    'scan',
 ]
 
 MIDDLEWARE = [

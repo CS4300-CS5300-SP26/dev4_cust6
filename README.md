@@ -69,10 +69,13 @@ python manage.py runserver
 ```bash
 # Unit + integration tests with coverage
 coverage run manage.py test
+
+# BDD tests appending coverage to previous results
+coverage run -a manage.py behave
+
+# Generate Coverage Report
 coverage report
 
-# BDD tests
-python manage.py behave
 ```
 
 ---
