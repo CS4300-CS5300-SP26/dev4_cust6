@@ -5,11 +5,11 @@ from django.conf import settings
 class TrackedCard(models.Model):
     # Dropdown choices for card status
     STATUS_CHOICES = [
+        ('owned', 'Owned'),
         ('watching', 'Watching'),
         ('submitted', 'Submitted for Grading'),
         ('graded', 'Graded'),
-        ('sold', 'Sold'),
-        ('price', 'Price')
+        ('sold', 'Sold')
     ]
 
     # Dropdown choices for grade tier
@@ -68,3 +68,15 @@ class TrackedCard(models.Model):
     # How the card shows up in admin or print statements
     def __str__(self):
         return f"{self.card_name} ({self.get_grade_tier_display()}) — {self.get_status_display()}"
+
+
+class ValueSnapshot(models.Model):
+    """Stores the total collection value at a point in time."""
+    total_value = models.DecimalField(max_digits=12, decimal_places=2)
+    date = models.DateField(auto_now_add=True)
+
+    class Meta:
+        ordering = ['date']
+
+    def __str__(self):
+        return f"${self.total_value} on {self.date}"

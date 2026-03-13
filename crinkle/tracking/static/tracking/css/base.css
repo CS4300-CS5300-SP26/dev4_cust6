@@ -449,3 +449,9 @@
     font-size: 28px;
     color: #2C4BFB;
 }
+
+.chart-container {
+    padding: 20px;
+    background: #fff;
+    border-bottom: 1px solid #E5E7EB;
+}

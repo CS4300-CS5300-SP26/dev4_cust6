@@ -10,10 +10,23 @@
 {% block content %}
 <div class="filter-tabs">
     <a href="{% url 'tracking:list' %}" class="tab {% if current_filter == 'all' %}active{% endif %}">All</a>
+    <a href="{% url 'tracking:list' %}?status=owned" class="tab {% if current_filter == 'owned' %}active{% endif %}">Collection</a>
     {% for value, label in status_choices %}
+    {% if value != 'owned' %}
     <a href="{% url 'tracking:list' %}?status={{ value }}" class="tab {% if current_filter == value %}active{% endif %}">{{ label }}</a>
+    {% endif %}
     {% endfor %}
 </div>
+
+{% if current_filter == 'owned' %}
+<div class="chart-container">
+    <h3 class="section-label">Collection Value</h3>
+    <canvas id="valueChart"></canvas>
+    {% if not chart_dates %}
+    <p class="muted" style="text-align: center; margin-top: 10px;">No value data yet</p>
+    {% endif %}
+</div>
+{% endif %}
 
 {% if tracked_cards %}
 <ul class="card-list">
@@ -41,5 +54,41 @@
     <p class="empty-text">No cards being tracked yet.</p>
     <a href="{% url 'tracking:add' %}" class="btn-tracking btn-tracking-primary">Track Your First Card</a>
 </div>
+{% endif %}
+
+{% if current_filter == 'owned' %}
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script>
+    const ctx = document.getElementById('valueChart').getContext('2d');
+    new Chart(ctx, {
+        type: 'line',
+        data: {
+            labels: {{ chart_dates|safe }},
+            datasets: [{
+                label: 'Collection Value ($)',
+                data: {{ chart_values|safe }},
+                borderColor: '#2C4BFB',
+                backgroundColor: 'rgba(44, 75, 251, 0.1)',
+                fill: true,
+                tension: 0.3,
+                pointBackgroundColor: '#2C4BFB',
+            }]
+        },
+        options: {
+            responsive: true,
+            plugins: {
+                legend: { display: false }
+            },
+            scales: {
+                y: {
+                    beginAtZero: true,
+                    ticks: {
+                        callback: function(value) { return '$' + value; }
+                    }
+                }
+            }
+        }
+    });
+</script>
 {% endif %}
 {% endblock %}

@@ -2,6 +2,7 @@ from django.shortcuts import render, get_object_or_404, redirect
 from django.contrib import messages
 from .models import TrackedCard
 from .forms import TrackedCardForm
+from .models import TrackedCard, ValueSnapshot
 
 
 def tracking_list(request):
@@ -11,10 +12,16 @@ def tracking_list(request):
     if status_filter and status_filter in dict(TrackedCard.STATUS_CHOICES):
         tracked_cards = tracked_cards.filter(status=status_filter)
 
+    snapshots = ValueSnapshot.objects.all()
+    chart_dates = [s.date.strftime('%b %d') for s in snapshots]
+    chart_values = [float(s.total_value) for s in snapshots]
+
     context = {
         'tracked_cards': tracked_cards,
         'status_choices': TrackedCard.STATUS_CHOICES,
         'current_filter': status_filter or 'all',
+        'chart_dates': chart_dates,
+        'chart_values': chart_values,
     }
     return render(request, 'tracking/tracking_list.html', context)
 
@@ -69,3 +76,12 @@ def tracking_delete(request, pk):
         return redirect('tracking:list')
 
     return render(request, 'tracking/tracking_delete.html', {'card': card})
+
+def collection_value_data(request):
+    from django.http import JsonResponse
+    snapshots = ValueSnapshot.objects.all()
+    data = {
+        'dates': [s.date.strftime('%b %d') for s in snapshots],
+        'values': [float(s.total_value) for s in snapshots],
+    }
+    return JsonResponse(data)
