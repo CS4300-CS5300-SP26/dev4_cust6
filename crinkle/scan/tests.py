@@ -24,7 +24,7 @@ class CameraPageTests(TestCase):
     def test_scan_page_template(self):
         """Scan page should use scan.html"""
         response = self.client.get(reverse("scan"))
-        self.assertTemplateUsed(response, "scan.html")
+        self.assertTemplateUsed(response, "scan/scan.html")
 
     def test_scan_page_contains_camera_ui(self):
         """Scan page should contain camera UI elements"""
