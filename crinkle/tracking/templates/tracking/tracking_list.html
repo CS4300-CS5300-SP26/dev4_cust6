@@ -17,7 +17,12 @@
     {% endif %}
     {% endfor %}
 </div>
-
+{% if current_filter == 'sold' %}
+<div class="chart-container">
+    <h3 class="section-label">Total Sold</h3>
+    <p class="detail-price">${{ sold_total }}</p>
+</div>
+{% endif %}
 {% if current_filter == 'owned' %}
 <div class="chart-container">
     <h3 class="section-label">Collection Value</h3>

@@ -8,7 +8,7 @@ class TrackedCardForm(forms.ModelForm):
         model = TrackedCard
 
         # Which fields show up on the form (user and dates are handled automatically)
-        fields = ['card_name', 'card_set', 'card_year', 'grade_tier', 'status', 'notes']
+        fields = ['card_name', 'card_set', 'card_year', 'grade_tier', 'status', 'sold_price','notes']
 
         # Customize how each field looks in HTML
         widgets = {
@@ -22,6 +22,10 @@ class TrackedCardForm(forms.ModelForm):
                 'placeholder': 'e.g. 2025',
                 'min': 1996,
                 'max': 2027,
+            }), 
+            'sold_price': forms.NumberInput(attrs={
+                'placeholder': 'e.g. 127.00',
+                'step': '0.01',
             }),
             'notes': forms.Textarea(attrs={
                 'placeholder': 'Any notes about this card...',

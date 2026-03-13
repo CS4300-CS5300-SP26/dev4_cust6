@@ -3,7 +3,7 @@ from django.contrib import messages
 from .models import TrackedCard
 from .forms import TrackedCardForm
 from .models import TrackedCard, ValueSnapshot
-
+from django.db import models
 
 def tracking_list(request):
     tracked_cards = TrackedCard.objects.all()
@@ -15,6 +15,7 @@ def tracking_list(request):
     snapshots = ValueSnapshot.objects.all()
     chart_dates = [s.date.strftime('%b %d') for s in snapshots]
     chart_values = [float(s.total_value) for s in snapshots]
+    
 
     context = {
         'tracked_cards': tracked_cards,
@@ -22,6 +23,7 @@ def tracking_list(request):
         'current_filter': status_filter or 'all',
         'chart_dates': chart_dates,
         'chart_values': chart_values,
+        'sold_total': TrackedCard.objects.filter(status='sold').exclude(sold_price__isnull=True).aggregate(total=models.Sum('sold_price'))['total'] or 0,
     }
     return render(request, 'tracking/tracking_list.html', context)
 

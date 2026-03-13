@@ -28,7 +28,6 @@ class TrackedCard(models.Model):
     ]
 
     # Links this tracked card to whichever user created it
-  
     # Basic card info
     card_name = models.CharField(max_length=200)           # e.g. "Charizard"
     card_set = models.CharField(max_length=200, blank=True, default='')  # e.g. "Base Set"
@@ -59,6 +58,11 @@ class TrackedCard(models.Model):
         max_length=10,
         choices=[('up', 'Up'), ('down', 'Down'), ('stable', 'Stable')],
         blank=True, default='',
+    )
+
+    # Price the card was sold for
+    sold_price = models.DecimalField(
+        max_digits=10, decimal_places=2, null=True, blank=True,
     )
 
     # Show newest cards first
