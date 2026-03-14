@@ -26,8 +26,8 @@ class CardModelTest(TestCase):
         card = Card.objects.create(name="No Set Card")
         self.assertEqual(card.set_name, "Unknown Set")
 
-    def test_scanned_at_auto_set(self):
-        self.assertIsNotNone(self.card.scanned_at)
+    def test_date_scanned_auto_set(self):
+        self.assertIsNotNone(self.card.date_scanned)
 
 
 class HistoryViewTest(TestCase):
@@ -52,7 +52,7 @@ class HistoryViewTest(TestCase):
     def test_history_ordered_by_most_recent(self):
         response = self.client.get(reverse('history'))
         cards = list(response.context['cards'])
-        self.assertGreaterEqual(cards[0].scanned_at, cards[-1].scanned_at)
+        self.assertGreaterEqual(cards[0].date_scanned, cards[-1].date_scanned)
 
 
 class IndexViewTest(TestCase):

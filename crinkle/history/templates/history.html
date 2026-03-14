@@ -279,10 +279,14 @@
                         name: '{{ card.name|default:"Unknown Card"|escapejs }}',
                         set: '{{ card.set_name|default:"Unknown Set"|escapejs }}',
                         grade: '{{ card.grade|default:""|escapejs }}',
-                        date: '{{ card.scanned_at|date:"M d, Y · g:i A"|escapejs }}',
-                        imageUrl: '{{ card.image.url|escapejs }}'
+                        date: '{{ card.date_scanned|date:"M d, Y · g:i A"|escapejs }}',
+                        imageUrl: '{% if card.image %}{{ card.image.url|escapejs }}{% endif %}'
                     })">
-                        <img class="card-thumbnail" src="{{ card.image.url }}" alt="{{ card.name }}">
+                        {% if card.image %}
+                            <img class="card-thumbnail" src="{{ card.image.url }}" alt="{{ card.name }}">
+                        {% else %}
+                            <div class="card-thumbnail-placeholder">🃏</div>
+                        {% endif %}
                         <div class="card-info">
                             <div class="card-name">{{ card.name|default:"Unknown Card" }}</div>
                             <div class="card-meta">
@@ -296,7 +300,7 @@
                                 {% endif %}
                                 <span class="card-badge">{{ card.set_name|default:"Unknown Set" }}</span>
                             </div>
-                            <div class="card-date">Scanned {{ card.scanned_at|date:"M d, Y · g:i A" }}</div>
+                            <div class="card-date">Scanned {{ card.date_scanned|date:"M d, Y · g:i A" }}</div>
                         </div>
                         <div class="card-arrow">›</div>
                     </div>
