@@ -40,6 +40,7 @@ INSTALLED_APPS = [
     'rest_framework',
     'behave_django',
     'home',
+    'history',
     'tracking',
     'accounts',
     'cards',

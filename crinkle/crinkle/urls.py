@@ -19,6 +19,8 @@ from home import views
 from home.views import index
 urlpatterns = [
     path('', index, name='index'),
+    path('', include('home.urls')),
+    path('history/', include('history.urls')),
     path('tracking/', include('tracking.urls')),
     path('accounts/', include('accounts.urls')),
     path('', include('cards.urls')),
