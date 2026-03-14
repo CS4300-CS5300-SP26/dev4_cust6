@@ -19,5 +19,6 @@ from home.views import index
 
 urlpatterns = [
     path('', index, name='index'),
-    path('', include('home.urls')),  # add this line
+    path('', include('home.urls')),
+    path('history/', include('history.urls')),
 ]
