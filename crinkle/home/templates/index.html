@@ -133,7 +133,15 @@
             <span>Home</span>
         </a>
 
-        <a class="nav-item scan-btn" href="#">
+        <a class="nav-item" href="{% url 'history' %}">
+            <svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round"
+                      d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"/>
+            </svg>
+            <span>History</span>
+        </a>
+
+        <a class="nav-item scan-btn" href="{% url 'scan' %}">
             <div class="scan-circle">
                 <svg fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24">
                     <path stroke-linecap="round" stroke-linejoin="round"

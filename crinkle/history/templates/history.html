@@ -122,6 +122,24 @@
         .card-date { font-size: 12px; color: rgba(255,255,255,0.50); margin-top: 5px; }
         .card-arrow { color: rgba(255,255,255,0.40); font-size: 20px; flex-shrink: 0; }
 
+        /* Back button */
+        .btn-back {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            height: 36px;
+            padding: 0 14px;
+            background: rgba(255,255,255,0.15);
+            border: 1px solid rgba(255,255,255,0.25);
+            border-radius: 10px;
+            color: #ffffff;
+            font-size: 14px;
+            font-weight: 500;
+            text-decoration: none;
+            -webkit-tap-highlight-color: transparent;
+        }
+        .btn-back:active { background: rgba(255,255,255,0.25); }
+
         /* ── MODAL BACKDROP ── */
         .modal-backdrop {
             display: none;
@@ -262,8 +280,10 @@
 
             <!-- Nav -->
             <div class="hero-nav" style="position:absolute;left:20px;right:20px;top:16px;display:flex;justify-content:space-between;align-items:center;z-index:3;">
+                <a class="btn-back" href="{% url 'index' %}">
+                    &#8592; Back
+                </a>
                 <div class="brand">Crinkle</div>
-                <a class="btn btn-nav" href="#">Login</a>
             </div>
 
             <div class="history-inner">
@@ -430,7 +450,6 @@
             return 'grade-low';
         }
 
-        // Sample estimated values — replace with real model data later
         const sampleValues = {
             'Charizard VMAX': '$420',
             'Pikachu Illustrator': '$5,000+',
