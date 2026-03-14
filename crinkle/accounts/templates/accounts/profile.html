@@ -112,7 +112,7 @@
 <!-- Navigation menu -->
 <p class="section-label">My Cards</p>
 <div class="menu-list">
-    <a class="menu-item" href="#">
+    <a class="menu-item" href="{% url 'history' %}">
         <div class="menu-icon" style="background:#EEF2FF;">📋</div>
         Grading History
         <span class="menu-arrow">›</span>
@@ -122,7 +122,7 @@
         My Collection
         <span class="menu-arrow">›</span>
     </a>
-    <a class="menu-item" href="#">
+    <a class="menu-item" href="{% url 'tracking:list' %}">
         <div class="menu-icon" style="background:#FFFBEB;">👁</div>
         Tracking
         <span class="menu-arrow">›</span>

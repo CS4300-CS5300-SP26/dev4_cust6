@@ -3,15 +3,15 @@ from . import views
 
 app_name = 'cards'
 urlpatterns = [
-    path('accounts/profile/collection/',
+    path('collection/',
          views.CardCollectionViewSet.as_view({'get': 'retrieve'}),
          name='collection'
          ),
-    path('accounts/profile/collection/<int:pk>/',
+    path('collection/<int:pk>/',
          views.CardViewSet.as_view({'get': 'retrieve'}),
          name='view_card'
          ),
-    path('accounts/profile/collection/<int:pk>/save',
+    path('collection/<int:pk>/save',
          views.CardViewSet.as_view({'post': 'update'}),
          name='save_card'
          ),
@@ -19,7 +19,7 @@ urlpatterns = [
          views.scan_report_view,
          name='scan_report'
          ),
-    path('accounts/profile/collection/save',
+    path('collection/save',
          views.save_report_view,
          name='save_report'
          ),
