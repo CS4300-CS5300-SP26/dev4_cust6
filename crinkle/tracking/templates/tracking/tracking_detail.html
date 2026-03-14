@@ -1,0 +1,34 @@
+{% extends "tracking/base.html" %}
+{% block title %}{{ card.card_name }} — Crinkle{% endblock %}
+{% block header_left %}
+<a href="{% url 'tracking:list' %}" class="back-link">&larr;</a>
+<span class="page-title">Card Details</span>
+{% endblock %}
+{% block header_right %}
+<a href="{% url 'tracking:edit' card.pk %}" class="btn-edit">Edit</a>
+{% endblock %}
+{% block content %}
+<div class="detail-card">
+    <h2 class="detail-name">{{ card.card_name }}</h2>
+    {% if card.card_set %}
+    <p class="detail-set">{{ card.card_set }}{% if card.card_year %} &middot; {{ card.card_year }}{% endif %}</p>
+    {% endif %}
+    <div class="detail-badges">
+        <span class="grade-badge lg">{{ card.get_grade_tier_display }}</span>
+        <span class="status-badge status-{{ card.status }} lg">{{ card.get_status_display }}</span>
+    </div>
+    {% if card.notes %}
+    <div class="detail-section">
+        <h3 class="section-label">Notes</h3>
+        <p>{{ card.notes }}</p>
+    </div>
+    {% endif %}
+    <div class="detail-section">
+        <p class="muted">Added {{ card.date_added|date:"M d, Y" }} &middot; Updated {{ card.date_updated|date:"M d, Y" }}</p>
+    </div>
+</div>
+<div class="detail-actions">
+    <a href="{% url 'tracking:edit' card.pk %}" class="btn-tracking btn-tracking-primary">Edit Card</a>
+    <a href="{% url 'tracking:delete' card.pk %}" class="btn-tracking btn-tracking-danger">Remove from Tracking</a>
+</div>
+{% endblock %}

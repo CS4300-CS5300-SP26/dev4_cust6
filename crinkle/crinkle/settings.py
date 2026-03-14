@@ -25,7 +25,7 @@ SECRET_KEY = 'django-insecure-v6apk9l#igpq(9@%stou5&o75hmsgoiezmu+wm*-(@)l%46872
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['app-bholland-21.devedu.io']
+ALLOWED_HOSTS = ['*']
 
 
 # Application definition
@@ -37,8 +37,14 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'rest_framework',
+    'behave_django',
     'home',
     'history',
+    'tracking',
+    'accounts',
+    'cards',
+    'scan',
 ]
 
 MIDDLEWARE = [
@@ -117,9 +123,13 @@ USE_TZ = True
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/4.2/howto/static-files/
 
-STATIC_URL = 'static/'
+STATIC_URL = '/static/'
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/4.2/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+CSRF_TRUSTED_ORIGINS = ['https://*.devedu.io']
+LOGIN_URL = '/accounts/login/'
+LOGIN_REDIRECT_URL = '/accounts/profile/'
+LOGOUT_REDIRECT_URL = '/'

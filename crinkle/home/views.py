@@ -1,5 +1,6 @@
 from django.shortcuts import render
 from .models import Card
+from scan.views import scan_page
 
 # Create your views here.
 def index(request):
