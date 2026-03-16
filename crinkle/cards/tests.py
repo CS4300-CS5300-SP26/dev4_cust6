@@ -101,7 +101,7 @@ class CollectionTestCase(TestCase):
 
         # Check that all cards are present
         for card in response.data['cards']:
-            self.assertEqual(card['name'], f'Card-{card['id']}')
+            self.assertEqual(card['name'], f"Card-{card['id']}")
             self.assertEqual(card['user'], self.user.pk)
 
     @parameterized.expand([
