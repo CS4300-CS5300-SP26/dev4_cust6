@@ -14,6 +14,4 @@ WORKDIR /app/crinkle
 
 RUN python manage.py collectstatic --noinput
 
-EXPOSE 10000
-
-CMD gunicorn crinkle.wsgi:application --bind 0.0.0.0:10000
+CMD sh -c "gunicorn crinkle.wsgi:application --bind 0.0.0.0:${PORT:-10000}"
