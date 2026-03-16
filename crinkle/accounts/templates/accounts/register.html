@@ -29,7 +29,11 @@
         <label for="{{ form.password1.id_for_label }}">Password</label>
         {{ form.password1 }}
         {% if form.password1.errors %}
-            <div class="field-error">{{ form.password1.errors|join:", " }}</div>
+            <div class="field-error">
+                {% for error in form.password1.errors %}
+                    <div>{{ error }}</div>
+                {% endfor %}
+            </div>
         {% endif %}
     </div>
 
@@ -37,7 +41,11 @@
         <label for="{{ form.password2.id_for_label }}">Confirm Password</label>
         {{ form.password2 }}
         {% if form.password2.errors %}
-            <div class="field-error">{{ form.password2.errors|join:", " }}</div>
+            <div class="field-error">
+                {% for error in form.password2.errors %}
+                    <div>{{ error }}</div>
+                {% endfor %}
+            </div>
         {% endif %}
     </div>
 
