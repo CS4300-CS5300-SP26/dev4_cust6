@@ -17,9 +17,12 @@ jobs:
 
       - name: Login to GitHub Container Registry
         run: echo "${{ secrets.GITHUB_TOKEN }}" | docker login ghcr.io -u ${{ github.actor }} --password-stdin
-
+        
+      - name: Set lowercase image name
+        run: echo "IMAGE_NAME=ghcr.io/${GITHUB_REPOSITORY,,}/crinkle:latest" >> $GITHUB_ENV
+        
       - name: Build image
-        run: docker build -t ghcr.io/${{ github.repository_owner }}/crinkle:latest .
+        run: docker build -t $IMAGE_NAME ./crinkle_RENDER
 
       - name: Push image
-        run: docker push ghcr.io/${{ github.repository_owner }}/crinkle:latest
+        run: docker push $IMAGE_NAME
