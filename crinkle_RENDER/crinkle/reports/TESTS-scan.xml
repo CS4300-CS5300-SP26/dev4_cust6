@@ -1,0 +1,109 @@
+<testsuite name="scan.Card Scanning" tests="9" errors="0" failures="0" skipped="0" time="0.003786" timestamp="2026-03-16T07:00:56.308212" hostname="Taras-MacBook-Pro.local"><testcase classname="scan.Card Scanning" name="Navigate to scan page from landing page" status="passed" time="0.000204"><system-out>
+<![CDATA[
+@scenario.begin
+  Scenario: Navigate to scan page from landing page
+    Given the application is running ... passed in 0.000s
+    Given I am on the landing page ... passed in 0.000s
+    When I tap the scan button ... passed in 0.000s
+    Then I should be taken to the scan page ... passed in 0.000s
+
+@scenario.end
+--------------------------------------------------------------------------------
+]]>
+</system-out></testcase><testcase classname="scan.Card Scanning" name="Initialise camera on scan page" status="passed" time="0.000208"><system-out>
+<![CDATA[
+@scenario.begin
+  Scenario: Initialise camera on scan page
+    Given the application is running ... passed in 0.000s
+    Given I am on the scan page ... passed in 0.000s
+    When the scan page loads ... passed in 0.000s
+    Then the camera should be initialised ... passed in 0.000s
+
+@scenario.end
+--------------------------------------------------------------------------------
+]]>
+</system-out></testcase><testcase classname="scan.Card Scanning" name="Frame for card pops up" status="passed" time="0.000199"><system-out>
+<![CDATA[
+@scenario.begin
+  Scenario: Frame for card pops up
+    Given the application is running ... passed in 0.000s
+    Given the camera is initialised ... passed in 0.000s
+    When the scan page is displayed ... passed in 0.000s
+    Then a frame for the card should appear ... passed in 0.000s
+
+@scenario.end
+--------------------------------------------------------------------------------
+]]>
+</system-out></testcase><testcase classname="scan.Card Scanning" name="Frame for card is horizontal" status="passed" time="0.000153"><system-out>
+<![CDATA[
+@scenario.begin
+  Scenario: Frame for card is horizontal
+    Given the application is running ... passed in 0.000s
+    Given the frame for the card is displayed ... passed in 0.000s
+    Then the frame should be horizontal ... passed in 0.000s
+
+@scenario.end
+--------------------------------------------------------------------------------
+]]>
+</system-out></testcase><testcase classname="scan.Card Scanning" name="User is prompted to take a photo and place the card in frame" status="passed" time="0.000155"><system-out>
+<![CDATA[
+@scenario.begin
+  Scenario: User is prompted to take a photo and place the card in frame
+    Given the application is running ... passed in 0.000s
+    Given the frame for the card is displayed ... passed in 0.000s
+    Then I should be prompted to place the card in the frame and take a photo ... passed in 0.000s
+
+@scenario.end
+--------------------------------------------------------------------------------
+]]>
+</system-out></testcase><testcase classname="scan.Card Scanning" name="Successfully take a photo of the card" status="passed" time="0.000339"><system-out>
+<![CDATA[
+@scenario.begin
+  Scenario: Successfully take a photo of the card
+    Given the application is running ... passed in 0.000s
+    Given I have a card ready to scan ... passed in 0.000s
+    When I select the scan option ... passed in 0.000s
+    And I place the card in the frame ... passed in 0.000s
+    And I press the camera button ... passed in 0.000s
+    Then the photo should be taken successfully ... passed in 0.000s
+    And the image should be displayed in the application ... passed in 0.000s
+
+@scenario.end
+--------------------------------------------------------------------------------
+]]>
+</system-out></testcase><testcase classname="scan.Card Scanning" name="User has option to retake photo" status="passed" time="0.000152"><system-out>
+<![CDATA[
+@scenario.begin
+  Scenario: User has option to retake photo
+    Given the application is running ... passed in 0.000s
+    Given a photo has been taken ... passed in 0.000s
+    Then I should see an option to retake the photo ... passed in 0.000s
+
+@scenario.end
+--------------------------------------------------------------------------------
+]]>
+</system-out></testcase><testcase classname="scan.Card Scanning" name="User is prompted to log in if photo is taken without logging in" status="passed" time="0.002179"><system-out>
+<![CDATA[
+@scenario.begin
+  Scenario: User is prompted to log in if photo is taken without logging in
+    Given the application is running ... passed in 0.000s
+    Given I am not logged in ... passed in 0.002s
+    When I take a photo of the card ... passed in 0.000s
+    Then I should be prompted to log in ... passed in 0.000s
+
+@scenario.end
+--------------------------------------------------------------------------------
+]]>
+</system-out></testcase><testcase classname="scan.Card Scanning" name="User can go back to landing page from camera page" status="passed" time="0.000198"><system-out>
+<![CDATA[
+@scenario.begin
+  Scenario: User can go back to landing page from camera page
+    Given the application is running ... passed in 0.000s
+    Given I am on the camera page ... passed in 0.000s
+    When I tap the back button ... passed in 0.000s
+    Then I should be taken back to the landing page ... passed in 0.000s
+
+@scenario.end
+--------------------------------------------------------------------------------
+]]>
+</system-out></testcase></testsuite>

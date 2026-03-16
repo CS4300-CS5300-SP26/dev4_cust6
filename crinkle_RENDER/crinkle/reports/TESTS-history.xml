@@ -1,0 +1,34 @@
+<testsuite name="history.Card History Page" tests="3" errors="0" failures="0" skipped="0" time="0.008567" timestamp="2026-03-16T07:00:56.053103" hostname="Taras-MacBook-Pro.local"><testcase classname="history.Card History Page" name="History page loads successfully" status="passed" time="0.005053"><system-out>
+<![CDATA[
+@scenario.begin
+  Scenario: History page loads successfully
+    Given the app is running ... passed in 0.002s
+    When I visit the history page ... passed in 0.003s
+    Then I should see a 200 response ... passed in 0.000s
+
+@scenario.end
+--------------------------------------------------------------------------------
+]]>
+</system-out></testcase><testcase classname="history.Card History Page" name="History page shows scanned cards" status="passed" time="0.001875"><system-out>
+<![CDATA[
+@scenario.begin
+  Scenario: History page shows scanned cards
+    Given a card named "Charizard VMAX" exists in the database ... passed in 0.000s
+    When I visit the history page ... passed in 0.001s
+    Then I should see "Charizard VMAX" on the history page ... passed in 0.000s
+
+@scenario.end
+--------------------------------------------------------------------------------
+]]>
+</system-out></testcase><testcase classname="history.Card History Page" name="History page shows empty state when no cards exist" status="passed" time="0.001639"><system-out>
+<![CDATA[
+@scenario.begin
+  Scenario: History page shows empty state when no cards exist
+    Given there are no cards in the database ... passed in 0.000s
+    When I visit the history page ... passed in 0.001s
+    Then I should see a 200 response ... passed in 0.000s
+
+@scenario.end
+--------------------------------------------------------------------------------
+]]>
+</system-out></testcase></testsuite>

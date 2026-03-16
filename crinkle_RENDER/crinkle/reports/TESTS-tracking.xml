@@ -1,0 +1,126 @@
+<testsuite name="tracking.Card Tracking" tests="10" errors="0" failures="0" skipped="0" time="0.075124" timestamp="2026-03-16T07:00:56.675353" hostname="Taras-MacBook-Pro.local"><testcase classname="tracking.Card Tracking" name="Add a card to tracking" status="passed" time="0.016832"><system-out>
+<![CDATA[
+@scenario.begin
+  Scenario: Add a card to tracking
+    Given I am on the tracking add page ... passed in 0.010s
+    When I fill in card name "Charizard" set "Base Set" year "1999" ... passed in 0.000s
+    And I select grade tier "PSA 9" and status "Watching" ... passed in 0.000s
+    And I submit the tracking form ... passed in 0.002s
+    Then I should be redirected to the tracking list ... passed in 0.000s
+    And I should see "Charizard" in the tracking list ... passed in 0.004s
+
+@scenario.end
+--------------------------------------------------------------------------------
+]]>
+</system-out></testcase><testcase classname="tracking.Card Tracking" name="Add a card with no name fails" status="passed" time="0.011304"><system-out>
+<![CDATA[
+@scenario.begin
+  Scenario: Add a card with no name fails
+    Given I am on the tracking add page ... passed in 0.006s
+    When I submit the tracking form without a card name ... passed in 0.005s
+    Then I should stay on the add card page ... passed in 0.000s
+    And no card should be created ... passed in 0.000s
+
+@scenario.end
+--------------------------------------------------------------------------------
+]]>
+</system-out></testcase><testcase classname="tracking.Card Tracking" name="Add a sold card" status="passed" time="0.011201"><system-out>
+<![CDATA[
+@scenario.begin
+  Scenario: Add a sold card
+    Given I am on the tracking add page ... passed in 0.006s
+    When I fill in card name "Blastoise" set "Base Set" year "1999" ... passed in 0.000s
+    And I select grade tier "PSA 10" and status "Sold" ... passed in 0.000s
+    And I submit the tracking form ... passed in 0.002s
+    Then I should be redirected to the tracking list ... passed in 0.000s
+    And I should see "Blastoise" in the tracking list ... passed in 0.003s
+
+@scenario.end
+--------------------------------------------------------------------------------
+]]>
+</system-out></testcase><testcase classname="tracking.Card Tracking" name="View tracking list" status="passed" time="0.005787"><system-out>
+<![CDATA[
+@scenario.begin
+  Scenario: View tracking list
+    Given a card "Mewtwo" with status "Watching" ... passed in 0.000s
+    When I visit the tracking list ... passed in 0.003s
+    Then I should see "Mewtwo" in the tracking list ... passed in 0.002s
+
+@scenario.end
+--------------------------------------------------------------------------------
+]]>
+</system-out></testcase><testcase classname="tracking.Card Tracking" name="View card detail" status="passed" time="0.004699"><system-out>
+<![CDATA[
+@scenario.begin
+  Scenario: View card detail
+    Given a card "Pikachu" with status "Owned" ... passed in 0.000s
+    When I view the detail page for "Pikachu" ... passed in 0.004s
+    Then I should see "Pikachu" on the page ... passed in 0.000s
+    And I should see "Owned" on the page ... passed in 0.000s
+
+@scenario.end
+--------------------------------------------------------------------------------
+]]>
+</system-out></testcase><testcase classname="tracking.Card Tracking" name="Filter by status" status="passed" time="0.006559"><system-out>
+<![CDATA[
+@scenario.begin
+  Scenario: Filter by status
+    Given a card "Mewtwo" with status "Watching" ... passed in 0.000s
+    And a card "Venusaur" with status "Sold" ... passed in 0.000s
+    When I filter the tracking list by "sold" ... passed in 0.003s
+    Then I should see "Venusaur" in the tracking list ... passed in 0.002s
+    And I should not see "Mewtwo" in the tracking list ... passed in 0.000s
+
+@scenario.end
+--------------------------------------------------------------------------------
+]]>
+</system-out></testcase><testcase classname="tracking.Card Tracking" name="Filter by collection" status="passed" time="0.006088"><system-out>
+<![CDATA[
+@scenario.begin
+  Scenario: Filter by collection
+    Given a card "Charizard" with status "Owned" ... passed in 0.000s
+    And a card "Pikachu" with status "Watching" ... passed in 0.000s
+    When I filter the tracking list by "owned" ... passed in 0.003s
+    Then I should see "Charizard" in the tracking list ... passed in 0.002s
+    And I should not see "Pikachu" in the tracking list ... passed in 0.000s
+
+@scenario.end
+--------------------------------------------------------------------------------
+]]>
+</system-out></testcase><testcase classname="tracking.Card Tracking" name="Edit a tracked card" status="passed" time="0.004447"><system-out>
+<![CDATA[
+@scenario.begin
+  Scenario: Edit a tracked card
+    Given a card "Mewtwo" with status "Watching" ... passed in 0.000s
+    When I edit "Mewtwo" and change status to "Submitted for Grading" ... passed in 0.004s
+    Then the card "Mewtwo" should have status "submitted" ... passed in 0.000s
+
+@scenario.end
+--------------------------------------------------------------------------------
+]]>
+</system-out></testcase><testcase classname="tracking.Card Tracking" name="Delete a tracked card" status="passed" time="0.00315"><system-out>
+<![CDATA[
+@scenario.begin
+  Scenario: Delete a tracked card
+    Given a card "Jigglypuff" with status "Watching" ... passed in 0.000s
+    When I delete the card "Jigglypuff" ... passed in 0.002s
+    Then "Jigglypuff" should not exist in tracking ... passed in 0.000s
+
+@scenario.end
+--------------------------------------------------------------------------------
+]]>
+</system-out></testcase><testcase classname="tracking.Card Tracking" name="Sold tab shows total" status="passed" time="0.005056"><system-out>
+<![CDATA[
+@scenario.begin
+  Scenario: Sold tab shows total
+    Given a card "Charizard" with status "Sold" ... passed in 0.000s
+    And that card was sold for "300.00" ... passed in 0.000s
+    And a card "Blastoise" with status "Sold" ... passed in 0.000s
+    And that card was sold for "200.00" ... passed in 0.000s
+    When I filter the tracking list by "sold" ... passed in 0.004s
+    Then the sold total should be "500.00" ... passed in 0.000s
+
+@scenario.end
+--------------------------------------------------------------------------------
+]]>
+</system-out></testcase></testsuite>

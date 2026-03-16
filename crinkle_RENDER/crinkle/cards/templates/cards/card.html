@@ -1,0 +1,23 @@
+{% extends "cards/base.html" %}
+{% load static %}
+
+{% block top_bar %}
+<a class="back-btn" href="{% url 'cards:collection' %}"> ‹ </a>
+<span class="screen-title"> Card View </span>
+{% endblock %}
+
+{% block content %}
+{{data}}
+<img src="{{picture_path}}" style="max-width:75vw; max-height:50vh; border-radius:12px;">
+
+<form method="post" class="form-group" action="{% url 'cards:collection' %}{{id}}/save">
+    {% csrf_token %}
+
+    <div class="card-collection">
+
+        <textarea class="notes-area" name="user_notes" maxlength="300">{{user_notes}}</textarea>
+
+        <input type="submit" value="Save" class="save-btn">
+    </div>
+<form>
+{% endblock %}
