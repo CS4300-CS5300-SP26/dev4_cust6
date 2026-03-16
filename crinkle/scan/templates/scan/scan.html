@@ -326,12 +326,24 @@
 
             <div class="post-capture-card" id="postCaptureCard">
                 <img id="scanPreview" class="scan-preview" alt="Captured card preview">
-                <h2 class="post-capture-title">Photo captured</h2>
+                <h2>Photo captured</h2>
+
+                {% if user.is_authenticated %}
+                <p class="post-capture-copy">Tap below to grade your card.</p>
+
+                <button class="btn btn-primary" id="gradeBtn" type="button">
+                    Grade Card
+                </button>
+
+                {% else %}
+
                 <p class="post-capture-copy">Log in to receive a grade.</p>
-                <div class="post-capture-actions">
-                    <button class="btn btn-primary" id="loginGradeBtn" type="button">
-                        Log in
-                    </button>
+
+                <button class="btn btn-primary" id="loginGradeBtn" type="button">
+                    Log in
+                </button>
+
+                {% endif %}
                     <button class="btn btn-secondary" id="retakeBtn" type="button">
                         Retake photo
                     </button>
@@ -444,6 +456,10 @@
         captureControls.style.display = "flex";
         overlay.style.display = "block";
         feedback.textContent = "Align your card inside the frame";
+    });
+
+    loginGradeBtn?.addEventListener("click", () => {
+        window.location.href = "/accounts/login/";
     });
 
     startCamera();
