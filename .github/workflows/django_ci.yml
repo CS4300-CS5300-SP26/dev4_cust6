@@ -80,6 +80,7 @@ jobs:
     
     # Attach report to pull request
     - name: Attach Coverage Report to Pull Request
+      if: github.event_name == 'pull_request'
       uses: thollander/actions-comment-pull-request@v3.0.1
       with:
         file-path: crinkle/report.md
