@@ -9,6 +9,7 @@ on:
 permissions:
   actions: write
   contents: read
+  pull-requests: write
 
 jobs:
   check-duplicate:
@@ -77,6 +78,6 @@ jobs:
           report.md
     
     # Then clean up any generated files
-    - name: Cleanup gGenerated Report
+    - name: Cleanup Generated Report
       if: github.event_name == 'pull_request'
       run: rm report.md
