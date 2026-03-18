@@ -63,6 +63,7 @@ jobs:
     - name: Attach Coverage To Pull Request
       if: github.event_name == 'pull_request'
       run: |
+        cd crinkle
         echo "## Coverage Report" > report.md
         echo "\`\`\`" >> report.md
         coverage report -m --fail-under=80 >> report.md
