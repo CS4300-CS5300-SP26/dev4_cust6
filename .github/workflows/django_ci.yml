@@ -82,7 +82,7 @@ jobs:
     - name: Attach Coverage Report to Pull Request
       uses: thollander/actions-comment-pull-request@v3.0.1
       with:
-        file-path: scripts/feedback.md
+        file-path: crinkle/report.md
     
     # Then clean up any generated files
     - name: Cleanup Generated Report
