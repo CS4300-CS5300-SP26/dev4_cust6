@@ -9,6 +9,7 @@ on:
 permissions:
   actions: write
   contents: read
+  pull-requests: write
 
 jobs:
   check-duplicate:
@@ -24,7 +25,10 @@ jobs:
     - id: skip-check
       uses: fkirc/skip-duplicate-actions@v5.3.1
       with:
-        concurrent_skipping: 'same_content_newer'
+        #concurrent_skipping: 'same_content_newer' - removed because it always needs to execute
+        concurrent_skipping: 'same_content'
+        do_not_skip: '["pull_request"]'
+
 
   test-and-coverage:
     needs: check-duplicate
@@ -55,3 +59,32 @@ jobs:
         coverage run manage.py test
         coverage run -a manage.py behave
         coverage report -m --fail-under=80
+
+    - name: Attach Coverage To Pull Request
+      if: github.event_name == 'pull_request'
+      run: |
+        cd crinkle
+        echo "## Coverage Report" > report.md
+        echo "\`\`\`" >> report.md
+        coverage report -m --fail-under=80 >> report.md
+        echo "\`\`\`" >> report.md
+    
+    # Upload code coverage
+    - name: Upload Coverage Report
+      if: github.event_name == 'pull_request'
+      uses: actions/upload-artifact@v4
+      with:
+        name: coverage-artifact
+        path: |
+          crinkle/report.md
+    
+    # Attach report to pull request
+    - name: Attach Coverage Report to Pull Request
+      uses: thollander/actions-comment-pull-request@v3.0.1
+      with:
+        file-path: crinkle/report.md
+    
+    # Then clean up any generated files
+    - name: Cleanup Generated Report
+      if: github.event_name == 'pull_request'
+      run: rm crinkle/report.md
