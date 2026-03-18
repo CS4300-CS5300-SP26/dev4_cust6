@@ -76,9 +76,9 @@ jobs:
       with:
         name: coverage-artifact
         path: |
-          report.md
+          crinkle/report.md
     
     # Then clean up any generated files
     - name: Cleanup Generated Report
       if: github.event_name == 'pull_request'
-      run: rm report.md
+      run: rm crinkle/report.md
