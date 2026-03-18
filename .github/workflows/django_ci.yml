@@ -69,14 +69,20 @@ jobs:
         coverage report -m --fail-under=80 >> report.md
         echo "\`\`\`" >> report.md
     
-    # Upload code coverage to pull request.
-    - name: Upload Report Artifact
+    # Upload code coverage
+    - name: Upload Coverage Report
       if: github.event_name == 'pull_request'
       uses: actions/upload-artifact@v4
       with:
         name: coverage-artifact
         path: |
           crinkle/report.md
+    
+    # Attach report to pull request
+    - name: Attach Coverage Report to Pull Request
+      uses: thollander/actions-comment-pull-request@v3.0.1
+      with:
+        file-path: scripts/feedback.md
     
     # Then clean up any generated files
     - name: Cleanup Generated Report
