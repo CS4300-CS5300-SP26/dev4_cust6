@@ -55,3 +55,25 @@ jobs:
         coverage run manage.py test
         coverage run -a manage.py behave
         coverage report -m --fail-under=80
+
+    - name: Attach Coverage To Pull Request
+      if: github.event_name == 'pull_request'
+      run: |
+        echo "## Coverage Report" > report.md
+        echo "\`\`\`" >> report.md
+        coverage report -m --fail-under=80 >> report.md
+        echo "\`\`\`" >> report.md
+    
+    # Upload code coverage to pull request.
+    - name: Upload Report Artifact
+      if: github.event_name == 'pull_request'
+      uses: actions/upload-artifact@v4
+      with:
+        name: coverage-artifact
+        path: |
+          report.md
+    
+    # Then clean up any generated files
+    - name: Cleanup gGenerated Report
+      if: github.event_name == 'pull_request'
+      run: rm report.md
