@@ -24,7 +24,10 @@ jobs:
     - id: skip-check
       uses: fkirc/skip-duplicate-actions@v5.3.1
       with:
-        concurrent_skipping: 'same_content_newer'
+        #concurrent_skipping: 'same_content_newer' - removed because it always needs to execute
+        concurrent_skipping: 'same_content'
+        do_not_skip: '["pull_request"]'
+
 
   test-and-coverage:
     needs: check-duplicate
