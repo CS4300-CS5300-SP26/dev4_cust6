@@ -22,6 +22,7 @@ class CardSerializer(serializers.ModelSerializer):
             "grading_notes",
             "picture_path",
             "user_notes",
+            "estimated_value",
         ]
 
 

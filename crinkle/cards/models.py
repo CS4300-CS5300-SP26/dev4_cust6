@@ -18,6 +18,8 @@ class Card(models.Model):
     picture_path = models.CharField(max_length=400)
     user_notes = models.TextField()
 
+    estimated_value = models.DecimalField(max_digits=12, decimal_places=2, default=50.00)
+
     def __str__(self):
         return self.name
 

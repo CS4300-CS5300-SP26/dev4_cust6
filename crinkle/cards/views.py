@@ -27,14 +27,23 @@ class CardCollectionViewSet(viewsets.ModelViewSet):
         collection = self.queryset.get_or_create(user=request.user)[0]
         cards = collection.cards
 
-        # if order argument is given apply it
-        if "order" in request.GET:
-            cards = collection.order_collection(request.GET["order"])
+        # apply order to cards
+        cards = collection.order_collection(collection.sort_order)
+
+        cards = CardSerializer(cards, many=True).data
+
+        for card in cards:
+            if float(card['estimated_value']) >= collection.value_threshold:
+                card['valuable'] = True
+            else:
+                card['valuable'] = False
 
         data = {
-            "cards": CardSerializer(cards, many=True).data,  # cards in order
+            "cards": cards,  # cards in order
             "value_threshold": collection.value_threshold,
         }
+
+        print(data)
 
         response = Response(
             data=data, template_name="cards/collection.html", status=status.HTTP_200_OK

@@ -44,6 +44,11 @@ html, body {
     border-width: 0.5px;
     margin-bottom: 2px;
 }
+.card-valuable {
+    border: rgb(199, 102, 255);
+    border-style: solid;
+    border-width: 2px;
+}
 
 .card-thumbnail {
     margin: 5px;
