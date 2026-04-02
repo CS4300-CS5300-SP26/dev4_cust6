@@ -99,20 +99,7 @@ class CollectionTestCase(TestCase):
             self.assertEqual(card["name"], f"Card-{card['id']}")
             self.assertEqual(card["user"], self.user.pk)
 
-    @parameterized.expand(
-        [
-            ("name"),
-            ("-name"),
-            ("date_scanned"),
-            ("-date_scanned"),
-            ("grading_notes"),
-            ("-grading_notes"),
-            ("-what_is_this"),  # what happens when a user modifies the url parameter
-            (
-                "date_scanne"
-            ),  # what happens if a user copies only part of the url and cuts off the sort
-        ]
-    )
+    @parameterized.expand([order[0] for order in CardCollection.SORT_CHOICES])
     def test_retrieve_cards_ordered_name(self, sort_order):
         """test that cards can be sorted in varying orderings"""
         self.set_up_user()
@@ -120,15 +107,18 @@ class CollectionTestCase(TestCase):
         self.set_up_add_card()
         self.set_up_add_card()
 
+        self.collection.sort_order = sort_order
+        self.collection.save()  # save sort order for testing
+
         # make a request where the specified order is name
         response = self.client.get(
-            reverse("cards:collection"), data={"order": sort_order}
+            reverse("cards:collection"),
         )
 
         self.assertEqual(response.status_code, 200)
 
         # order the cards by the intended order
-        ordered_cards = self.collection.order_collection(sort_order)
+        ordered_cards = self.collection.ordered_collection()
 
         # The ordered cards should be in the same order as the collection's cards
         for card in range(len(response.data["cards"])):

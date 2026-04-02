@@ -25,20 +25,17 @@ class CardCollectionViewSet(viewsets.ModelViewSet):
     def retrieve(self, request):
         """If the user is authenticated, retrieve their collection in the order (if specified)"""
         collection = self.queryset.get_or_create(user=request.user)[0]
-        cards = collection.cards
+        cards = collection.ordered_collection()  # obtain ordered ocllection
 
-        # apply order to cards
-        cards = collection.order_collection(collection.sort_order)
-
-        cards = CardSerializer(cards, many=True).data
+        cards_data = CardSerializer(cards, many=True).data
 
         # mark valuable cards as such
-        for card in cards:
-            if float(card['estimated_value']) >= collection.value_threshold:
-                card['valuable'] = True
+        for card in cards_data:
+            if float(card["estimated_value"]) >= collection.value_threshold:
+                card["valuable"] = True
 
         data = {
-            "cards": cards,  # cards in order
+            "cards": cards_data,  # cards in order
             "value_threshold": collection.value_threshold,
         }
 
@@ -76,7 +73,7 @@ def view_collection_settings(request):
 
     form = CollectionSettingsForm(instance=collection)
 
-    if request.method == 'POST':
+    if request.method == "POST":
         form = CollectionSettingsForm(request.POST, instance=collection)
         if form.is_valid():
             form.save()

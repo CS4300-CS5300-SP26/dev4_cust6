@@ -43,7 +43,7 @@ class CardCollection(models.Model):
     def __str__(self):
         return f"Collection of {self.user.username}"
 
-    def order_collection(self, sort_order):
+    def ordered_collection(self):
         """order card collection by sort_order parameter
 
         Args:
@@ -56,7 +56,7 @@ class CardCollection(models.Model):
 
         # if the card model has the attribute in sort order
         # then apply it
-        if hasattr(Card, sort_order.lstrip("-")):
-            cards = cards.order_by(sort_order)
+        if hasattr(Card, self.sort_order.lstrip("-")):
+            cards = cards.order_by(self.sort_order)
 
         return cards
