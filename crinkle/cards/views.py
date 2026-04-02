@@ -1,4 +1,4 @@
-from django.shortcuts import render, get_object_or_404
+from django.shortcuts import render, get_object_or_404, redirect
 from django.contrib.auth.decorators import login_required
 from rest_framework import viewsets, status, permissions
 from rest_framework.response import Response
@@ -6,6 +6,7 @@ from rest_framework.renderers import TemplateHTMLRenderer
 
 from .models import GradeReport, Card, CardCollection
 from .serializers import GradeReportSerializer, CardSerializer, CardCollectionSerializer
+from .forms import CollectionSettingsForm
 
 
 class GradeReportViewSet(viewsets.ModelViewSet):
@@ -32,6 +33,7 @@ class CardCollectionViewSet(viewsets.ModelViewSet):
 
         data = {
             "cards": CardSerializer(cards, many=True).data,  # cards in order
+            "value_threshold": collection.value_threshold,
         }
 
         response = Response(
@@ -62,11 +64,24 @@ class CardViewSet(viewsets.ModelViewSet):
         return self.retrieve(request, pk=pk)
 
 
+@login_required
 def view_collection_settings(request):
+    collection = CardCollection.objects.get_or_create(user=request.user)[0]
+
+    form = CollectionSettingsForm(instance=collection)
+
+    if request.method == 'POST':
+        form = CollectionSettingsForm(request.POST, instance=collection)
+        if form.is_valid():
+            form.save()
+            return redirect("cards:collection")
+    else:
+        form = CollectionSettingsForm(instance=collection)
+
     return render(
         request,
         template_name="cards/collection_settings.html",
-        context={"test": "test"},
+        context={"form": form},
     )
 
 

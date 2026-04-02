@@ -10,9 +10,4 @@ class CollectionSettingsForm(forms.ModelForm):
             "value_threshold",
         ]
 
-        widgets = {
-            "sort_order": forms.ChoiceField(
-                choices=["name", "date_scanned", "grading_notes"]
-            ),
-            "value_threshold": forms.DecimalField(max_digits=12, decimal_places=2),
-        }
+        widgets = {"sort_order": forms.TextInput(attrs={"class": "form-label"})}

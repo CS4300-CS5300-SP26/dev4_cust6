@@ -23,11 +23,20 @@ class Card(models.Model):
 
 
 class CardCollection(models.Model):
+    SORT_CHOICES = [
+        ("name", "Name"),
+        ("date_scanned", "Date Scanned"),
+        ("grading_notes", "Grade"),
+        ("-name", "Name Descending"),
+        ("-date_scanned", "Date Scanned Descending"),
+        ("-grading_notes", "Grade Descending"),
+    ]
+
     user = models.OneToOneField(User, on_delete=models.CASCADE)
     cards = models.ManyToManyField(Card)
 
-    sort_order = models.CharField(max_length=400, default="name")
-    value_threshold = models.DecimalField(max_digits=12, decimal_places=2, default=100)
+    sort_order = models.CharField(max_length=400, choices=SORT_CHOICES, default="name")
+    value_threshold = models.DecimalField(max_digits=12, decimal_places=2, default=100.00)
 
     def __str__(self):
         return f"Collection of {self.user.username}"
