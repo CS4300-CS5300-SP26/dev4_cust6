@@ -32,18 +32,15 @@ class CardCollectionViewSet(viewsets.ModelViewSet):
 
         cards = CardSerializer(cards, many=True).data
 
+        # mark valuable cards as such
         for card in cards:
             if float(card['estimated_value']) >= collection.value_threshold:
                 card['valuable'] = True
-            else:
-                card['valuable'] = False
 
         data = {
             "cards": cards,  # cards in order
             "value_threshold": collection.value_threshold,
         }
-
-        print(data)
 
         response = Response(
             data=data, template_name="cards/collection.html", status=status.HTTP_200_OK

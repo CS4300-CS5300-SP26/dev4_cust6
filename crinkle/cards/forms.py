@@ -9,5 +9,3 @@ class CollectionSettingsForm(forms.ModelForm):
             "sort_order",
             "value_threshold",
         ]
-
-        widgets = {"sort_order": forms.TextInput(attrs={"class": "form-label"})}
