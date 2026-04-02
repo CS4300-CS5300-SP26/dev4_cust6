@@ -5,7 +5,7 @@ from .models import GradeReport, Card, CardCollection
 class GradeReportSerializer(serializers.ModelSerializer):
     class Meta:
         model = GradeReport
-        fields = '__all__'
+        fields = "__all__"
 
 
 class CardSerializer(serializers.ModelSerializer):
@@ -14,7 +14,15 @@ class CardSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Card
-        fields = ['id', 'user', 'name', 'date_scanned', 'grading_notes', 'picture_path', 'user_notes']
+        fields = [
+            "id",
+            "user",
+            "name",
+            "date_scanned",
+            "grading_notes",
+            "picture_path",
+            "user_notes",
+        ]
 
 
 class CardCollectionSerializer(serializers.ModelSerializer):
@@ -22,4 +30,4 @@ class CardCollectionSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = CardCollection
-        fields = '__all__'
+        fields = "__all__"

@@ -7,6 +7,7 @@
 {% endblock %}
 
 {% block content %}
+<a class="back-btn" href="{% url 'cards:collection_settings' %}"> Settings </a>
 <form method="get" action="{% url 'cards:collection' %}">
     <select id='order' name="order" class="select-order">
         <option value="grading_notes"> Grade </option>
