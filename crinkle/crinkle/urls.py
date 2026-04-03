@@ -25,4 +25,5 @@ urlpatterns = [
     path('accounts/', include('accounts.urls')),
     path('cards/', include('cards.urls')),
     path("scan/", include("scan.urls")),
+    path('submission/', include('submission.urls')),
 ]
