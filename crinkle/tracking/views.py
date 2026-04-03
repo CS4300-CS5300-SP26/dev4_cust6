@@ -1,9 +1,9 @@
 from django.shortcuts import render, get_object_or_404, redirect
 from django.contrib import messages
-from .models import TrackedCard
-from .forms import TrackedCardForm
-from .models import TrackedCard, ValueSnapshot
 from django.db import models
+from .models import TrackedCard, ValueSnapshot, CardPricing
+from .forms import TrackedCardForm
+
 
 def tracking_list(request):
     tracked_cards = TrackedCard.objects.all()
@@ -12,17 +12,10 @@ def tracking_list(request):
     if status_filter and status_filter in dict(TrackedCard.STATUS_CHOICES):
         tracked_cards = tracked_cards.filter(status=status_filter)
 
-    snapshots = ValueSnapshot.objects.all()
-    chart_dates = [s.date.strftime('%b %d') for s in snapshots]
-    chart_values = [float(s.total_value) for s in snapshots]
-    
-
     context = {
         'tracked_cards': tracked_cards,
         'status_choices': TrackedCard.STATUS_CHOICES,
         'current_filter': status_filter or 'all',
-        'chart_dates': chart_dates,
-        'chart_values': chart_values,
         'sold_total': TrackedCard.objects.filter(status='sold').exclude(sold_price__isnull=True).aggregate(total=models.Sum('sold_price'))['total'] or 0,
     }
     return render(request, 'tracking/tracking_list.html', context)
@@ -79,11 +72,17 @@ def tracking_delete(request, pk):
 
     return render(request, 'tracking/tracking_delete.html', {'card': card})
 
-def collection_value_data(request):
-    from django.http import JsonResponse
-    snapshots = ValueSnapshot.objects.all()
-    data = {
-        'dates': [s.date.strftime('%b %d') for s in snapshots],
-        'values': [float(s.total_value) for s in snapshots],
+
+def market_search(request):
+    query = request.GET.get('q', '')
+    results = []
+    if query:
+        results = CardPricing.objects.filter(
+            card_name__icontains=query
+        ).values('card_name', 'card_set').distinct()
+
+    context = {
+        'query': query,
+        'results': results,
     }
-    return JsonResponse(data)
+    return render(request, 'tracking/market_search.html', context)
