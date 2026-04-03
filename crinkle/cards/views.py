@@ -32,8 +32,7 @@ class CardCollectionViewSet(viewsets.ModelViewSet):
 
         # mark valuable cards as such
         for card in cards_data:
-            if float(card["estimated_value"]) >= collection.value_threshold:
-                card["valuable"] = True
+            card["is_valuable"] = collection.is_valuable(float(card["estimated_value"]))
 
         data = {
             "cards": cards_data,  # cards in order

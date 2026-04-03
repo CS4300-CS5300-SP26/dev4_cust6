@@ -13,11 +13,11 @@ Feature: Card Tracking
         Given I am logged in
         Given I have a collection of cards of value 39
         When I set a value threshold of 40
-        Then it is "True" that my cards are valuable
+        Then it is "False" that my cards are valuable
 
     Scenario: Cards matching threshold are valuable
         Given I am logged in
         Given I have a collection of cards of value 40
         When I set a value threshold of 40
-        Then it is "False" that my cards are valuable
+        Then it is "True" that my cards are valuable
 

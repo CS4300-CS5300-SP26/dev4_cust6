@@ -36,4 +36,7 @@ def view_collection(context, is_valuable):
     context.response = context.client.get(reverse("cards:collection"))
 
     for card in context.response.data["cards"]:
-        assert card["valuable"] == bool(is_valuable)
+        if is_valuable == "True":
+            assert card["is_valuable"]
+        else:
+            assert not card["is_valuable"]

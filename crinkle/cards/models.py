@@ -71,3 +71,14 @@ class CardCollection(models.Model):
             cards = cards.order_by(self.sort_order)
 
         return cards
+    
+    def is_valuable(self, value):
+        """Helper to check and return if value is valuable
+
+        Args:
+            value (Decimal): value to check if valuable
+
+        Returns:
+            bool: flag indicating if value is valuable according to colllection
+        """
+        return value >= self.value_threshold
