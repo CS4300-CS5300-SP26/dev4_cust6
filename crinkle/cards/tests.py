@@ -127,6 +127,13 @@ class CollectionTestCase(TestCase):
             ordered_card = ordered_cards[card].id
             self.assertEqual(response_card, ordered_card)
 
+    def test_modify_settings(self):
+        self.set_up_user()
+        self.set_up_collection()
+
+        reverse("cards:collection_settings")
+        self.assert_(False)
+
 
 class CardTestCase(TestCase):
     def set_up_user(self):

@@ -20,5 +20,14 @@ urlpatterns = [
     ),
     path("scan/report/", views.scan_report_view, name="scan_report"),
     path("collection/save", views.save_report_view, name="save_report"),
-    path("collection/settings", views.view_collection_settings, name="collection_settings"),
+    path(
+        "collection/settings",
+        views.CardCollectionViewSet.as_view(
+            {
+                "get": "collection_settings",
+                "post": "collection_settings",
+            }
+        ),
+        name="collection_settings",
+    ),
 ]

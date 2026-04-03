@@ -1,6 +1,7 @@
 from django.shortcuts import render, get_object_or_404, redirect
 from django.contrib.auth.decorators import login_required
 from rest_framework import viewsets, status, permissions
+from rest_framework.decorators import action
 from rest_framework.response import Response
 from rest_framework.renderers import TemplateHTMLRenderer
 
@@ -44,6 +45,28 @@ class CardCollectionViewSet(viewsets.ModelViewSet):
         )
         return response
 
+    @action(detail=True, methods=["GET", "POST"])
+    def collection_settings(self, request):
+        collection = self.queryset.get_or_create(user=request.user)[0]
+
+        form = CollectionSettingsForm(instance=collection)
+
+        if request.method == "POST":
+            form = CollectionSettingsForm(request.POST, instance=collection)
+            if form.is_valid():
+                form.save()
+                return redirect("cards:collection")
+        else:
+            form = CollectionSettingsForm(instance=collection)
+
+        response = Response(
+            data={"form": form},
+            template_name="cards/collection_settings.html",
+            status=status.HTTP_200_OK,
+        )
+
+        return response
+
 
 class CardViewSet(viewsets.ModelViewSet):
     queryset = Card.objects.all()
@@ -68,24 +91,6 @@ class CardViewSet(viewsets.ModelViewSet):
 
 
 @login_required
-def view_collection_settings(request):
-    collection = CardCollection.objects.get_or_create(user=request.user)[0]
-
-    form = CollectionSettingsForm(instance=collection)
-
-    if request.method == "POST":
-        form = CollectionSettingsForm(request.POST, instance=collection)
-        if form.is_valid():
-            form.save()
-            return redirect("cards:collection")
-    else:
-        form = CollectionSettingsForm(instance=collection)
-
-    return render(
-        request,
-        template_name="cards/collection_settings.html",
-        context={"form": form},
-    )
 
 
 # Mock functions, would put them inside a viewset, but that wouldn't be very useful
