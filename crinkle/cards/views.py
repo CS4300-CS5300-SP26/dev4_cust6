@@ -90,9 +90,6 @@ class CardViewSet(viewsets.ModelViewSet):
         return self.retrieve(request, pk=pk)
 
 
-@login_required
-
-
 # Mock functions, would put them inside a viewset, but that wouldn't be very useful
 @login_required
 def scan_report_view(request):

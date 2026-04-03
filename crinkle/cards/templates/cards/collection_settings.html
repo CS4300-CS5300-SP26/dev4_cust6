@@ -19,6 +19,9 @@
         
         <div class="form-group">
             <label for="{{ form.value_threshold.id_for_label }}" class="input-label">Valuable Card Threshold </label>
+            {% if form.value_threshold.errors %}
+                {{ form.value_threshold.errors }}
+            {% endif %}
             {{ form.value_threshold }}
         </div>
 

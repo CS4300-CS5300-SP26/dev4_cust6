@@ -4,6 +4,7 @@ from django.contrib.auth.models import User
 from parameterized import parameterized
 
 from .models import GradeReport, Card, CardCollection
+from .forms import CollectionSettingsForm
 
 
 # Create your tests here.
@@ -127,12 +128,48 @@ class CollectionTestCase(TestCase):
             ordered_card = ordered_cards[card].id
             self.assertEqual(response_card, ordered_card)
 
-    def test_modify_settings(self):
+    def test_access_settings_not_logged_in(self):
+        """No settings given if not logged in"""
+        response = self.client.get(reverse("cards:collection_settings"))
+
+        self.assertEqual(response.status_code, 403)
+
+    def test_access_settings(self):
+        """when accessing settings of collection, it should return a form"""
+        self.set_up_user()
+
+        response = self.client.get(reverse("cards:collection_settings"))
+
+        self.assertEqual(response.status_code, 200)
+        self.assertIsNotNone(response.data["form"])
+
+    @parameterized.expand(
+        [
+            ("name", 100, 100),
+            ("grading_notes", -100, 0),
+            ("date_scanned", 5, 5),
+        ]
+    )
+    def test_modify_settings(
+        self, sort_order, value_threshold, expected_value_threshold
+    ):
         self.set_up_user()
         self.set_up_collection()
 
-        reverse("cards:collection_settings")
-        self.assert_(False)
+        form = CollectionSettingsForm(
+            data={
+                "sort_order": sort_order,
+                "value_threshold": value_threshold,
+            },
+            instance=self.collection,
+        )
+
+        if value_threshold < 0:
+            self.assertFalse(form.is_valid())
+        else:
+            self.assertTrue(form.is_valid())
+            self.assertEqual(self.collection.value_threshold, expected_value_threshold)
+            self.assertEqual(self.collection.sort_order, sort_order)
 
 
 class CardTestCase(TestCase):

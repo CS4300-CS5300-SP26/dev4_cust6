@@ -1,5 +1,6 @@
 from django.db import models
 from django.contrib.auth.models import User
+from django.core.validators import MinValueValidator
 
 
 class GradeReport(models.Model):
@@ -18,7 +19,12 @@ class Card(models.Model):
     picture_path = models.CharField(max_length=400)
     user_notes = models.TextField()
 
-    estimated_value = models.DecimalField(max_digits=12, decimal_places=2, default=50.00)
+    estimated_value = models.DecimalField(
+        max_digits=12,
+        decimal_places=2,
+        default=50.00,
+        validators=[MinValueValidator(0)],
+    )
 
     def __str__(self):
         return self.name
@@ -38,7 +44,12 @@ class CardCollection(models.Model):
     cards = models.ManyToManyField(Card)
 
     sort_order = models.CharField(max_length=400, choices=SORT_CHOICES, default="name")
-    value_threshold = models.DecimalField(max_digits=12, decimal_places=2, default=100.00)
+    value_threshold = models.DecimalField(
+        max_digits=12,
+        decimal_places=2,
+        default=100.00,
+        validators=[MinValueValidator(0)],
+    )
 
     def __str__(self):
         return f"Collection of {self.user.username}"

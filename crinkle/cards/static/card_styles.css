@@ -221,6 +221,7 @@ html, body {
     color: #101828;
     background: #fff;
     outline: none;
+    appearance: none;
     -webkit-appearance: none;
     transition: border-color 0.15s;
 }
