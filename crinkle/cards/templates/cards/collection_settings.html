@@ -11,14 +11,19 @@
 <div class="form-container">
     <form method="post">
         {% csrf_token %}
-        {% for field in form %}
+
         <div class="form-group">
-            <label for="{{ field.id_for_label }}">{{ field.label }}</label>
-            {{ field }}
+            <label for="{{ form.sort_order.id_for_label }}" class="input-label"> Collection Sort Order </label>
+            {{ form.sort_order }}
         </div>
-        {% endfor %}
-        <div class="form-actions">
-            <button type="submit" class="btn-tracking btn-tracking-primary">
+        
+        <div class="form-group">
+            <label for="{{ form.value_threshold.id_for_label }}" class="input-label">Valuable Card Threshold </label>
+            {{ form.value_threshold }}
+        </div>
+
+        <div class="card-collection">
+            <button type="submit" class="select-order card-btn">
                 Update Settings
             </button>
         </div>
