@@ -5,7 +5,6 @@ from django.conf import settings
 class TrackedCard(models.Model):
     # Dropdown choices for card status
     STATUS_CHOICES = [
-        ('owned', 'Owned'),
         ('watching', 'Watching'),
         ('submitted', 'Submitted for Grading'),
         ('graded', 'Graded'),
