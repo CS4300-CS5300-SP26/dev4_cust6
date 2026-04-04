@@ -45,7 +45,7 @@ class CardCollectionViewSet(viewsets.ModelViewSet):
         )
         return response
 
-    @action(detail=True, methods=["GET", "POST"])
+    @action(detail=False, methods=["GET", "POST"])
     def collection_settings(self, request):
         collection = self.queryset.get_or_create(user=request.user)[0]
 
