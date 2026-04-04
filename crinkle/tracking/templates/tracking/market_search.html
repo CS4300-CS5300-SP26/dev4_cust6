@@ -1,0 +1,41 @@
+{% extends "tracking/base.html" %}
+{% block title %}Market — Crinkle{% endblock %}
+{% block header_left %}
+<a href="{% url 'tracking:list' %}" class="back-link">&larr;</a>
+<span class="page-title">Card Market</span>
+{% endblock %}
+{% block content %}
+<div class="form-container">
+    <form method="get" novalidate>
+        <div class="form-group">
+            <input type="text" name="q" value="{{ query }}" placeholder="Search for a card..." class="form-input">
+        </div>
+        <button type="submit" class="btn-tracking btn-tracking-primary">Search</button>
+    </form>
+</div>
+
+{% if query %}
+    {% if results %}
+    <ul class="card-list">
+        {% for card in results %}
+        <li class="card-item">
+            <a href="{% url 'tracking:market' %}?q={{ card.card_name }}">
+                <div class="card-row">
+                    <div class="card-info">
+                        <span class="card-name">{{ card.card_name }}</span>
+                        {% if card.card_set %}
+                        <span class="card-set">{{ card.card_set }}</span>
+                        {% endif %}
+                    </div>
+                </div>
+            </a>
+        </li>
+        {% endfor %}
+    </ul>
+    {% else %}
+    <div class="empty-state">
+        <p class="empty-text">No results for "{{ query }}"</p>
+    </div>
+    {% endif %}
+{% endif %}
+{% endblock %}
