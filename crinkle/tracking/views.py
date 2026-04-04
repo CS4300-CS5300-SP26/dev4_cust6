@@ -123,3 +123,61 @@ def market_search(request):
         
     }
     return render(request, 'tracking/market_search.html', context)
+
+def card_pricing(request):
+    card_name = request.GET.get('name', '')
+    card_set = request.GET.get('set', '')
+
+    if not card_name:
+        return redirect('tracking:market')
+
+    tiers = ['ungraded', 'psa_7', 'psa_8', 'psa_9', 'psa_10']
+    tier_labels = {
+        'ungraded': 'Ungraded', 'psa_7': 'PSA 7', 'psa_8': 'PSA 8',
+        'psa_9': 'PSA 9', 'psa_10': 'PSA 10',
+    }
+
+    tier_prices = []
+    for tier in tiers:
+        latest = CardPricing.objects.filter(
+            card_name=card_name,
+            card_set=card_set,
+            grade_tier=tier,
+        ).order_by('-date_recorded').first()
+        tier_prices.append({
+            'tier': tier,
+            'label': tier_labels[tier],
+            'price': latest.price if latest else None,
+        })
+
+    selected_tier = request.GET.get('tier', 'ungraded')
+    history = CardPricing.objects.filter(
+        card_name=card_name,
+        card_set=card_set,
+        grade_tier=selected_tier,
+    ).order_by('date_recorded')
+
+    chart_dates = [h.date_recorded.strftime('%b %d') for h in history]
+    chart_prices = [float(h.price) for h in history]
+
+    compare_data = []
+    for i in range(len(tier_prices) - 1):
+        if tier_prices[i]['price'] and tier_prices[i + 1]['price']:
+            delta = tier_prices[i + 1]['price'] - tier_prices[i]['price']
+            compare_data.append({
+                'from': tier_prices[i]['label'],
+                'to': tier_prices[i + 1]['label'],
+                'delta': delta,
+            })
+
+    context = {
+        'card_name': card_name,
+        'card_set': card_set,
+        'tier_prices': tier_prices,
+        'chart_dates': chart_dates,
+        'chart_prices': chart_prices,
+        'selected_tier': selected_tier,
+        'tier_labels': tier_labels,
+        'compare_data': compare_data,
+    }
+    return render(request, 'tracking/card_pricing.html', context)

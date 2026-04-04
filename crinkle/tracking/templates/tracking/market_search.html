@@ -36,7 +36,7 @@
 {% if cards %}
 <div class="market-grid">
     {% for card in cards %}
-    <a href="{% url 'tracking:market' %}?q={{ card.card_name }}" class="market-card">
+    <a href="{% url 'tracking:card_pricing' %}?name={{ card.card_name }}&set={{ card.card_set }}" class="market-card">
         <div class="market-card-image">
             <span class="market-card-initial">{{ card.card_name|first }}</span>
         </div>

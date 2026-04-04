@@ -589,3 +589,112 @@
     font-weight: 600;
     cursor: pointer;
 }
+
+
+/* --- Pricing Detail --- */
+.pricing-hero {
+    text-align: center;
+    padding: 20px;
+}
+
+.pricing-card-image {
+    width: 120px;
+    height: 160px;
+    background: linear-gradient(135deg, #2C4BFB, #D9111D);
+    border-radius: 14px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 0 auto 12px;
+}
+
+.pricing-name {
+    font-family: 'Lato', sans-serif;
+    font-size: 24px;
+    font-weight: 500;
+    color: #101828;
+}
+
+.pricing-set {
+    font-size: 14px;
+    color: #667085;
+}
+
+.pricing-section {
+    padding: 16px 20px;
+    border-top: 1px solid #E5E7EB;
+}
+
+.pricing-table {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+}
+
+.pricing-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 12px 14px;
+    background: #F9FAFB;
+    border-radius: 10px;
+}
+
+.pricing-row-active {
+    background: #EFF6FF;
+    border: 1px solid #2C4BFB;
+}
+
+.pricing-tier {
+    font-size: 14px;
+    font-weight: 600;
+    color: #101828;
+}
+
+.pricing-amount {
+    font-family: 'Jersey 10', cursive;
+    font-size: 20px;
+    color: #2C4BFB;
+}
+
+.pricing-tier-select {
+    display: flex;
+    gap: 6px;
+    overflow-x: auto;
+    margin-bottom: 12px;
+    -webkit-overflow-scrolling: touch;
+}
+
+/* --- Grade Comparison --- */
+.compare-table {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+}
+
+.compare-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 12px 14px;
+    background: #F9FAFB;
+    border-radius: 10px;
+}
+
+.compare-tiers {
+    font-size: 14px;
+    color: #101828;
+}
+
+.compare-delta {
+    font-weight: 600;
+    font-size: 14px;
+}
+
+.delta-up {
+    color: #27ae60;
+}
+
+.delta-down {
+    color: #D9111D;
+}
