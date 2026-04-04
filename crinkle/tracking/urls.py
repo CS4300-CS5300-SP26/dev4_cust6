@@ -5,9 +5,11 @@ from . import views
 app_name = 'tracking'
 
 urlpatterns = [
-    path('', views.tracking_list, name='list'),              # /tracking/
-    path('add/', views.tracking_add, name='add'),             # /tracking/add/
-    path('<int:pk>/', views.tracking_detail, name='detail'),  # /tracking/1/
-    path('<int:pk>/edit/', views.tracking_edit, name='edit'),  # /tracking/1/edit/
-    path('<int:pk>/delete/', views.tracking_delete, name='delete'),  # /tracking/1/delete/
+    path('', views.tracking_list, name='list'),              
+    path('add/', views.tracking_add, name='add'),             
+    path('market/', views.market_search, name='market'),
+    path('market/pricing/', views.card_pricing, name='card_pricing'),
+    path('<int:pk>/', views.tracking_detail, name='detail'),  
+    path('<int:pk>/edit/', views.tracking_edit, name='edit'),  
+    path('<int:pk>/delete/', views.tracking_delete, name='delete'),  
 ]
