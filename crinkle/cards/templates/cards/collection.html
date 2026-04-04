@@ -7,21 +7,13 @@
 {% endblock %}
 
 {% block content %}
-<form method="get" action="{% url 'cards:collection' %}">
-    <select id='order' name="order" class="select-order">
-        <option value="grading_notes"> Grade </option>
-        <option value="name"> Name </option>
-        <option value="date_scanned"> Date </option>
-        <option value="-grading_notes"> Grade Descending </option>
-        <option value="-name"> Name Descending </option>
-        <option value="-date_scanned"> Date Descending </option>
-    </select>
-    <input type="submit" class="submit-btn" value="Sort Collection">
-<form>
+<div class="card-collection">
+    <a class="select-order card-btn" href="{% url 'cards:collection_settings' %}"> Settings </a>
+</div>
 
 <div class="card-collection">
     {% for card in cards %}
-    <div class="card-panel">
+    <div class="card-panel {% if card.is_valuable %}card-valuable{% endif %}">
         <img src="{{card.picture_path}}" class="card-thumbnail">
 
         <div class="card-info">

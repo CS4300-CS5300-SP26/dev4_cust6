@@ -1,11 +1,14 @@
-from django.shortcuts import render, get_object_or_404
+from django.shortcuts import render, get_object_or_404, redirect
 from django.contrib.auth.decorators import login_required
+from django.http import HttpResponseForbidden
 from rest_framework import viewsets, status, permissions
+from rest_framework.decorators import action
 from rest_framework.response import Response
 from rest_framework.renderers import TemplateHTMLRenderer
 
 from .models import GradeReport, Card, CardCollection
 from .serializers import GradeReportSerializer, CardSerializer, CardCollectionSerializer
+from .forms import CollectionSettingsForm
 
 
 class GradeReportViewSet(viewsets.ModelViewSet):
@@ -22,22 +25,46 @@ class CardCollectionViewSet(viewsets.ModelViewSet):
     renderer_classes = [TemplateHTMLRenderer]
 
     def retrieve(self, request):
-        """If the user is authenticated, retrieve their collection in the order (if specified)
-        """
+        """If the user is authenticated, retrieve their collection in the order (if specified)"""
         collection = self.queryset.get_or_create(user=request.user)[0]
-        cards = collection.cards
+        cards = collection.ordered_collection()  # obtain ordered ocllection
 
-        # if order argument is given apply it
-        if 'order' in request.GET:
-            cards = collection.order_collection(request.GET['order'])
+        cards_data = CardSerializer(cards, many=True).data
+
+        # mark valuable cards as such
+        for card in cards_data:
+            card["is_valuable"] = collection.is_valuable(float(card["estimated_value"]))
 
         data = {
-            'cards': CardSerializer(cards, many=True).data,  # cards in order
+            "cards": cards_data,  # cards in order
+            "value_threshold": collection.value_threshold,
         }
 
-        response = Response(data=data,
-                            template_name='cards/collection.html',
-                            status=status.HTTP_200_OK)
+        response = Response(
+            data=data, template_name="cards/collection.html", status=status.HTTP_200_OK
+        )
+        return response
+
+    @action(detail=False, methods=["GET", "POST"])
+    def collection_settings(self, request):
+        collection = self.queryset.get_or_create(user=request.user)[0]
+
+        form = CollectionSettingsForm(instance=collection)
+
+        if request.method == "POST":
+            form = CollectionSettingsForm(request.POST, instance=collection)
+            if form.is_valid():
+                form.save()
+                return redirect("cards:collection")
+        else:
+            form = CollectionSettingsForm(instance=collection)
+
+        response = Response(
+            data={"form": form},
+            template_name="cards/collection_settings.html",
+            status=status.HTTP_200_OK,
+        )
+
         return response
 
 
@@ -52,14 +79,20 @@ class CardViewSet(viewsets.ModelViewSet):
         simply attaching the template to the super's response.
         """
         response = super(CardViewSet, self).retrieve(request, pk=pk)
-        response.template_name = 'cards/card.html'
+        response.template_name = "cards/card.html"
+
+        # check that user can access card if not return forbidden response
+        if (response.data['user'] == request.user.id):
+            response.template_name = "cards/card.html"
+        else:
+            response = HttpResponseForbidden("403 Card Forbidden")
+
         return response
 
     def update(self, request, pk=None):
-        """update a card, only allows changes to the user notes, other fields should not change
-        """
+        """update a card, only allows changes to the user notes, other fields should not change"""
         card = get_object_or_404(Card, pk=pk)
-        card.user_notes = request.POST['user_notes']
+        card.user_notes = request.POST["user_notes"]
         card.save()
         return self.retrieve(request, pk=pk)
 
@@ -67,35 +100,36 @@ class CardViewSet(viewsets.ModelViewSet):
 # Mock functions, would put them inside a viewset, but that wouldn't be very useful
 @login_required
 def scan_report_view(request):
-    """mock view for card report
-    """
-    return render(request,
-                  template_name='cards/card_report.html',
-                  context={'user': request.user},
-                  )
+    """mock view for card report"""
+    return render(
+        request,
+        template_name="cards/card_report.html",
+        context={"user": request.user},
+    )
 
 
 @login_required
 def save_report_view(request):
-    """mocking function to save report with default info
-    """
+    """mocking function to save report with default info"""
 
     report = GradeReport.objects.create(grade="No Grade")
-    card = Card.objects.create(user=request.user,
-                               name="Invalid Card",
-                               grading_notes=report,
-                               picture_path="/static/invalid.jpg",
-                               )
-    card.name += f'-{card.pk}'
+    card = Card.objects.create(
+        user=request.user,
+        name="Invalid Card",
+        grading_notes=report,
+        picture_path="/static/invalid.jpg",
+    )
+    card.name += f"-{card.pk}"
     card.save()
     collection = CardCollection.objects.get_or_create(user=request.user)[0]
     collection.cards.add(card)
     collection.save()
 
-    return render(request,
-                  template_name='cards/collection.html',
-                  context={
-                      'collection': CardCollectionSerializer(collection).data,
-                      'cards': CardSerializer(collection.cards, many=True).data,
-                  }
-                  )
+    return render(
+        request,
+        template_name="cards/collection.html",
+        context={
+            "collection": CardCollectionSerializer(collection).data,
+            "cards": CardSerializer(collection.cards, many=True).data,
+        },
+    )

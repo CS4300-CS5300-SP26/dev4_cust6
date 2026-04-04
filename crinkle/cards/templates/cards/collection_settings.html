@@ -1,0 +1,37 @@
+{% extends "cards/base.html" %}
+{% load static %}
+
+{% block top_bar %}
+<a class="back-btn" href="{% url 'cards:collection' %}"> ‹ </a>
+<span class="screen-title"> My Collection </span>
+{% endblock %}
+
+{% block content %}
+
+<div class="form-container">
+    <form method="post">
+        {% csrf_token %}
+
+        <div class="form-group">
+            <label for="{{ form.sort_order.id_for_label }}" class="input-label"> Collection Sort Order </label>
+            {{ form.sort_order }}
+        </div>
+        
+        <div class="form-group">
+            <label for="{{ form.value_threshold.id_for_label }}" class="input-label">Valuable Card Threshold </label>
+            {% if form.value_threshold.errors %}
+                {{ form.value_threshold.errors }}
+            {% endif %}
+            {{ form.value_threshold }}
+        </div>
+
+        <div class="card-collection">
+            <button type="submit" class="select-order card-btn">
+                Update Settings
+            </button>
+        </div>
+    </form>
+</div>
+
+{% endblock %}   
+
