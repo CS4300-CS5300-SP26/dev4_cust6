@@ -15,7 +15,17 @@ class Command(BaseCommand):
             ('Pikachu', 'Base Set'),
             ('Mewtwo', 'Base Set'),
             ('Blastoise', 'Base Set'),
+            ('Venusaur', 'Base Set'),
+            ('Alakazam', 'Base Set'),
             ('Lugia', 'Neo Genesis'),
+            ('Typhlosion', 'Neo Genesis'),
+            ('Umbreon', 'Neo Discovery'),
+            ('Espeon', 'Neo Discovery'),
+            ('Rayquaza', 'EX Deoxys'),
+            ('Gardevoir', 'EX Sandstorm'),
+            ('Gold Star Mew', 'Dragon Frontiers'),
+            ('Shining Gyarados', 'Neo Revelation'),
+            ('Dark Charizard', 'Team Rocket'),
         ]
 
         tiers = ['ungraded', 'psa_7', 'psa_8', 'psa_9', 'psa_10']

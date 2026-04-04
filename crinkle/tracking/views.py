@@ -75,20 +75,27 @@ def tracking_delete(request, pk):
 
 def market_search(request):
     query = request.GET.get('q', '')
+    set_filter = request.GET.get('set', '')
+    sort = request.GET.get('sort', 'name')
+    grade_filter = request.GET.get('grade', '')
 
     if query:
-        cards = CardPricing.objects.filter(
-            card_name__icontains=query
-        ).values('card_name', 'card_set').distinct()
+        cards_qs = CardPricing.objects.filter(card_name__icontains=query)
     else:
-        cards = CardPricing.objects.values('card_name', 'card_set').distinct()
+        cards_qs = CardPricing.objects.all()
+
+    if set_filter:
+        cards_qs = cards_qs.filter(card_set=set_filter)
+
+    unique_cards = cards_qs.values('card_name', 'card_set').distinct()
 
     card_list = []
-    for card in cards:
+    for card in unique_cards:
+        tier = grade_filter if grade_filter else 'ungraded'
         latest = CardPricing.objects.filter(
             card_name=card['card_name'],
             card_set=card['card_set'],
-            grade_tier='ungraded',
+            grade_tier=tier,
         ).order_by('-date_recorded').first()
         card_list.append({
             'card_name': card['card_name'],
@@ -96,8 +103,23 @@ def market_search(request):
             'price': latest.price if latest else None,
         })
 
+    if sort == '-name':
+        card_list.sort(key=lambda c: c['card_name'], reverse=True)
+    elif sort == 'price_low':
+        card_list.sort(key=lambda c: c['price'] or 0)
+    elif sort == 'price_high':
+        card_list.sort(key=lambda c: c['price'] or 0, reverse=True)
+    else:
+        card_list.sort(key=lambda c: c['card_name'])
+
+    sets = list(CardPricing.objects.values_list('card_set', flat=True).distinct().order_by('card_set'))
+
     context = {
         'query': query,
         'cards': card_list,
+        'sets': sets,
+        'current_set': set_filter,
+        'current_sort': sort,
+        
     }
     return render(request, 'tracking/market_search.html', context)

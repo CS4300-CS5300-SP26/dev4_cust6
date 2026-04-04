@@ -1,13 +1,35 @@
 {% extends "tracking/base.html" %}
-{% block title %}Market — Crinkle{% endblock %}
+{% block title %}PokeMart — Crinkle{% endblock %}
 {% block header_left %}
 <a href="{% url 'tracking:list' %}" class="back-link">&larr;</a>
-<span class="page-title">Card Market</span>
+<span class="page-title">PokeMart</span>
 {% endblock %}
 {% block content %}
+<div class="market-hero">
+    <h1 class="market-title">PokeMart</h1>
+    <p class="market-subtitle">Browse and compare card prices across all grade tiers</p>
+</div>
+
 <div class="market-search">
     <form method="get" novalidate>
         <input type="text" name="q" value="{{ query }}" placeholder="Search cards..." class="market-search-input">
+        <div class="market-filters">
+            <select name="set" class="market-filter-select">
+                <option value="">All Sets</option>
+                {% for set in sets %}
+                <option value="{{ set }}" {% if current_set == set %}selected{% endif %}>{{ set }}</option>
+                {% endfor %}
+            </select>
+            <select name="grade" class="market-filter-select">
+                <option value="">All Grades</option>
+                <option value="ungraded" {% if current_grade == 'ungraded' %}selected{% endif %}>Ungraded</option>
+                <option value="psa_7" {% if current_grade == 'psa_7' %}selected{% endif %}>PSA 7</option>
+                <option value="psa_8" {% if current_grade == 'psa_8' %}selected{% endif %}>PSA 8</option>
+                <option value="psa_9" {% if current_grade == 'psa_9' %}selected{% endif %}>PSA 9</option>
+                <option value="psa_10" {% if current_grade == 'psa_10' %}selected{% endif %}>PSA 10</option>
+            </select>
+            <button type="submit" class="market-filter-btn">Apply</button>
+        </div>
     </form>
 </div>
 

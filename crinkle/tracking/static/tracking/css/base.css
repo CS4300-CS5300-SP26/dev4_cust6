@@ -535,3 +535,57 @@
     color: #2C4BFB;
     margin-top: 4px;
 }
+
+
+/* --- Market Hero --- */
+.market-hero {
+    padding: 24px 20px 12px;
+    text-align: center;
+}
+
+.market-title {
+    font-family: 'Jersey 10', cursive;
+    font-size: 36px;
+    color: #2C4BFB;
+}
+
+.market-subtitle {
+    font-size: 13px;
+    color: #667085;
+    margin-top: 4px;
+}
+
+/* --- Market Filters --- */
+.market-filters {
+    display: flex;
+    gap: 8px;
+    margin-top: 10px;
+}
+
+.market-filter-select {
+    flex: 1;
+    padding: 10px 12px;
+    border: 1px solid #E5E7EB;
+    border-radius: 14px;
+    font-size: 13px;
+    font-family: 'Inter', sans-serif;
+    background: #fff;
+    color: #101828;
+    -webkit-appearance: none;
+}
+
+.market-filter-select:focus {
+    outline: none;
+    border-color: #2C4BFB;
+}
+
+.market-filter-btn {
+    padding: 10px 16px;
+    background: #2C4BFB;
+    color: #fff;
+    border: none;
+    border-radius: 14px;
+    font-size: 13px;
+    font-weight: 600;
+    cursor: pointer;
+}
