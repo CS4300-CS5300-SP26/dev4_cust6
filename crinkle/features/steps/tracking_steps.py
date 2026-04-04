@@ -156,3 +156,39 @@ def step_card_not_exist(context, name):
 def step_check_sold_total(context, total):
     content = context.response.content.decode()
     assert f'${total}' in content or f'${total.split(".")[0]}' in content
+
+
+@given('I visit the market page')
+def step_visit_market(context):
+    context.response = context.client.get('/tracking/market/')
+
+
+@then('I should see the market page')
+def step_see_market(context):
+    assert context.response.status_code == 200
+
+
+@given('a pricing entry for "{name}" in "{card_set}"')
+def step_pricing_entry(context, name, card_set):
+    from tracking.models import CardPricing
+    CardPricing.objects.create(
+        card_name=name, card_set=card_set,
+        grade_tier='ungraded', price=50.00,
+    )
+
+
+@when('I search the market for "{query}"')
+def step_search_market(context, query):
+    context.response = context.client.get(f'/tracking/market/?q={query}')
+
+
+@then('I should see "{text}" in the market results')
+def step_see_in_market(context, text):
+    assert text in context.response.content.decode()
+
+
+@when('I view pricing for "{name}" in "{card_set}"')
+def step_view_pricing(context, name, card_set):
+    context.response = context.client.get(
+        f'/tracking/market/pricing/?name={name}&set={card_set}'
+    )
