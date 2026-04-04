@@ -148,6 +148,7 @@ class CollectionTestCase(TestCase):
             ("name", 100, 100),
             ("grading_notes", -100, 0),
             ("date_scanned", 5, 5),
+            ("date_scanned", 50, 50),
         ]
     )
     def test_modify_settings(
@@ -168,6 +169,7 @@ class CollectionTestCase(TestCase):
             self.assertFalse(form.is_valid())
         else:
             self.assertTrue(form.is_valid())
+            form.save()
             self.assertEqual(self.collection.value_threshold, expected_value_threshold)
             self.assertEqual(self.collection.sort_order, sort_order)
 
