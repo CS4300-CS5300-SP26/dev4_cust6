@@ -1,5 +1,6 @@
 from django.shortcuts import render, get_object_or_404, redirect
 from django.contrib.auth.decorators import login_required
+from django.http import HttpResponseForbidden
 from rest_framework import viewsets, status, permissions
 from rest_framework.decorators import action
 from rest_framework.response import Response
@@ -79,6 +80,13 @@ class CardViewSet(viewsets.ModelViewSet):
         """
         response = super(CardViewSet, self).retrieve(request, pk=pk)
         response.template_name = "cards/card.html"
+
+        # check that user can access card if not return forbidden response
+        if (response.data['user'] == request.user.id):
+            response.template_name = "cards/card.html"
+        else:
+            response = HttpResponseForbidden("403 Card Forbidden")
+
         return response
 
     def update(self, request, pk=None):
