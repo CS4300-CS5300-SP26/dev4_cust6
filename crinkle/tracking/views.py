@@ -75,14 +75,29 @@ def tracking_delete(request, pk):
 
 def market_search(request):
     query = request.GET.get('q', '')
-    results = []
+
     if query:
-        results = CardPricing.objects.filter(
+        cards = CardPricing.objects.filter(
             card_name__icontains=query
         ).values('card_name', 'card_set').distinct()
+    else:
+        cards = CardPricing.objects.values('card_name', 'card_set').distinct()
+
+    card_list = []
+    for card in cards:
+        latest = CardPricing.objects.filter(
+            card_name=card['card_name'],
+            card_set=card['card_set'],
+            grade_tier='ungraded',
+        ).order_by('-date_recorded').first()
+        card_list.append({
+            'card_name': card['card_name'],
+            'card_set': card['card_set'],
+            'price': latest.price if latest else None,
+        })
 
     context = {
         'query': query,
-        'results': results,
+        'cards': card_list,
     }
     return render(request, 'tracking/market_search.html', context)

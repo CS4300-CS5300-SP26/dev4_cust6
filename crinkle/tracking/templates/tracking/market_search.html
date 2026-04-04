@@ -5,37 +5,32 @@
 <span class="page-title">Card Market</span>
 {% endblock %}
 {% block content %}
-<div class="form-container">
+<div class="market-search">
     <form method="get" novalidate>
-        <div class="form-group">
-            <input type="text" name="q" value="{{ query }}" placeholder="Search for a card..." class="form-input">
-        </div>
-        <button type="submit" class="btn-tracking btn-tracking-primary">Search</button>
+        <input type="text" name="q" value="{{ query }}" placeholder="Search cards..." class="market-search-input">
     </form>
 </div>
 
-{% if query %}
-    {% if results %}
-    <ul class="card-list">
-        {% for card in results %}
-        <li class="card-item">
-            <a href="{% url 'tracking:market' %}?q={{ card.card_name }}">
-                <div class="card-row">
-                    <div class="card-info">
-                        <span class="card-name">{{ card.card_name }}</span>
-                        {% if card.card_set %}
-                        <span class="card-set">{{ card.card_set }}</span>
-                        {% endif %}
-                    </div>
-                </div>
-            </a>
-        </li>
-        {% endfor %}
-    </ul>
-    {% else %}
-    <div class="empty-state">
-        <p class="empty-text">No results for "{{ query }}"</p>
-    </div>
-    {% endif %}
+{% if cards %}
+<div class="market-grid">
+    {% for card in cards %}
+    <a href="{% url 'tracking:market' %}?q={{ card.card_name }}" class="market-card">
+        <div class="market-card-image">
+            <span class="market-card-initial">{{ card.card_name|first }}</span>
+        </div>
+        <div class="market-card-info">
+            <span class="market-card-name">{{ card.card_name }}</span>
+            <span class="market-card-set">{{ card.card_set }}</span>
+            {% if card.price %}
+            <span class="market-card-price">${{ card.price|floatformat:2 }}</span>
+            {% endif %}
+        </div>
+    </a>
+    {% endfor %}
+</div>
+{% else %}
+<div class="empty-state">
+    <p class="empty-text">{% if query %}No results for "{{ query }}"{% else %}No cards available{% endif %}</p>
+</div>
 {% endif %}
 {% endblock %}
