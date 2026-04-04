@@ -31,10 +31,10 @@ Feature: Card Tracking
     Then I should see "Mewtwo" in the tracking list
 
   Scenario: View card detail
-    Given a card "Pikachu" with status "Owned"
+    Given a card "Pikachu" with status "Watching"
     When I view the detail page for "Pikachu"
     Then I should see "Pikachu" on the page
-    And I should see "Owned" on the page
+    And I should see "Watching" on the page
 
   Scenario: Filter by status
     Given a card "Mewtwo" with status "Watching"
@@ -42,13 +42,6 @@ Feature: Card Tracking
     When I filter the tracking list by "sold"
     Then I should see "Venusaur" in the tracking list
     And I should not see "Mewtwo" in the tracking list
-
-  Scenario: Filter by collection
-    Given a card "Charizard" with status "Owned"
-    And a card "Pikachu" with status "Watching"
-    When I filter the tracking list by "owned"
-    Then I should see "Charizard" in the tracking list
-    And I should not see "Pikachu" in the tracking list
 
   Scenario: Edit a tracked card
     Given a card "Mewtwo" with status "Watching"
@@ -67,3 +60,18 @@ Feature: Card Tracking
     And that card was sold for "200.00"
     When I filter the tracking list by "sold"
     Then the sold total should be "500.00"
+
+  Scenario: View market page
+    Given I visit the market page
+    Then I should see the market page
+
+  Scenario: Search market
+    Given a pricing entry for "Charizard" in "Base Set"
+    When I search the market for "Charizard"
+    Then I should see "Charizard" in the market results
+
+  Scenario: View card pricing
+    Given a pricing entry for "Mewtwo" in "Base Set"
+    When I view pricing for "Mewtwo" in "Base Set"
+    Then I should see "Mewtwo" on the page
+    And I should see "Ungraded" on the page

@@ -1,17 +1,17 @@
-<testsuite name="accounts.Account Management" tests="14" errors="0" failures="0" skipped="0" time="4.968409" timestamp="2026-03-14T06:13:33.590474" hostname="bholland-21-5cdb5db5d6-dcbxn"><testcase classname="accounts.Account Management" name="Successful registration" status="passed" time="0.389313"><system-out>
+<testsuite name="accounts.Account Management" tests="14" errors="0" failures="0" skipped="0" time="3.592121" timestamp="2026-04-04T19:07:54.825843" hostname="jjones-21-596646f8dc-gx5pk"><testcase classname="accounts.Account Management" name="Successful registration" status="passed" time="0.296467"><system-out>
 <![CDATA[
 @scenario.begin
   Scenario: Successful registration
-    Given I am on the register page ... passed in 0.034s
+    Given I am on the register page ... passed in 0.042s
     When I fill in username "naz" email "naz@test.com" password "StrongPass123!" ... passed in 0.000s
-    And I submit the registration form ... passed in 0.354s
+    And I submit the registration form ... passed in 0.253s
     Then I should be redirected to my profile page ... passed in 0.000s
     And a user account should exist for "naz" ... passed in 0.001s
 
 @scenario.end
 --------------------------------------------------------------------------------
 ]]>
-</system-out></testcase><testcase classname="accounts.Account Management" name="Registration with mismatched passwords" status="passed" time="0.012468"><system-out>
+</system-out></testcase><testcase classname="accounts.Account Management" name="Registration with mismatched passwords" status="passed" time="0.011629"><system-out>
 <![CDATA[
 @scenario.begin
   Scenario: Registration with mismatched passwords
@@ -25,12 +25,12 @@
 @scenario.end
 --------------------------------------------------------------------------------
 ]]>
-</system-out></testcase><testcase classname="accounts.Account Management" name="Registration with duplicate username" status="passed" time="0.285959"><system-out>
+</system-out></testcase><testcase classname="accounts.Account Management" name="Registration with duplicate username" status="passed" time="0.314407"><system-out>
 <![CDATA[
 @scenario.begin
   Scenario: Registration with duplicate username
-    Given a user "naz" already exists ... passed in 0.273s
-    And I am on the register page ... passed in 0.004s
+    Given a user "naz" already exists ... passed in 0.294s
+    And I am on the register page ... passed in 0.011s
     When I fill in username "naz" email "other@test.com" password "StrongPass123!" ... passed in 0.000s
     And I submit the registration form ... passed in 0.007s
     Then I should stay on the register page ... passed in 0.000s
@@ -39,131 +39,131 @@
 @scenario.end
 --------------------------------------------------------------------------------
 ]]>
-</system-out></testcase><testcase classname="accounts.Account Management" name="Registration with invalid inputs -- @1.1 " status="passed" time="0.010409"><system-out>
+</system-out></testcase><testcase classname="accounts.Account Management" name="Registration with invalid inputs -- @1.1 " status="passed" time="0.018819"><system-out>
 <![CDATA[
 @scenario.begin
   Scenario Outline: Registration with invalid inputs -- @1.1 
-    Given I am on the register page ... passed in 0.004s
-    When I submit registration with username "naz" email "not-an-email" password "StrongPass123!" ... passed in 0.006s
+    Given I am on the register page ... passed in 0.011s
+    When I submit registration with username "naz" email "not-an-email" password "StrongPass123!" ... passed in 0.007s
     Then I should stay on the register page ... passed in 0.000s
     And no account should be created for "naz" ... passed in 0.001s
 
 @scenario.end
 --------------------------------------------------------------------------------
 ]]>
-</system-out></testcase><testcase classname="accounts.Account Management" name="Registration with invalid inputs -- @1.2 " status="passed" time="0.010948"><system-out>
+</system-out></testcase><testcase classname="accounts.Account Management" name="Registration with invalid inputs -- @1.2 " status="passed" time="0.013667"><system-out>
 <![CDATA[
 @scenario.begin
   Scenario Outline: Registration with invalid inputs -- @1.2 
-    Given I am on the register page ... passed in 0.005s
-    When I submit registration with username "naz" email "naz@test.com" password "123" ... passed in 0.006s
+    Given I am on the register page ... passed in 0.006s
+    When I submit registration with username "naz" email "naz@test.com" password "123" ... passed in 0.007s
     Then I should stay on the register page ... passed in 0.000s
     And no account should be created for "naz" ... passed in 0.001s
 
 @scenario.end
 --------------------------------------------------------------------------------
 ]]>
-</system-out></testcase><testcase classname="accounts.Account Management" name="Successful login" status="passed" time="0.757694"><system-out>
+</system-out></testcase><testcase classname="accounts.Account Management" name="Successful login" status="passed" time="0.540257"><system-out>
 <![CDATA[
 @scenario.begin
   Scenario: Successful login
-    Given a user "naz" with password "StrongPass123!" exists ... passed in 0.339s
-    And I am on the login page ... passed in 0.008s
-    When I log in with username "naz" and password "StrongPass123!" ... passed in 0.411s
+    Given a user "naz" with password "StrongPass123!" exists ... passed in 0.220s
+    And I am on the login page ... passed in 0.084s
+    When I log in with username "naz" and password "StrongPass123!" ... passed in 0.236s
     Then I should be redirected to my profile page ... passed in 0.000s
 
 @scenario.end
 --------------------------------------------------------------------------------
 ]]>
-</system-out></testcase><testcase classname="accounts.Account Management" name="Login with wrong password" status="passed" time="0.644595"><system-out>
+</system-out></testcase><testcase classname="accounts.Account Management" name="Login with wrong password" status="passed" time="0.470528"><system-out>
 <![CDATA[
 @scenario.begin
   Scenario: Login with wrong password
-    Given a user "naz" with password "StrongPass123!" exists ... passed in 0.330s
-    And I am on the login page ... passed in 0.007s
-    When I log in with username "naz" and password "WrongPass!" ... passed in 0.308s
+    Given a user "naz" with password "StrongPass123!" exists ... passed in 0.264s
+    And I am on the login page ... passed in 0.006s
+    When I log in with username "naz" and password "WrongPass!" ... passed in 0.200s
     Then I should stay on the login page ... passed in 0.000s
 
 @scenario.end
 --------------------------------------------------------------------------------
 ]]>
-</system-out></testcase><testcase classname="accounts.Account Management" name="Login with non-existent user" status="passed" time="0.305426"><system-out>
+</system-out></testcase><testcase classname="accounts.Account Management" name="Login with non-existent user" status="passed" time="0.205146"><system-out>
 <![CDATA[
 @scenario.begin
   Scenario: Login with non-existent user
     Given I am on the login page ... passed in 0.004s
-    When I log in with username "ghost" and password "StrongPass123!" ... passed in 0.301s
+    When I log in with username "ghost" and password "StrongPass123!" ... passed in 0.201s
     Then I should stay on the login page ... passed in 0.000s
 
 @scenario.end
 --------------------------------------------------------------------------------
 ]]>
-</system-out></testcase><testcase classname="accounts.Account Management" name="Login with invalid credentials -- @1.1 " status="passed" time="0.614899"><system-out>
+</system-out></testcase><testcase classname="accounts.Account Management" name="Login with invalid credentials -- @1.1 " status="passed" time="0.400361"><system-out>
 <![CDATA[
 @scenario.begin
   Scenario Outline: Login with invalid credentials -- @1.1 
-    Given a user "naz" with password "StrongPass123!" exists ... passed in 0.296s
-    And I am on the login page ... passed in 0.005s
-    When I log in with username "naz" and password "WrongPassword!" ... passed in 0.314s
+    Given a user "naz" with password "StrongPass123!" exists ... passed in 0.197s
+    And I am on the login page ... passed in 0.004s
+    When I log in with username "naz" and password "WrongPassword!" ... passed in 0.199s
     Then I should stay on the login page ... passed in 0.000s
 
 @scenario.end
 --------------------------------------------------------------------------------
 ]]>
-</system-out></testcase><testcase classname="accounts.Account Management" name="Login with invalid credentials -- @1.2 " status="passed" time="0.705631"><system-out>
+</system-out></testcase><testcase classname="accounts.Account Management" name="Login with invalid credentials -- @1.2 " status="passed" time="0.425697"><system-out>
 <![CDATA[
 @scenario.begin
   Scenario Outline: Login with invalid credentials -- @1.2 
-    Given a user "naz" with password "StrongPass123!" exists ... passed in 0.393s
+    Given a user "naz" with password "StrongPass123!" exists ... passed in 0.198s
     And I am on the login page ... passed in 0.004s
-    When I log in with username "nobody" and password "StrongPass123!" ... passed in 0.309s
+    When I log in with username "nobody" and password "StrongPass123!" ... passed in 0.223s
     Then I should stay on the login page ... passed in 0.000s
 
 @scenario.end
 --------------------------------------------------------------------------------
 ]]>
-</system-out></testcase><testcase classname="accounts.Account Management" name="Logged-in user can view profile" status="passed" time="0.613967"><system-out>
+</system-out></testcase><testcase classname="accounts.Account Management" name="Logged-in user can view profile" status="passed" time="0.437938"><system-out>
 <![CDATA[
 @scenario.begin
   Scenario: Logged-in user can view profile
-    Given a user "naz" with password "StrongPass123!" exists ... passed in 0.292s
-    And I am logged in as "naz" ... passed in 0.314s
-    When I visit the profile page ... passed in 0.008s
+    Given a user "naz" with password "StrongPass123!" exists ... passed in 0.211s
+    And I am logged in as "naz" ... passed in 0.194s
+    When I visit the profile page ... passed in 0.033s
     Then I should see my username "naz" on the page ... passed in 0.000s
 
 @scenario.end
 --------------------------------------------------------------------------------
 ]]>
-</system-out></testcase><testcase classname="accounts.Account Management" name="Unauthenticated user cannot view profile" status="passed" time="0.011578"><system-out>
+</system-out></testcase><testcase classname="accounts.Account Management" name="Unauthenticated user cannot view profile" status="passed" time="0.006528"><system-out>
 <![CDATA[
 @scenario.begin
   Scenario: Unauthenticated user cannot view profile
-    Given I am not logged in ... passed in 0.006s
-    When I visit the profile page ... passed in 0.005s
+    Given I am not logged in ... passed in 0.003s
+    When I visit the profile page ... passed in 0.003s
     Then I should be redirected to the login page ... passed in 0.000s
 
 @scenario.end
 --------------------------------------------------------------------------------
 ]]>
-</system-out></testcase><testcase classname="accounts.Account Management" name="User can log out" status="passed" time="0.598029"><system-out>
+</system-out></testcase><testcase classname="accounts.Account Management" name="User can log out" status="passed" time="0.440676"><system-out>
 <![CDATA[
 @scenario.begin
   Scenario: User can log out
-    Given a user "naz" with password "StrongPass123!" exists ... passed in 0.303s
-    And I am logged in as "naz" ... passed in 0.290s
-    When I log out ... passed in 0.004s
+    Given a user "naz" with password "StrongPass123!" exists ... passed in 0.232s
+    And I am logged in as "naz" ... passed in 0.200s
+    When I log out ... passed in 0.007s
     Then I should be redirected to the home page ... passed in 0.000s
     And I should not be able to access the profile page ... passed in 0.001s
 
 @scenario.end
 --------------------------------------------------------------------------------
 ]]>
-</system-out></testcase><testcase classname="accounts.Account Management" name="Guest can continue without account" status="passed" time="0.007493"><system-out>
+</system-out></testcase><testcase classname="accounts.Account Management" name="Guest can continue without account" status="passed" time="0.010001"><system-out>
 <![CDATA[
 @scenario.begin
   Scenario: Guest can continue without account
-    Given I am on the login page ... passed in 0.004s
-    When I click continue as guest ... passed in 0.002s
+    Given I am on the login page ... passed in 0.006s
+    When I click continue as guest ... passed in 0.003s
     Then I should be redirected to the home page ... passed in 0.000s
     And the guest session flag should be set ... passed in 0.001s
 
