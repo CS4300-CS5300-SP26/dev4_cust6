@@ -1,0 +1,88 @@
+<testsuite name="submission.Grading Service Submission" tests="7" errors="0" failures="0" skipped="0" time="0.492741" timestamp="2026-04-06T05:45:22.499312" hostname="Taras-MacBook-Pro.local"><testcase classname="submission.Grading Service Submission" name="Successful submission as guest" status="passed" time="0.006318"><system-out>
+<![CDATA[
+@scenario.begin
+  Scenario: Successful submission as guest
+    Given I am on the submission start page ... passed in 0.004s
+    When I enter card name "Charizard Base Set" and select service "PSA" ... passed in 0.000s
+    And I submit the start form ... passed in 0.002s
+    Then I should be on the details page ... passed in 0.000s
+
+@scenario.end
+--------------------------------------------------------------------------------
+]]>
+</system-out></testcase><testcase classname="submission.Grading Service Submission" name="Successful full submission" status="passed" time="0.010669"><system-out>
+<![CDATA[
+@scenario.begin
+  Scenario: Successful full submission
+    Given I am on the details page with session data ... passed in 0.008s
+    When I fill in all shipping and payment details ... passed in 0.000s
+    And I submit the details form ... passed in 0.002s
+    Then I should see the confirmation page ... passed in 0.000s
+    And the submission should exist in the database ... passed in 0.000s
+
+@scenario.end
+--------------------------------------------------------------------------------
+]]>
+</system-out></testcase><testcase classname="submission.Grading Service Submission" name="Submission as logged in user" status="passed" time="0.456378"><system-out>
+<![CDATA[
+@scenario.begin
+  Scenario: Submission as logged in user
+    Given a user "naz" with password "StrongPass123!" exists ... passed in 0.225s
+    And I am logged in as "naz" ... passed in 0.229s
+    And I am on the submission start page ... passed in 0.001s
+    When I enter card name "Pikachu" and select service "BGS" ... passed in 0.000s
+    And I submit the start form ... passed in 0.002s
+    Then I should be on the details page ... passed in 0.000s
+
+@scenario.end
+--------------------------------------------------------------------------------
+]]>
+</system-out></testcase><testcase classname="submission.Grading Service Submission" name="Confirmation page shows submission details" status="passed" time="0.002901"><system-out>
+<![CDATA[
+@scenario.begin
+  Scenario: Confirmation page shows submission details
+    Given a submission exists for card "Mewtwo" with service "PSA" ... passed in 0.000s
+    When I visit the confirmation page for that submission ... passed in 0.002s
+    Then the confirmation page shows "Mewtwo" ... passed in 0.000s
+    And the confirmation page shows service "PSA" ... passed in 0.000s
+
+@scenario.end
+--------------------------------------------------------------------------------
+]]>
+</system-out></testcase><testcase classname="submission.Grading Service Submission" name="Details page with missing fields stays on page" status="passed" time="0.010597"><system-out>
+<![CDATA[
+@scenario.begin
+  Scenario: Details page with missing fields stays on page
+    Given I am on the details page with session data ... passed in 0.006s
+    When I submit the details form with missing fields ... passed in 0.004s
+    Then I should stay on the details page ... passed in 0.000s
+    And no submission should be created ... passed in 0.000s
+
+@scenario.end
+--------------------------------------------------------------------------------
+]]>
+</system-out></testcase><testcase classname="submission.Grading Service Submission" name="Start page accepts both grading services -- @1.1 " status="passed" time="0.003015"><system-out>
+<![CDATA[
+@scenario.begin
+  Scenario Outline: Start page accepts both grading services -- @1.1 
+    Given I am on the submission start page ... passed in 0.001s
+    When I enter card name "Charizard" and select service "PSA" ... passed in 0.000s
+    And I submit the start form ... passed in 0.002s
+    Then I should be on the details page ... passed in 0.000s
+
+@scenario.end
+--------------------------------------------------------------------------------
+]]>
+</system-out></testcase><testcase classname="submission.Grading Service Submission" name="Start page accepts both grading services -- @1.2 " status="passed" time="0.002862"><system-out>
+<![CDATA[
+@scenario.begin
+  Scenario Outline: Start page accepts both grading services -- @1.2 
+    Given I am on the submission start page ... passed in 0.001s
+    When I enter card name "Charizard" and select service "BGS" ... passed in 0.000s
+    And I submit the start form ... passed in 0.001s
+    Then I should be on the details page ... passed in 0.000s
+
+@scenario.end
+--------------------------------------------------------------------------------
+]]>
+</system-out></testcase></testsuite>

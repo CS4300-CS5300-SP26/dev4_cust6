@@ -42,10 +42,21 @@ Feature: Card Scanning
         Given a photo has been taken
         Then I should see an option to retake the photo
 
-    Scenario: User is prompted to log in if photo is taken without logging in
+    Scenario: Guest can grade a scanned card but must log in to save it
         Given I am not logged in
-        When I take a photo of the card
-        Then I should be prompted to log in
+        And I have taken a captured scan image
+        When I request a grade for the captured scan
+        Then I should see the grading report
+        And I should see a prompt to create an account to save to collection
+        When I try to save the scanned card to my collection
+        Then I should be redirected to the login page
+
+    Scenario: Logged in user can save a scanned image to the collection
+        Given I am logged in
+        And I have taken a captured scan image
+        When I request a grade for the captured scan
+        And I save the scanned card to my collection
+        Then the scanned card image should be saved in my collection
 
     Scenario: User can go back to landing page from camera page
         Given I am on the camera page

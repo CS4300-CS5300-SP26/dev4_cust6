@@ -1,4 +1,4 @@
-<testsuite name="scan.Card Scanning" tests="9" errors="0" failures="0" skipped="0" time="0.007627" timestamp="2026-04-04T19:07:59.026151" hostname="jjones-21-596646f8dc-gx5pk"><testcase classname="scan.Card Scanning" name="Navigate to scan page from landing page" status="passed" time="0.000485"><system-out>
+<testsuite name="scan.Card Scanning" tests="10" errors="0" failures="0" skipped="0" time="0.464405" timestamp="2026-04-06T05:45:21.779935" hostname="Taras-MacBook-Pro.local"><testcase classname="scan.Card Scanning" name="Navigate to scan page from landing page" status="passed" time="0.000202"><system-out>
 <![CDATA[
 @scenario.begin
   Scenario: Navigate to scan page from landing page
@@ -10,7 +10,7 @@
 @scenario.end
 --------------------------------------------------------------------------------
 ]]>
-</system-out></testcase><testcase classname="scan.Card Scanning" name="Initialise camera on scan page" status="passed" time="0.000676"><system-out>
+</system-out></testcase><testcase classname="scan.Card Scanning" name="Initialise camera on scan page" status="passed" time="0.000204"><system-out>
 <![CDATA[
 @scenario.begin
   Scenario: Initialise camera on scan page
@@ -22,7 +22,7 @@
 @scenario.end
 --------------------------------------------------------------------------------
 ]]>
-</system-out></testcase><testcase classname="scan.Card Scanning" name="Frame for card pops up" status="passed" time="0.000532"><system-out>
+</system-out></testcase><testcase classname="scan.Card Scanning" name="Frame for card pops up" status="passed" time="0.000202"><system-out>
 <![CDATA[
 @scenario.begin
   Scenario: Frame for card pops up
@@ -34,7 +34,7 @@
 @scenario.end
 --------------------------------------------------------------------------------
 ]]>
-</system-out></testcase><testcase classname="scan.Card Scanning" name="Frame for card is horizontal" status="passed" time="0.000359"><system-out>
+</system-out></testcase><testcase classname="scan.Card Scanning" name="Frame for card is horizontal" status="passed" time="0.000163"><system-out>
 <![CDATA[
 @scenario.begin
   Scenario: Frame for card is horizontal
@@ -45,7 +45,7 @@
 @scenario.end
 --------------------------------------------------------------------------------
 ]]>
-</system-out></testcase><testcase classname="scan.Card Scanning" name="User is prompted to take a photo and place the card in frame" status="passed" time="0.000368"><system-out>
+</system-out></testcase><testcase classname="scan.Card Scanning" name="User is prompted to take a photo and place the card in frame" status="passed" time="0.000152"><system-out>
 <![CDATA[
 @scenario.begin
   Scenario: User is prompted to take a photo and place the card in frame
@@ -56,7 +56,7 @@
 @scenario.end
 --------------------------------------------------------------------------------
 ]]>
-</system-out></testcase><testcase classname="scan.Card Scanning" name="Successfully take a photo of the card" status="passed" time="0.000853"><system-out>
+</system-out></testcase><testcase classname="scan.Card Scanning" name="Successfully take a photo of the card" status="passed" time="0.000338"><system-out>
 <![CDATA[
 @scenario.begin
   Scenario: Successfully take a photo of the card
@@ -71,7 +71,7 @@
 @scenario.end
 --------------------------------------------------------------------------------
 ]]>
-</system-out></testcase><testcase classname="scan.Card Scanning" name="User has option to retake photo" status="passed" time="0.000359"><system-out>
+</system-out></testcase><testcase classname="scan.Card Scanning" name="User has option to retake photo" status="passed" time="0.000149"><system-out>
 <![CDATA[
 @scenario.begin
   Scenario: User has option to retake photo
@@ -82,19 +82,37 @@
 @scenario.end
 --------------------------------------------------------------------------------
 ]]>
-</system-out></testcase><testcase classname="scan.Card Scanning" name="User is prompted to log in if photo is taken without logging in" status="passed" time="0.003501"><system-out>
+</system-out></testcase><testcase classname="scan.Card Scanning" name="Guest can grade a scanned card but must log in to save it" status="passed" time="0.010667"><system-out>
 <![CDATA[
 @scenario.begin
-  Scenario: User is prompted to log in if photo is taken without logging in
+  Scenario: Guest can grade a scanned card but must log in to save it
     Given the application is running ... passed in 0.000s
-    Given I am not logged in ... passed in 0.003s
-    When I take a photo of the card ... passed in 0.000s
-    Then I should be prompted to log in ... passed in 0.000s
+    Given I am not logged in ... passed in 0.002s
+    And I have taken a captured scan image ... passed in 0.003s
+    When I request a grade for the captured scan ... passed in 0.004s
+    Then I should see the grading report ... passed in 0.000s
+    And I should see a prompt to create an account to save to collection ... passed in 0.000s
+    When I try to save the scanned card to my collection ... passed in 0.001s
+    Then I should be redirected to the login page ... passed in 0.000s
 
 @scenario.end
 --------------------------------------------------------------------------------
 ]]>
-</system-out></testcase><testcase classname="scan.Card Scanning" name="User can go back to landing page from camera page" status="passed" time="0.000493"><system-out>
+</system-out></testcase><testcase classname="scan.Card Scanning" name="Logged in user can save a scanned image to the collection" status="passed" time="0.452127"><system-out>
+<![CDATA[
+@scenario.begin
+  Scenario: Logged in user can save a scanned image to the collection
+    Given the application is running ... passed in 0.000s
+    Given I am logged in ... passed in 0.439s
+    And I have taken a captured scan image ... passed in 0.001s
+    When I request a grade for the captured scan ... passed in 0.003s
+    And I save the scanned card to my collection ... passed in 0.008s
+    Then the scanned card image should be saved in my collection ... passed in 0.001s
+
+@scenario.end
+--------------------------------------------------------------------------------
+]]>
+</system-out></testcase><testcase classname="scan.Card Scanning" name="User can go back to landing page from camera page" status="passed" time="0.000201"><system-out>
 <![CDATA[
 @scenario.begin
   Scenario: User can go back to landing page from camera page

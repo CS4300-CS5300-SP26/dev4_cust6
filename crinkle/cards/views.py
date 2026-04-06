@@ -1,6 +1,11 @@
 from django.shortcuts import render, get_object_or_404, redirect
 from django.contrib.auth.decorators import login_required
 from django.http import HttpResponseForbidden
+from django.templatetags.static import static
+from django.conf import settings
+from django.core.files.base import ContentFile
+from django.core.files.storage import default_storage
+from django.views.decorators.http import require_POST
 from rest_framework import viewsets, status, permissions
 from rest_framework.decorators import action
 from rest_framework.response import Response
@@ -9,6 +14,12 @@ from rest_framework.renderers import TemplateHTMLRenderer
 from .models import GradeReport, Card, CardCollection
 from .serializers import GradeReportSerializer, CardSerializer, CardCollectionSerializer
 from .forms import CollectionSettingsForm
+
+import base64
+import uuid
+
+
+CAPTURED_SCAN_SESSION_KEY = "captured_scan_image"
 
 
 class GradeReportViewSet(viewsets.ModelViewSet):
@@ -27,16 +38,15 @@ class CardCollectionViewSet(viewsets.ModelViewSet):
     def retrieve(self, request):
         """If the user is authenticated, retrieve their collection in the order (if specified)"""
         collection = self.queryset.get_or_create(user=request.user)[0]
-        cards = collection.ordered_collection()  # obtain ordered ocllection
+        cards = collection.ordered_collection()
 
         cards_data = CardSerializer(cards, many=True).data
 
-        # mark valuable cards as such
         for card in cards_data:
             card["is_valuable"] = collection.is_valuable(float(card["estimated_value"]))
 
         data = {
-            "cards": cards_data,  # cards in order
+            "cards": cards_data,
             "value_threshold": collection.value_threshold,
         }
 
@@ -75,14 +85,11 @@ class CardViewSet(viewsets.ModelViewSet):
     renderer_classes = [TemplateHTMLRenderer]
 
     def retrieve(self, request, pk=None):
-        """Retrieve a card of a given primary key, uses super retrieve method,
-        simply attaching the template to the super's response.
-        """
+        """Retrieve a card of a given primary key."""
         response = super(CardViewSet, self).retrieve(request, pk=pk)
         response.template_name = "cards/card.html"
 
-        # check that user can access card if not return forbidden response
-        if (response.data['user'] == request.user.id):
+        if response.data["user"] == request.user.id:
             response.template_name = "cards/card.html"
         else:
             response = HttpResponseForbidden("403 Card Forbidden")
@@ -90,37 +97,69 @@ class CardViewSet(viewsets.ModelViewSet):
         return response
 
     def update(self, request, pk=None):
-        """update a card, only allows changes to the user notes, other fields should not change"""
+        """Update a card, only allows changes to the user notes."""
         card = get_object_or_404(Card, pk=pk)
         card.user_notes = request.POST["user_notes"]
         card.save()
         return self.retrieve(request, pk=pk)
 
 
-# Mock functions, would put them inside a viewset, but that wouldn't be very useful
-@login_required
+def _captured_image_from_request(request):
+    captured_image = request.POST.get("captured_image") or request.session.get(
+        CAPTURED_SCAN_SESSION_KEY
+    )
+
+    if captured_image:
+        request.session[CAPTURED_SCAN_SESSION_KEY] = captured_image
+
+    return captured_image
+
+
+def _save_captured_image(data_url):
+    if not data_url or ";base64," not in data_url:
+        return static("invalid.jpg")
+
+    header, encoded_image = data_url.split(";base64,", 1)
+    file_extension = header.split("/")[-1] if "/" in header else "jpg"
+    file_name = f"scans/{uuid.uuid4()}.{file_extension}"
+
+    image_bytes = base64.b64decode(encoded_image)
+    saved_path = default_storage.save(file_name, ContentFile(image_bytes))
+
+    return f"{settings.MEDIA_URL}{saved_path}"
+
+
 def scan_report_view(request):
-    """mock view for card report"""
+    """Mock grading report that supports guest grading and authenticated saving."""
+    captured_image = _captured_image_from_request(request)
+
     return render(
         request,
         template_name="cards/card_report.html",
-        context={"user": request.user},
+        context={
+            "user": request.user,
+            "user_label": request.user.username if request.user.is_authenticated else "Guest",
+            "report_image": captured_image or static("invalid.jpg"),
+            "can_save_to_collection": request.user.is_authenticated,
+        },
     )
 
 
 @login_required
 def save_report_view(request):
-    """mocking function to save report with default info"""
-
+    """Save the latest captured scan to the authenticated user's collection."""
     report = GradeReport.objects.create(grade="No Grade")
+    picture_path = _save_captured_image(request.session.get(CAPTURED_SCAN_SESSION_KEY))
     card = Card.objects.create(
         user=request.user,
-        name="Invalid Card",
+        name="Scanned Card",
         grading_notes=report,
-        picture_path="/static/invalid.jpg",
+        picture_path=picture_path,
+        user_notes="",
     )
     card.name += f"-{card.pk}"
     card.save()
+
     collection = CardCollection.objects.get_or_create(user=request.user)[0]
     collection.cards.add(card)
     collection.save()
@@ -130,6 +169,21 @@ def save_report_view(request):
         template_name="cards/collection.html",
         context={
             "collection": CardCollectionSerializer(collection).data,
-            "cards": CardSerializer(collection.cards, many=True).data,
+            "cards": CardSerializer(collection.cards.all(), many=True).data,
         },
     )
+
+
+@login_required
+@require_POST
+def delete_card_view(request, pk):
+    """Remove a card from the authenticated user's collection and delete it."""
+    card = get_object_or_404(Card, pk=pk, user=request.user)
+    collection = CardCollection.objects.get_or_create(user=request.user)[0]
+
+    if collection.cards.filter(pk=card.pk).exists():
+        collection.cards.remove(card)
+
+    card.delete()
+
+    return redirect("cards:collection")

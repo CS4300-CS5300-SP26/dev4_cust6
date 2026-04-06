@@ -18,6 +18,11 @@ urlpatterns = [
         views.CardViewSet.as_view({"post": "update"}),
         name="save_card",
     ),
+    path(
+        "collection/<int:pk>/delete",
+        views.delete_card_view,
+        name="delete_card",
+    ),
     path("scan/report/", views.scan_report_view, name="scan_report"),
     path("collection/save", views.save_report_view, name="save_report"),
     path(

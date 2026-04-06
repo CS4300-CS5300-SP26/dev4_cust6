@@ -1,4 +1,7 @@
-from django.test import TestCase
+import os
+import tempfile
+
+from django.test import TestCase, override_settings
 from django.urls import reverse
 from django.contrib.auth.models import User
 from parameterized import parameterized
@@ -262,3 +265,62 @@ class CardTestCase(TestCase):
 
         # ok it was created
         self.assertEqual(response.status_code, 200)
+
+
+TEST_CAPTURED_IMAGE = (
+    "data:image/png;base64,"
+    "iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mP8/x8AAwMCAO2R0xQAAAAASUVORK5CYII="
+)
+
+
+class ScannedImageSaveTests(TestCase):
+    def setUp(self):
+        self.temp_media = tempfile.TemporaryDirectory()
+        self.override = override_settings(MEDIA_ROOT=self.temp_media.name)
+        self.override.enable()
+        self.client = self.client_class()
+        self.user = User.objects.create_user(username="collector", password="p1234567890")
+
+    def tearDown(self):
+        self.override.disable()
+        self.temp_media.cleanup()
+
+    def test_guest_can_view_grade_report_with_captured_image(self):
+        response = self.client.post(
+            reverse("cards:scan_report"),
+            data={"captured_image": TEST_CAPTURED_IMAGE},
+        )
+
+        self.assertEqual(response.status_code, 200)
+        self.assertContains(response, "User: Guest")
+        self.assertContains(response, "Create an account to save this scan to your collection.")
+        self.assertEqual(self.client.session.get("captured_scan_image"), TEST_CAPTURED_IMAGE)
+
+    def test_guest_cannot_save_scan_to_collection(self):
+        session = self.client.session
+        session["captured_scan_image"] = TEST_CAPTURED_IMAGE
+        session.save()
+
+        response = self.client.get(reverse("cards:save_report"))
+
+        self.assertEqual(response.status_code, 302)
+        self.assertIn(reverse("login"), response["Location"])
+        self.assertEqual(Card.objects.count(), 0)
+
+    def test_authenticated_user_save_report_persists_scan_image(self):
+        self.client.login(username="collector", password="p1234567890")
+        session = self.client.session
+        session["captured_scan_image"] = TEST_CAPTURED_IMAGE
+        session.save()
+
+        response = self.client.get(reverse("cards:save_report"))
+
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(Card.objects.count(), 1)
+        saved_card = Card.objects.get()
+        self.assertTrue(saved_card.picture_path.startswith("/media/scans/"))
+        self.assertEqual(saved_card.user, self.user)
+
+        relative_path = saved_card.picture_path.replace("/media/", "", 1)
+        self.assertTrue(os.path.exists(os.path.join(self.temp_media.name, relative_path)))
+        self.assertTrue(CardCollection.objects.filter(user=self.user, cards=saved_card).exists())

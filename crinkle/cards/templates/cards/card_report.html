@@ -2,22 +2,27 @@
 {% load static %}
 
 {% block top_bar %}
-<a class="back-btn" href="{% url 'profile' %}"> ‹ </a>
+<a class="back-btn" href="{% if user.is_authenticated %}{% url 'profile' %}{% else %}{% url 'index' %}{% endif %}"> ‹ </a>
 <span class="screen-title"> Scan Report </span>
 {% endblock %}
 
 {% block content %}
 <h1> Grading Report </h1>
 
-<img src="{% static 'invalid.jpg' %}" style="max-width:75vw; max-height:60vh; border-radius:12px;">
+<img src="{{ report_image }}" style="max-width:75vw; max-height:60vh; border-radius:12px;">
 
 {% comment %} grade info {% endcomment %}
 <div>
-    <h3> User: {{ user }} </h3>
+    <h3> User: {{ user_label }} </h3>
     <h3> Card Name: Invalid </h3>
     <h3> Grade: None</h3>
     <h3> Date: {% now "jS F Y" %} </h3>
 </div>
 
+{% if can_save_to_collection %}
 <a class="btn-save" href="{% url 'cards:save_report' %}"> Save To Collection </a>
+{% else %}
+<p>Create an account to save this scan to your collection.</p>
+<a class="btn-save" href="{% url 'login' %}?next={% url 'cards:save_report' %}"> Log in to Save </a>
+{% endif %}
 {% endblock %}

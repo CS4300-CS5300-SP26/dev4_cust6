@@ -330,18 +330,16 @@
                 <h2>Photo captured</h2>
 
                 {% if user.is_authenticated %}
-                <p class="post-capture-copy">Tap below to grade your card.</p>
+                <p class="post-capture-copy">Tap below to grade your card, then save it to your collection.</p>
+                {% else %}
+                <p class="post-capture-copy">Tap below to grade your card. Create an account to save it to your collection.</p>
+                {% endif %}
 
                 <button class="btn btn-primary" id="gradeBtn" type="button">
                     Grade Card
                 </button>
-                
-                <script>
-                document.getElementById("gradeBtn").onclick = function() {
-                    window.location.href = "{% url 'cards:scan_report' %}";
-                };
-                </script>
-                
+
+                {% if user.is_authenticated %}
                 <a href="{% url 'submission:start' %}" 
                    style="display:block; width:100%; min-height:52px; margin-top:10px;
                           background:#0D9488; color:#fff; border-radius:14px;
@@ -349,14 +347,6 @@
                           display:flex; align-items:center; justify-content:center;">
                     Submit for Grading
                 </a>
-                {% else %}
-
-                <p class="post-capture-copy">Log in to receive a grade.</p>
-
-                <button class="btn btn-primary" id="loginGradeBtn" type="button">
-                    Log in
-                </button>
-
                 {% endif %}
                     <button class="btn btn-secondary" id="retakeBtn" type="button">
                         Retake photo
@@ -375,7 +365,7 @@
     const captureBtn = document.getElementById("captureBtn");
     const postCaptureCard = document.getElementById("postCaptureCard");
     const retakeBtn = document.getElementById("retakeBtn");
-    const loginGradeBtn = document.getElementById("loginGradeBtn");
+    const gradeBtn = document.getElementById("gradeBtn");
     const scanPreview = document.getElementById("scanPreview");
     const captureControls = document.getElementById("captureControls");
     const overlay = document.getElementById("overlay");
@@ -472,8 +462,25 @@
         feedback.textContent = "Align your card inside the frame";
     });
 
-    loginGradeBtn?.addEventListener("click", () => {
-        window.location.href = "/accounts/login/";
+    gradeBtn?.addEventListener("click", () => {
+        const form = document.createElement("form");
+        form.method = "post";
+        form.action = "{% url 'cards:scan_report' %}";
+
+        const csrfInput = document.createElement("input");
+        csrfInput.type = "hidden";
+        csrfInput.name = "csrfmiddlewaretoken";
+        csrfInput.value = "{{ csrf_token }}";
+        form.appendChild(csrfInput);
+
+        const imageInput = document.createElement("input");
+        imageInput.type = "hidden";
+        imageInput.name = "captured_image";
+        imageInput.value = scanPreview.src;
+        form.appendChild(imageInput);
+
+        document.body.appendChild(form);
+        form.submit();
     });
 
     startCamera();
