@@ -1,0 +1,33 @@
+{% extends "cards/base.html" %}
+{% load static %}
+
+{% block top_bar %}
+<a class="back-btn" href="{% url 'profile' %}"> ‹ </a>
+<span class="screen-title"> My Collection </span>
+{% endblock %}
+
+{% block content %}
+<div class="card-collection">
+    <a class="select-order card-btn" href="{% url 'cards:collection_settings' %}"> Settings </a>
+</div>
+
+<div class="card-collection">
+    {% for card in cards %}
+    <div class="card-panel {% if card.is_valuable %}card-valuable{% endif %}">
+        <img src="{{card.picture_path}}" class="card-thumbnail">
+
+        <div class="card-info">
+            <p class="card-info card-title"> {{card.name}} </p>
+            <p class="card-info card-date"> {{card.date_scanned}} </p>
+            <a href="{% url 'cards:collection' %}{{card.id}}/" class="card-btn"> View/Edit Notes</a>
+        </div>
+
+        <div class="card-grade">
+            {{card.grading_notes.grade}}
+        </div>
+    </div>
+    {% endfor %}
+</div>
+
+{% endblock %}   
+

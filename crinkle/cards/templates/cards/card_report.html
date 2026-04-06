@@ -1,0 +1,34 @@
+{% extends "cards/base.html" %}
+
+{% block top_bar %}
+<a class="back-btn" href="{% url 'scan' %}"> ‹ </a>
+<span class="screen-title"> Scan Report </span>
+{% endblock %}
+
+{% block content %}
+<h1>Grading Report</h1>
+
+{% if picture_path %}
+<img src="{{ picture_path }}" alt="Captured card" style="max-width:75vw; max-height:60vh; border-radius:12px;">
+{% endif %}
+
+<div>
+    <h3>User: {% if request.user.is_authenticated %}{{ request.user.username }}{% elif is_guest_session %}Guest{% else %}Visitor{% endif %}</h3>
+    <h3>Card Name: {{ card_name }}</h3>
+    <h3>Grade: {{ grade }}</h3>
+    <h3>Date: {% now "jS F Y" %}</h3>
+</div>
+
+{% if can_save %}
+<form method="post" action="{% url 'cards:save_report' %}">
+    {% csrf_token %}
+    <input type="hidden" name="scan_id" value="{{ scan.id }}">
+    <button class="btn-save" type="submit">Save To Collection</button>
+</form>
+{% else %}
+<div>
+    <p>Guests can receive a grade, but they must log in to save cards to a collection.</p>
+    <a class="btn-save" href="{% url 'login' %}?next={% url 'cards:scan_report' %}?scan_id={{ scan.id }}">Log in to save this grade</a>
+</div>
+{% endif %}
+{% endblock %}

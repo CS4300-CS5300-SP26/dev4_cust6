@@ -1,0 +1,139 @@
+{% extends "accounts/base_auth.html" %}
+{% block title %}My Account — Crinkle{% endblock %}
+{% block screen_title %}My Account{% endblock %}
+
+{% block content %}
+<style>
+    .profile-header {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        padding: 24px 0 28px;
+    }
+    .avatar {
+        width: 80px;
+        height: 80px;
+        border-radius: 50%;
+        background: linear-gradient(135deg, #2C4BFB, #D9111D);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-family: 'Jersey 10', cursive;
+        font-size: 30px;
+        color: #fff;
+        letter-spacing: 1px;
+        margin-bottom: 14px;
+    }
+    .profile-name {
+        font-family: 'Lato', sans-serif;
+        font-size: 22px;
+        font-weight: 500;
+        color: #101828;
+        margin-bottom: 4px;
+    }
+    .profile-email {
+        font-size: 13px;
+        color: #667085;
+    }
+
+    .section-label {
+        font-size: 11px;
+        font-weight: 600;
+        color: #98A2B3;
+        text-transform: uppercase;
+        letter-spacing: 0.8px;
+        margin: 0 0 10px;
+    }
+
+    .menu-list {
+        display: flex;
+        flex-direction: column;
+        gap: 2px;
+        background: #fff;
+        border-radius: 16px;
+        overflow: hidden;
+        border: 1px solid #F2F4F7;
+        margin-bottom: 24px;
+    }
+    .menu-item {
+        display: flex;
+        align-items: center;
+        gap: 14px;
+        padding: 16px 18px;
+        text-decoration: none;
+        color: #344054;
+        font-size: 15px;
+        font-weight: 500;
+        border-bottom: 1px solid #F9FAFB;
+        -webkit-tap-highlight-color: transparent;
+        transition: background 0.1s;
+    }
+    .menu-item:last-child { border-bottom: none; }
+    .menu-item:active { background: #F5F6FF; }
+    .menu-icon {
+        width: 36px;
+        height: 36px;
+        border-radius: 10px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 18px;
+        flex-shrink: 0;
+    }
+    .menu-arrow {
+        margin-left: auto;
+        color: #D0D5DD;
+        font-size: 20px;
+    }
+
+    .btn-signout {
+        width: 100%;
+        height: 52px;
+        background: #fff;
+        color: #D9111D;
+        border: 1.5px solid #FECACA;
+        border-radius: 16px;
+        font-size: 15px;
+        font-weight: 500;
+        font-family: 'Inter', sans-serif;
+        cursor: pointer;
+        -webkit-tap-highlight-color: transparent;
+    }
+    .btn-signout:active { background: #FEF2F2; }
+</style>
+
+<!-- Avatar + name -->
+<div class="profile-header">
+    <div class="avatar">{{ profile.get_initials }}</div>
+    <div class="profile-name">{{ request.user.username }}</div>
+    <div class="profile-email">{{ request.user.email }}</div>
+</div>
+
+<!-- Navigation menu -->
+<p class="section-label">My Cards</p>
+<div class="menu-list">
+    <a class="menu-item" href="{% url 'history' %}">
+        <div class="menu-icon" style="background:#EEF2FF;">📋</div>
+        Grading History
+        <span class="menu-arrow">›</span>
+    </a>
+    <a class="menu-item" href="{% url 'cards:collection' %}">
+        <div class="menu-icon" style="background:#F0FDF4;">📦</div>
+        My Collection
+        <span class="menu-arrow">›</span>
+    </a>
+    <a class="menu-item" href="{% url 'tracking:list' %}">
+        <div class="menu-icon" style="background:#FFFBEB;">👁</div>
+        Tracking
+        <span class="menu-arrow">›</span>
+    </a>
+</div>
+
+<!-- Sign out -->
+<form method="post" action="{% url 'logout' %}">
+    {% csrf_token %}
+    <button type="submit" class="btn-signout">Sign Out</button>
+</form>
+{% endblock %}
+
+{% block nav_user %}active{% endblock %}
