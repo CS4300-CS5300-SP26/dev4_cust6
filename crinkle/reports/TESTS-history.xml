@@ -1,31 +1,31 @@
-<testsuite name="history.Card History Page" tests="3" errors="0" failures="0" skipped="0" time="0.01351" timestamp="2026-04-04T19:07:58.518292" hostname="jjones-21-596646f8dc-gx5pk"><testcase classname="history.Card History Page" name="History page loads successfully" status="passed" time="0.007344"><system-out>
+<testsuite name="history.Card History Page" tests="3" errors="0" failures="0" skipped="0" time="0.00788" timestamp="2026-04-06T05:45:20.997855" hostname="Taras-MacBook-Pro.local"><testcase classname="history.Card History Page" name="History page loads successfully" status="passed" time="0.004739"><system-out>
 <![CDATA[
 @scenario.begin
   Scenario: History page loads successfully
     Given the app is running ... passed in 0.000s
-    When I visit the history page ... passed in 0.007s
+    When I visit the history page ... passed in 0.005s
     Then I should see a 200 response ... passed in 0.000s
 
 @scenario.end
 --------------------------------------------------------------------------------
 ]]>
-</system-out></testcase><testcase classname="history.Card History Page" name="History page shows scanned cards" status="passed" time="0.003348"><system-out>
+</system-out></testcase><testcase classname="history.Card History Page" name="History page shows scanned cards" status="passed" time="0.001596"><system-out>
 <![CDATA[
 @scenario.begin
   Scenario: History page shows scanned cards
-    Given a card named "Charizard VMAX" exists in the database ... passed in 0.001s
-    When I visit the history page ... passed in 0.002s
+    Given a card named "Charizard VMAX" exists in the database ... passed in 0.000s
+    When I visit the history page ... passed in 0.001s
     Then I should see "Charizard VMAX" on the history page ... passed in 0.000s
 
 @scenario.end
 --------------------------------------------------------------------------------
 ]]>
-</system-out></testcase><testcase classname="history.Card History Page" name="History page shows empty state when no cards exist" status="passed" time="0.002817"><system-out>
+</system-out></testcase><testcase classname="history.Card History Page" name="History page shows empty state when no cards exist" status="passed" time="0.001545"><system-out>
 <![CDATA[
 @scenario.begin
   Scenario: History page shows empty state when no cards exist
-    Given there are no cards in the database ... passed in 0.001s
-    When I visit the history page ... passed in 0.002s
+    Given there are no cards in the database ... passed in 0.000s
+    When I visit the history page ... passed in 0.001s
     Then I should see a 200 response ... passed in 0.000s
 
 @scenario.end
