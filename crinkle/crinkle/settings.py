@@ -45,6 +45,7 @@ INSTALLED_APPS = [
     'accounts',
     'cards',
     'scan',
+    'education',
     'submission',
 ]
 

@@ -1,0 +1,453 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Jersey+10&family=Lato:wght@500&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="{% static 'styles.css' %}">
+    <title>Crinkle – Education</title>
+    <style>
+        .edu-page {
+            min-height: 100vh;
+            background: linear-gradient(180deg, #2C4BFB 0%, #D9111D 70%, #E7DB00 100%);
+            position: relative;
+            overflow: hidden;
+            padding-bottom: 48px;
+        }
+
+        .edu-bg-img {
+            position: absolute;
+            inset: 0;
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            opacity: 0.20;
+        }
+
+        .edu-overlay {
+            position: absolute;
+            inset: 0;
+            background: rgba(0,0,0,0.20);
+        }
+
+        /* Nav */
+        .edu-nav {
+            position: absolute;
+            left: 20px;
+            right: 20px;
+            top: 16px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            z-index: 3;
+        }
+
+        .btn-back {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            height: 36px;
+            padding: 0 14px;
+            background: rgba(255,255,255,0.15);
+            border: 1px solid rgba(255,255,255,0.25);
+            border-radius: 10px;
+            color: #ffffff;
+            font-size: 14px;
+            font-weight: 500;
+            text-decoration: none;
+            -webkit-tap-highlight-color: transparent;
+        }
+        .btn-back:active { background: rgba(255,255,255,0.25); }
+
+        /* Inner content */
+        .edu-inner {
+            position: relative;
+            z-index: 2;
+            max-width: 600px;
+            margin: 0 auto;
+            padding: 100px 20px 48px;
+        }
+
+        .edu-header { margin-bottom: 32px; }
+
+        .edu-title {
+            font-family: 'Lato', sans-serif;
+            font-weight: 500;
+            font-size: 36px;
+            color: #ffffff;
+            margin: 12px 0 4px;
+        }
+
+        .edu-subtitle {
+            font-size: 14px;
+            color: rgba(255,255,255,0.70);
+        }
+
+        /* Section heading */
+        .section-heading {
+            font-family: 'Jersey 10', cursive;
+            font-size: 26px;
+            color: #ffffff;
+            margin: 0 0 16px;
+        }
+
+        /* FAQ button */
+        .faq-btn {
+            display: block;
+            width: 100%;
+            padding: 16px 20px;
+            background: rgba(255,255,255,0.12);
+            border: 1px solid rgba(255,255,255,0.22);
+            border-radius: 16px;
+            color: #ffffff;
+            font-family: 'Jersey 10', cursive;
+            font-size: 20px;
+            text-align: left;
+            cursor: pointer;
+            margin-bottom: 16px;
+            -webkit-tap-highlight-color: transparent;
+            transition: background 0.18s;
+        }
+        .faq-btn:active { background: rgba(255,255,255,0.20); }
+
+        /* FAQ accordion list */
+        .faq-list {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        .faq-item {
+            background: rgba(255,255,255,0.10);
+            border: 1px solid rgba(255,255,255,0.20);
+            border-radius: 14px;
+            overflow: hidden;
+        }
+
+        .faq-question {
+            width: 100%;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 16px 18px;
+            background: none;
+            border: none;
+            color: #ffffff;
+            font-size: 15px;
+            font-weight: 500;
+            font-family: 'Inter', sans-serif;
+            text-align: left;
+            cursor: pointer;
+            -webkit-tap-highlight-color: transparent;
+            gap: 12px;
+        }
+
+        .faq-chevron {
+            flex-shrink: 0;
+            font-size: 18px;
+            color: rgba(255,255,255,0.60);
+            transition: transform 0.25s;
+        }
+
+        .faq-item.open .faq-chevron {
+            transform: rotate(180deg);
+        }
+
+        .faq-answer {
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.3s ease, padding 0.3s ease;
+            font-size: 14px;
+            line-height: 1.6;
+            color: rgba(255,255,255,0.80);
+            font-family: 'Inter', sans-serif;
+            padding: 0 18px;
+        }
+
+        .faq-item.open .faq-answer {
+            max-height: 400px;
+            padding: 0 18px 16px;
+        }
+
+        .faq-divider {
+            height: 1px;
+            background: rgba(255,255,255,0.12);
+            margin: 0 18px;
+            display: none;
+        }
+
+        .faq-item.open .faq-divider {
+            display: block;
+        }
+    </style>
+</head>
+<body>
+    <main>
+        <div class="edu-page">
+            <img class="edu-bg-img" src="{% static 'pokemon.jpg' %}" alt="">
+            <div class="edu-overlay"></div>
+
+            <!-- Nav -->
+            <div class="edu-nav">
+                <a class="btn-back" href="{% url 'index' %}">&#8592; Back</a>
+                <div class="brand">Crinkle</div>
+            </div>
+
+            <div class="edu-inner">
+
+                <!-- Header -->
+                <div class="edu-header">
+                    <div class="hero-pill"><span>Learn the Basics</span></div>
+                    <h1 class="edu-title">Education</h1>
+                    <p class="edu-subtitle">Everything you need to know about Pokémon card grading</p>
+                </div>
+
+                <!-- How to Grade section -->
+                <h2 class="section-heading">How to Grade</h2>
+
+                <!-- Grading Categories section: shown first -->
+                <h2 class="section-heading" style="margin-top: 0;">Grading Categories</h2>
+
+                <!-- Corners: expands dropdown list -->
+                <button class="faq-btn" onclick="toggleSection('corners')">Corners</button>
+                <div class="faq-list" id="corners" style="display:none; margin-bottom: 16px;">
+                    <div class="faq-item">
+                        <button class="faq-question" onclick="toggleItem(this)">
+                            What are graders looking for on corners?
+                            <span class="faq-chevron">&#8964;</span>
+                        </button>
+                        <div class="faq-divider"></div>
+                        <div class="faq-answer">
+                            Corners are one of the most important factors in grading. Graders look for any fraying, bending, or whitening at the four corners of the card. Even a single worn corner can drop a card from a 10 to an 8 or lower.
+                        </div>
+                    </div>
+                    <div class="faq-item">
+                        <button class="faq-question" onclick="toggleItem(this)">
+                            What does a perfect corner look like?
+                            <span class="faq-chevron">&#8964;</span>
+                        </button>
+                        <div class="faq-divider"></div>
+                        <div class="faq-answer">
+                            A perfect corner is sharp and pointed with no visible fraying, fuzzing, or white stress marks. Under a loupe or magnification, the corner should come to a clean, crisp point with no separation of the card layers.
+                        </div>
+                    </div>
+                    <div class="faq-item">
+                        <button class="faq-question" onclick="toggleItem(this)">
+                            How do I protect corners before grading?
+                            <span class="faq-chevron">&#8964;</span>
+                        </button>
+                        <div class="faq-divider"></div>
+                        <div class="faq-answer">
+                            Always sleeve cards immediately after pulling them from a pack. Use a soft penny sleeve first, then place the card in a rigid top loader. Never stack unsleeved cards or store them loose in a box where corners can rub together.
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Edges: expands dropdown list -->
+                <button class="faq-btn" onclick="toggleSection('edges')">Edges</button>
+                <div class="faq-list" id="edges" style="display:none; margin-bottom: 16px;">
+                    <div class="faq-item">
+                        <button class="faq-question" onclick="toggleItem(this)">
+                            What are graders looking for on edges?
+                            <span class="faq-chevron">&#8964;</span>
+                        </button>
+                        <div class="faq-divider"></div>
+                        <div class="faq-answer">
+                            Graders inspect all four edges of the card for nicks, chips, roughness, or white wear marks. Edges are the borders between the corners and are particularly vulnerable when cards are shuffled or stored improperly.
+                        </div>
+                    </div>
+                    <div class="faq-item">
+                        <button class="faq-question" onclick="toggleItem(this)">
+                            Are edge nicks common on Pokémon cards?
+                            <span class="faq-chevron">&#8964;</span>
+                        </button>
+                        <div class="faq-divider"></div>
+                        <div class="faq-answer">
+                            Yes, edge nicks are very common, especially on older cards. Cards from the Base Set era (1999–2000) frequently have edge wear due to being played with or stored in binders without sleeves. Even factory-fresh packs can sometimes produce cards with minor edge imperfections.
+                        </div>
+                    </div>
+                    <div class="faq-item">
+                        <button class="faq-question" onclick="toggleItem(this)">
+                            Can edge damage be repaired?
+                            <span class="faq-chevron">&#8964;</span>
+                        </button>
+                        <div class="faq-divider"></div>
+                        <div class="faq-answer">
+                            No — and attempting to alter a card in any way is considered tampering and will result in the card being rejected or marked as altered by grading companies. Cards should be submitted in their natural, unmodified condition.
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Centering: expands dropdown list -->
+                <button class="faq-btn" onclick="toggleSection('centering')">Centering</button>
+                <div class="faq-list" id="centering" style="display:none; margin-bottom: 16px;">
+                    <div class="faq-item">
+                        <button class="faq-question" onclick="toggleItem(this)">
+                            What is centering in card grading?
+                            <span class="faq-chevron">&#8964;</span>
+                        </button>
+                        <div class="faq-divider"></div>
+                        <div class="faq-answer">
+                            Centering refers to how evenly the printed image is positioned within the card's border. It is measured as a ratio — for example, 55/45 means the left border is slightly wider than the right. A perfectly centered card is 50/50 on all sides.
+                        </div>
+                    </div>
+                    <div class="faq-item">
+                        <button class="faq-question" onclick="toggleItem(this)">
+                            What centering is required for a PSA 10?
+                            <span class="faq-chevron">&#8964;</span>
+                        </button>
+                        <div class="faq-divider"></div>
+                        <div class="faq-answer">
+                            PSA requires centering to be no worse than 55/45 on the front and 75/25 on the back for a grade of 10. BGS is stricter, requiring 50/50 on all sides for their Black Label Pristine 10. Even slight miscentering can prevent a card from achieving the top grade.
+                        </div>
+                    </div>
+                    <div class="faq-item">
+                        <button class="faq-question" onclick="toggleItem(this)">
+                            How do I check centering before submitting?
+                            <span class="faq-chevron">&#8964;</span>
+                        </button>
+                        <div class="faq-divider"></div>
+                        <div class="faq-answer">
+                            You can use a ruler or centering tool to measure the border widths on each side. Many collectors use a centering tool app on their phone to get a quick ratio estimate. If the borders are visibly uneven to the naked eye, the card likely won't achieve a 10.
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Surface: expands dropdown list -->
+                <button class="faq-btn" onclick="toggleSection('surface')">Surface</button>
+                <div class="faq-list" id="surface" style="display:none; margin-bottom: 32px;">
+                    <div class="faq-item">
+                        <button class="faq-question" onclick="toggleItem(this)">
+                            What are graders looking for on the surface?
+                            <span class="faq-chevron">&#8964;</span>
+                        </button>
+                        <div class="faq-divider"></div>
+                        <div class="faq-answer">
+                            Graders examine both the front and back of the card for scratches, print lines, ink spots, stains, creases, and holo damage on holographic cards. The surface is often the hardest category to achieve a perfect score in because even light handling can leave microscopic scratches.
+                        </div>
+                    </div>
+                    <div class="faq-item">
+                        <button class="faq-question" onclick="toggleItem(this)">
+                            What is holo damage?
+                            <span class="faq-chevron">&#8964;</span>
+                        </button>
+                        <div class="faq-divider"></div>
+                        <div class="faq-answer">
+                            Holo damage refers to scratches or cloudiness on the holographic foil layer of a card. It appears as dull or scratched areas when the card is tilted under light. Holo damage is extremely common and can significantly reduce a card's grade even if the rest of the card looks perfect.
+                        </div>
+                    </div>
+                    <div class="faq-item">
+                        <button class="faq-question" onclick="toggleItem(this)">
+                            How do I check for surface issues?
+                            <span class="faq-chevron">&#8964;</span>
+                        </button>
+                        <div class="faq-divider"></div>
+                        <div class="faq-answer">
+                            Hold the card under a bright light and tilt it slowly at different angles. Scratches and print lines will catch the light and become visible. For holo cards, look specifically at the foil area for any dullness or swirl patterns that indicate surface wear.
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Grading FAQ section: shown after categories -->
+                <h2 class="section-heading">Grading FAQ</h2>
+
+                <!-- FAQ button: expands dropdown list -->
+                <button class="faq-btn" onclick="toggleFaq()">Grading FAQ</button>
+
+                <!-- FAQ dropdown list: hidden until button is tapped -->
+                <div class="faq-list" id="faqList" style="display:none;">
+
+                    <div class="faq-item">
+                        <button class="faq-question" onclick="toggleItem(this)">
+                            What is Pokémon card grading?
+                            <span class="faq-chevron">&#8964;</span>
+                        </button>
+                        <div class="faq-divider"></div>
+                        <div class="faq-answer">
+                            Card grading is the process of having a professional service evaluate the condition of your Pokémon card and assign it a numeric score, typically on a scale of 1–10. A higher grade means the card is in better condition and is usually worth more money.
+                        </div>
+                    </div>
+
+                    <div class="faq-item">
+                        <button class="faq-question" onclick="toggleItem(this)">
+                            What do grading companies look for?
+                            <span class="faq-chevron">&#8964;</span>
+                        </button>
+                        <div class="faq-divider"></div>
+                        <div class="faq-answer">
+                            Graders evaluate four main areas: centering (is the image centered on the card?), corners (are they sharp or worn?), edges (any nicks or chips?), and surface (any scratches, print lines, or stains?). All four scores are combined into an overall grade.
+                        </div>
+                    </div>
+
+                    <div class="faq-item">
+                        <button class="faq-question" onclick="toggleItem(this)">
+                            What does a grade of 10 mean?
+                            <span class="faq-chevron">&#8964;</span>
+                        </button>
+                        <div class="faq-divider"></div>
+                        <div class="faq-answer">
+                            A grade of 10 — called "Gem Mint" — means the card is in essentially perfect condition. It has sharp corners, clean edges, a flawless surface, and near-perfect centering. These cards are extremely rare and command the highest prices.
+                        </div>
+                    </div>
+
+                    <div class="faq-item">
+                        <button class="faq-question" onclick="toggleItem(this)">
+                            Which grading companies are most trusted?
+                            <span class="faq-chevron">&#8964;</span>
+                        </button>
+                        <div class="faq-divider"></div>
+                        <div class="faq-answer">
+                            The most widely recognized grading companies are PSA (Professional Sports Authenticator), BGS (Beckett Grading Services), and CGC (Certified Guaranty Company). PSA is the most popular for Pokémon cards and typically carries the highest resale value.
+                        </div>
+                    </div>
+
+                    <div class="faq-item">
+                        <button class="faq-question" onclick="toggleItem(this)">
+                            Is it worth grading my card?
+                            <span class="faq-chevron">&#8964;</span>
+                        </button>
+                        <div class="faq-divider"></div>
+                        <div class="faq-answer">
+                            It depends on the card's value and condition. Grading fees typically range from $20–$100+ per card, so it's usually only worth it if the card is rare, in excellent condition, and likely to sell for significantly more graded than ungraded.
+                        </div>
+                    </div>
+
+                    <div class="faq-item">
+                        <button class="faq-question" onclick="toggleItem(this)">
+                            How do I prepare my card for grading?
+                            <span class="faq-chevron">&#8964;</span>
+                        </button>
+                        <div class="faq-divider"></div>
+                        <div class="faq-answer">
+                            Handle the card only by its edges, never touch the surface. Store it in a soft penny sleeve first, then a rigid top loader or card saver. Avoid rubber bands or anything that could bend or scratch the card before submission.
+                        </div>
+                    </div>
+
+                </div>
+
+            </div>
+        </div>
+    </main>
+
+    <footer class="page-footer">
+        Created by Tara Prasad, Nazanin Siavash, Joshua D. Jones, Jeffrey Kotz, and Bryce Holland - 3/3/2026
+    </footer>
+
+    <script>
+        function toggleFaq() {
+            toggleSection('faqList');
+        }
+
+        function toggleSection(id) {
+            const list = document.getElementById(id);
+            list.style.display = list.style.display === 'none' ? 'flex' : 'none';
+        }
+
+        function toggleItem(btn) {
+            const item = btn.closest('.faq-item');
+            item.classList.toggle('open');
+        }
+    </script>
+</body>
+</html>
