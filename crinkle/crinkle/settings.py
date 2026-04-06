@@ -46,6 +46,7 @@ INSTALLED_APPS = [
     'cards',
     'scan',
     'education',
+    'submission',
 ]
 
 MIDDLEWARE = [

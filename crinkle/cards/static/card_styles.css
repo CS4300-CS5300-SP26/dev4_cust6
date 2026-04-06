@@ -29,10 +29,24 @@ html, body {
     font-size: large;
 }
 
+.input-label {
+    font-size: large;
+    font-weight: bold;
+}
+
+.input-field {
+    display: flex;
+    font-size: large;
+    width: 100%;
+
+    margin-bottom: 4px;
+}
+
 .card-collection {
     display: flex;
     flex-direction: column;    
     width: 100%;
+    font-size: large;
 }
 
 .card-panel {
@@ -43,6 +57,10 @@ html, body {
     border-radius: 12px;
     border-width: 0.5px;
     margin-bottom: 2px;
+}
+.card-valuable {
+    border-width: 2px;
+    background-color: #fff8aa;
 }
 
 .card-thumbnail {
@@ -87,8 +105,11 @@ html, body {
 .card-btn {
     color: black;
     text-decoration: none;
+    background-color: rgb(255, 255, 255);
     border: black;
     border-style: solid;
+
+    font-weight: bold;
 
     border-radius: 8px;
     text-align: center;
@@ -200,6 +221,7 @@ html, body {
     color: #101828;
     background: #fff;
     outline: none;
+    appearance: none;
     -webkit-appearance: none;
     transition: border-color 0.15s;
 }

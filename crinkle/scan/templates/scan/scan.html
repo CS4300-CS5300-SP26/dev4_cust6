@@ -335,13 +335,20 @@
                 <button class="btn btn-primary" id="gradeBtn" type="button">
                     Grade Card
                 </button>
-
+                
                 <script>
                 document.getElementById("gradeBtn").onclick = function() {
                     window.location.href = "{% url 'cards:scan_report' %}";
                 };
                 </script>
-
+                
+                <a href="{% url 'submission:start' %}" 
+                   style="display:block; width:100%; min-height:52px; margin-top:10px;
+                          background:#0D9488; color:#fff; border-radius:14px;
+                          font-size:16px; font-weight:600; text-decoration:none;
+                          display:flex; align-items:center; justify-content:center;">
+                    Submit for Grading
+                </a>
                 {% else %}
 
                 <p class="post-capture-copy">Log in to receive a grade.</p>

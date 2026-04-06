@@ -1,0 +1,46 @@
+{% extends "accounts/base_auth.html" %}
+{% block title %}Submission Confirmed — Crinkle{% endblock %}
+{% block screen_title %}Confirmed!{% endblock %}
+
+{% block content %}
+<div style="text-align:center; padding: 24px 0;">
+    <div style="font-size:48px;">✅</div>
+    <h1 class="screen-heading">Submission Confirmed</h1>
+    <p class="screen-subheading">Your card has been submitted for grading.</p>
+</div>
+
+<div style="background:#f8fafc; border-radius:12px; padding:16px; margin:16px 0;">
+    <h2 style="font-size:14px; font-weight:700; color:#64748b; margin-bottom:12px;">SUBMISSION DETAILS</h2>
+
+    <div style="display:flex; justify-content:space-between; padding:8px 0; border-bottom:1px solid #e2e8f0;">
+        <span style="color:#64748b;">Card</span>
+        <span style="font-weight:600;">{{ submission.card_name }}</span>
+    </div>
+    <div style="display:flex; justify-content:space-between; padding:8px 0; border-bottom:1px solid #e2e8f0;">
+        <span style="color:#64748b;">Grading Service</span>
+        <span style="font-weight:600;">{{ submission.grading_service }}</span>
+    </div>
+    <div style="display:flex; justify-content:space-between; padding:8px 0; border-bottom:1px solid #e2e8f0;">
+        <span style="color:#64748b;">Ship To</span>
+        <span style="font-weight:600;">{{ submission.full_name }}</span>
+    </div>
+    <div style="display:flex; justify-content:space-between; padding:8px 0; border-bottom:1px solid #e2e8f0;">
+        <span style="color:#64748b;">Address</span>
+        <span style="font-weight:600;">{{ submission.address }}, {{ submission.city }}, {{ submission.state }} {{ submission.zip_code }}</span>
+    </div>
+    <div style="display:flex; justify-content:space-between; padding:8px 0;">
+        <span style="color:#64748b;">Submitted</span>
+        <span style="font-weight:600;">{{ submission.created_at|date:"M d, Y" }}</span>
+    </div>
+</div>
+
+<a href="{% url 'index' %}" class="btn-primary" style="display:block; text-align:center; text-decoration:none;">
+    Back to Home
+</a>
+
+<div class="footer-link">
+    <a href="{% url 'submission:start' %}">Submit another card</a>
+</div>
+{% endblock %}
+
+{% block nav_user %}active{% endblock %}

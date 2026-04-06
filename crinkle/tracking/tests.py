@@ -1,6 +1,6 @@
 from django.test import TestCase, Client
 from django.urls import reverse
-from .models import TrackedCard, ValueSnapshot
+from .models import TrackedCard, ValueSnapshot, CardPricing
 
 
 class TrackedCardModelTest(TestCase):
@@ -45,6 +45,24 @@ class ValueSnapshotModelTest(TestCase):
     def test_snapshot_str(self):
         snapshot = ValueSnapshot.objects.create(total_value=250.00)
         self.assertIn('$250', str(snapshot))
+
+
+class CardPricingModelTest(TestCase):
+    def test_pricing_creation(self):
+        pricing = CardPricing.objects.create(
+            card_name='Charizard', card_set='Base Set',
+            grade_tier='psa_10', price=5000.00,
+        )
+        self.assertEqual(pricing.card_name, 'Charizard')
+        self.assertEqual(float(pricing.price), 5000.00)
+
+    def test_pricing_str(self):
+        pricing = CardPricing.objects.create(
+            card_name='Charizard', card_set='Base Set',
+            grade_tier='psa_10', price=5000.00,
+        )
+        self.assertIn('Charizard', str(pricing))
+        self.assertIn('5000', str(pricing))
 
 
 class TrackingViewsTest(TestCase):
@@ -149,11 +167,50 @@ class TrackingViewsTest(TestCase):
         response = self.client.get(reverse('tracking:list') + '?status=sold')
         self.assertEqual(float(response.context['sold_total']), 350.00)
 
-    def test_collection_filter(self):
-        TrackedCard.objects.create(card_name='Pikachu', status='owned')
-        response = self.client.get(reverse('tracking:list') + '?status=owned')
-        self.assertContains(response, 'Pikachu')
-        self.assertNotContains(response, 'Mewtwo')
+    def test_market_search_page(self):
+        response = self.client.get(reverse('tracking:market'))
+        self.assertEqual(response.status_code, 200)
+
+    def test_market_search_with_query(self):
+        CardPricing.objects.create(
+            card_name='Charizard', card_set='Base Set',
+            grade_tier='ungraded', price=50.00,
+        )
+        response = self.client.get(reverse('tracking:market') + '?q=Charizard')
+        self.assertEqual(response.status_code, 200)
+        self.assertContains(response, 'Charizard')
+
+    def test_market_search_no_results(self):
+        response = self.client.get(reverse('tracking:market') + '?q=nonexistent')
+        self.assertEqual(response.status_code, 200)
+        self.assertContains(response, 'No results')
+
+    def test_card_pricing_page(self):
+        CardPricing.objects.create(
+            card_name='Charizard', card_set='Base Set',
+            grade_tier='ungraded', price=50.00,
+        )
+        response = self.client.get(
+            reverse('tracking:card_pricing') + '?name=Charizard&set=Base+Set'
+        )
+        self.assertEqual(response.status_code, 200)
+        self.assertContains(response, 'Charizard')
+
+    def test_card_pricing_no_name_redirects(self):
+        response = self.client.get(reverse('tracking:card_pricing'))
+        self.assertEqual(response.status_code, 302)
+
+    def test_card_pricing_shows_tiers(self):
+        for tier in ['ungraded', 'psa_7', 'psa_8', 'psa_9', 'psa_10']:
+            CardPricing.objects.create(
+                card_name='Pikachu', card_set='Base Set',
+                grade_tier=tier, price=100.00,
+            )
+        response = self.client.get(
+            reverse('tracking:card_pricing') + '?name=Pikachu&set=Base+Set'
+        )
+        self.assertContains(response, 'Ungraded')
+        self.assertContains(response, 'PSA 10')
 
 
 class TrackedCardFormTest(TestCase):

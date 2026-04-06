@@ -1,71 +1,71 @@
-<testsuite name="collection_sorting.Collection Sorting" tests="6" errors="0" failures="0" skipped="0" time="2.809761" timestamp="2026-04-06T00:37:39.922882" hostname="bholland-21-5cdb5db5d6-gb674"><testcase classname="collection_sorting.Collection Sorting" name="Sort collection by card name" status="passed" time="0.454742"><system-out>
+<testsuite name="collection_sorting.Collection Sorting" tests="6" errors="0" failures="0" skipped="0" time="3.150879" timestamp="2026-04-04T19:07:58.324904" hostname="jjones-21-596646f8dc-gx5pk"><testcase classname="collection_sorting.Collection Sorting" name="Sort collection by card name" status="passed" time="0.486072"><system-out>
 <![CDATA[
 @scenario.begin
   Scenario: Sort collection by card name
-    Given I am logged in ... passed in 0.416s
-    Given I have a collection of cards ... passed in 0.010s
-    When I sort by card "name" ... passed in 0.023s
-    Then my cards will be ordered by "name" ... passed in 0.006s
+    Given I am logged in ... passed in 0.434s
+    Given I have a collection of cards ... passed in 0.018s
+    When I sort by card "name" ... passed in 0.026s
+    Then my cards will be ordered by "name" ... passed in 0.008s
 
 @scenario.end
 --------------------------------------------------------------------------------
 ]]>
-</system-out></testcase><testcase classname="collection_sorting.Collection Sorting" name="Sort collection by card name descending" status="passed" time="0.466415"><system-out>
+</system-out></testcase><testcase classname="collection_sorting.Collection Sorting" name="Sort collection by card name descending" status="passed" time="0.46662"><system-out>
 <![CDATA[
 @scenario.begin
   Scenario: Sort collection by card name descending
-    Given I am logged in ... passed in 0.446s
-    Given I have a collection of cards ... passed in 0.008s
-    When I sort by card "-name" ... passed in 0.008s
-    Then my cards will be ordered by "-name" ... passed in 0.005s
+    Given I am logged in ... passed in 0.430s
+    Given I have a collection of cards ... passed in 0.015s
+    When I sort by card "-name" ... passed in 0.014s
+    Then my cards will be ordered by "-name" ... passed in 0.008s
 
 @scenario.end
 --------------------------------------------------------------------------------
 ]]>
-</system-out></testcase><testcase classname="collection_sorting.Collection Sorting" name="Sort collection by scan date" status="passed" time="0.543948"><system-out>
+</system-out></testcase><testcase classname="collection_sorting.Collection Sorting" name="Sort collection by scan date" status="passed" time="0.781626"><system-out>
 <![CDATA[
 @scenario.begin
   Scenario: Sort collection by scan date
-    Given I am logged in ... passed in 0.523s
-    Given I have a collection of cards ... passed in 0.008s
-    When I sort by card "date_scanned" ... passed in 0.008s
-    Then my cards will be ordered by "date_scanned" ... passed in 0.005s
+    Given I am logged in ... passed in 0.724s
+    Given I have a collection of cards ... passed in 0.014s
+    When I sort by card "date_scanned" ... passed in 0.034s
+    Then my cards will be ordered by "date_scanned" ... passed in 0.010s
 
 @scenario.end
 --------------------------------------------------------------------------------
 ]]>
-</system-out></testcase><testcase classname="collection_sorting.Collection Sorting" name="Sort collection by scan date descending" status="passed" time="0.466939"><system-out>
+</system-out></testcase><testcase classname="collection_sorting.Collection Sorting" name="Sort collection by scan date descending" status="passed" time="0.492772"><system-out>
 <![CDATA[
 @scenario.begin
   Scenario: Sort collection by scan date descending
-    Given I am logged in ... passed in 0.446s
-    Given I have a collection of cards ... passed in 0.008s
-    When I sort by card "-date_scanned" ... passed in 0.008s
-    Then my cards will be ordered by "-date_scanned" ... passed in 0.005s
+    Given I am logged in ... passed in 0.448s
+    Given I have a collection of cards ... passed in 0.017s
+    When I sort by card "-date_scanned" ... passed in 0.018s
+    Then my cards will be ordered by "-date_scanned" ... passed in 0.010s
 
 @scenario.end
 --------------------------------------------------------------------------------
 ]]>
-</system-out></testcase><testcase classname="collection_sorting.Collection Sorting" name="Sort collection by card grade" status="passed" time="0.420134"><system-out>
+</system-out></testcase><testcase classname="collection_sorting.Collection Sorting" name="Sort collection by card grade" status="passed" time="0.4749"><system-out>
 <![CDATA[
 @scenario.begin
   Scenario: Sort collection by card grade
-    Given I am logged in ... passed in 0.398s
-    Given I have a collection of cards ... passed in 0.009s
-    When I sort by card "grading_notes" ... passed in 0.008s
-    Then my cards will be ordered by "grading_notes" ... passed in 0.005s
+    Given I am logged in ... passed in 0.432s
+    Given I have a collection of cards ... passed in 0.015s
+    When I sort by card "grading_notes" ... passed in 0.016s
+    Then my cards will be ordered by "grading_notes" ... passed in 0.013s
 
 @scenario.end
 --------------------------------------------------------------------------------
 ]]>
-</system-out></testcase><testcase classname="collection_sorting.Collection Sorting" name="Sort collection by card grade descending" status="passed" time="0.457583"><system-out>
+</system-out></testcase><testcase classname="collection_sorting.Collection Sorting" name="Sort collection by card grade descending" status="passed" time="0.448889"><system-out>
 <![CDATA[
 @scenario.begin
   Scenario: Sort collection by card grade descending
-    Given I am logged in ... passed in 0.436s
-    Given I have a collection of cards ... passed in 0.009s
-    When I sort by card "-grading_notes" ... passed in 0.008s
-    Then my cards will be ordered by "-grading_notes" ... passed in 0.005s
+    Given I am logged in ... passed in 0.409s
+    Given I have a collection of cards ... passed in 0.014s
+    When I sort by card "-grading_notes" ... passed in 0.014s
+    Then my cards will be ordered by "-grading_notes" ... passed in 0.012s
 
 @scenario.end
 --------------------------------------------------------------------------------

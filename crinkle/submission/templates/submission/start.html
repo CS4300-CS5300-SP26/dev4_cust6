@@ -1,0 +1,33 @@
+{% extends "accounts/base_auth.html" %}
+{% block title %}Submit for Grading — Crinkle{% endblock %}
+{% block screen_title %}Submit for Grading{% endblock %}
+
+{% block content %}
+<h1 class="screen-heading">Grade your card</h1>
+<p class="screen-subheading">Select a grading service and enter your card name to get started.</p>
+
+<form method="post" novalidate>
+    {% csrf_token %}
+
+    <div class="field">
+        <label for="card_name">Card Name</label>
+        <input type="text" id="card_name" name="card_name" placeholder="e.g. Charizard Base Set" required>
+    </div>
+
+    <div class="field">
+        <label for="grading_service">Grading Service</label>
+        <select id="grading_service" name="grading_service">
+            <option value="PSA">PSA</option>
+            <option value="BGS">BGS</option>
+        </select>
+    </div>
+
+    <button type="submit" class="btn-primary">Continue</button>
+</form>
+
+<div class="footer-link">
+    <a href="{% url 'index' %}">Back to Home</a>
+</div>
+{% endblock %}
+
+{% block nav_user %}active{% endblock %}

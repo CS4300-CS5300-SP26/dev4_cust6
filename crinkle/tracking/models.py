@@ -5,7 +5,6 @@ from django.conf import settings
 class TrackedCard(models.Model):
     # Dropdown choices for card status
     STATUS_CHOICES = [
-        ('owned', 'Owned'),
         ('watching', 'Watching'),
         ('submitted', 'Submitted for Grading'),
         ('graded', 'Graded'),
@@ -84,3 +83,17 @@ class ValueSnapshot(models.Model):
 
     def __str__(self):
         return f"${self.total_value} on {self.date}"
+
+class CardPricing(models.Model):
+    """Stores pricing data for a card at each grade tier."""
+    card_name = models.CharField(max_length=200)
+    card_set = models.CharField(max_length=200, blank=True, default='')
+    grade_tier = models.CharField(max_length=10)
+    price = models.DecimalField(max_digits=10, decimal_places=2)
+    date_recorded = models.DateField(auto_now_add=True)
+
+    class Meta:
+        ordering = ['-date_recorded']
+
+    def __str__(self):
+        return f"{self.card_name} {self.grade_tier} ${self.price} on {self.date_recorded}"
