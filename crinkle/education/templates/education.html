@@ -206,10 +206,156 @@
                 <!-- How to Grade section -->
                 <h2 class="section-heading">How to Grade</h2>
 
-                <!-- Grading FAQ button → reveals dropdowns -->
-                <button class="faq-btn" onclick="toggleFaq()">📋 Grading FAQ</button>
+                <!-- Grading Categories section: shown first -->
+                <h2 class="section-heading" style="margin-top: 0;">Grading Categories</h2>
 
-                <!-- FAQ dropdown list (hidden until button is tapped) -->
+                <!-- Corners: expands dropdown list -->
+                <button class="faq-btn" onclick="toggleSection('corners')">Corners</button>
+                <div class="faq-list" id="corners" style="display:none; margin-bottom: 16px;">
+                    <div class="faq-item">
+                        <button class="faq-question" onclick="toggleItem(this)">
+                            What are graders looking for on corners?
+                            <span class="faq-chevron">&#8964;</span>
+                        </button>
+                        <div class="faq-divider"></div>
+                        <div class="faq-answer">
+                            Corners are one of the most important factors in grading. Graders look for any fraying, bending, or whitening at the four corners of the card. Even a single worn corner can drop a card from a 10 to an 8 or lower.
+                        </div>
+                    </div>
+                    <div class="faq-item">
+                        <button class="faq-question" onclick="toggleItem(this)">
+                            What does a perfect corner look like?
+                            <span class="faq-chevron">&#8964;</span>
+                        </button>
+                        <div class="faq-divider"></div>
+                        <div class="faq-answer">
+                            A perfect corner is sharp and pointed with no visible fraying, fuzzing, or white stress marks. Under a loupe or magnification, the corner should come to a clean, crisp point with no separation of the card layers.
+                        </div>
+                    </div>
+                    <div class="faq-item">
+                        <button class="faq-question" onclick="toggleItem(this)">
+                            How do I protect corners before grading?
+                            <span class="faq-chevron">&#8964;</span>
+                        </button>
+                        <div class="faq-divider"></div>
+                        <div class="faq-answer">
+                            Always sleeve cards immediately after pulling them from a pack. Use a soft penny sleeve first, then place the card in a rigid top loader. Never stack unsleeved cards or store them loose in a box where corners can rub together.
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Edges: expands dropdown list -->
+                <button class="faq-btn" onclick="toggleSection('edges')">Edges</button>
+                <div class="faq-list" id="edges" style="display:none; margin-bottom: 16px;">
+                    <div class="faq-item">
+                        <button class="faq-question" onclick="toggleItem(this)">
+                            What are graders looking for on edges?
+                            <span class="faq-chevron">&#8964;</span>
+                        </button>
+                        <div class="faq-divider"></div>
+                        <div class="faq-answer">
+                            Graders inspect all four edges of the card for nicks, chips, roughness, or white wear marks. Edges are the borders between the corners and are particularly vulnerable when cards are shuffled or stored improperly.
+                        </div>
+                    </div>
+                    <div class="faq-item">
+                        <button class="faq-question" onclick="toggleItem(this)">
+                            Are edge nicks common on Pokémon cards?
+                            <span class="faq-chevron">&#8964;</span>
+                        </button>
+                        <div class="faq-divider"></div>
+                        <div class="faq-answer">
+                            Yes, edge nicks are very common, especially on older cards. Cards from the Base Set era (1999–2000) frequently have edge wear due to being played with or stored in binders without sleeves. Even factory-fresh packs can sometimes produce cards with minor edge imperfections.
+                        </div>
+                    </div>
+                    <div class="faq-item">
+                        <button class="faq-question" onclick="toggleItem(this)">
+                            Can edge damage be repaired?
+                            <span class="faq-chevron">&#8964;</span>
+                        </button>
+                        <div class="faq-divider"></div>
+                        <div class="faq-answer">
+                            No — and attempting to alter a card in any way is considered tampering and will result in the card being rejected or marked as altered by grading companies. Cards should be submitted in their natural, unmodified condition.
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Centering: expands dropdown list -->
+                <button class="faq-btn" onclick="toggleSection('centering')">Centering</button>
+                <div class="faq-list" id="centering" style="display:none; margin-bottom: 16px;">
+                    <div class="faq-item">
+                        <button class="faq-question" onclick="toggleItem(this)">
+                            What is centering in card grading?
+                            <span class="faq-chevron">&#8964;</span>
+                        </button>
+                        <div class="faq-divider"></div>
+                        <div class="faq-answer">
+                            Centering refers to how evenly the printed image is positioned within the card's border. It is measured as a ratio — for example, 55/45 means the left border is slightly wider than the right. A perfectly centered card is 50/50 on all sides.
+                        </div>
+                    </div>
+                    <div class="faq-item">
+                        <button class="faq-question" onclick="toggleItem(this)">
+                            What centering is required for a PSA 10?
+                            <span class="faq-chevron">&#8964;</span>
+                        </button>
+                        <div class="faq-divider"></div>
+                        <div class="faq-answer">
+                            PSA requires centering to be no worse than 55/45 on the front and 75/25 on the back for a grade of 10. BGS is stricter, requiring 50/50 on all sides for their Black Label Pristine 10. Even slight miscentering can prevent a card from achieving the top grade.
+                        </div>
+                    </div>
+                    <div class="faq-item">
+                        <button class="faq-question" onclick="toggleItem(this)">
+                            How do I check centering before submitting?
+                            <span class="faq-chevron">&#8964;</span>
+                        </button>
+                        <div class="faq-divider"></div>
+                        <div class="faq-answer">
+                            You can use a ruler or centering tool to measure the border widths on each side. Many collectors use a centering tool app on their phone to get a quick ratio estimate. If the borders are visibly uneven to the naked eye, the card likely won't achieve a 10.
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Surface: expands dropdown list -->
+                <button class="faq-btn" onclick="toggleSection('surface')">Surface</button>
+                <div class="faq-list" id="surface" style="display:none; margin-bottom: 32px;">
+                    <div class="faq-item">
+                        <button class="faq-question" onclick="toggleItem(this)">
+                            What are graders looking for on the surface?
+                            <span class="faq-chevron">&#8964;</span>
+                        </button>
+                        <div class="faq-divider"></div>
+                        <div class="faq-answer">
+                            Graders examine both the front and back of the card for scratches, print lines, ink spots, stains, creases, and holo damage on holographic cards. The surface is often the hardest category to achieve a perfect score in because even light handling can leave microscopic scratches.
+                        </div>
+                    </div>
+                    <div class="faq-item">
+                        <button class="faq-question" onclick="toggleItem(this)">
+                            What is holo damage?
+                            <span class="faq-chevron">&#8964;</span>
+                        </button>
+                        <div class="faq-divider"></div>
+                        <div class="faq-answer">
+                            Holo damage refers to scratches or cloudiness on the holographic foil layer of a card. It appears as dull or scratched areas when the card is tilted under light. Holo damage is extremely common and can significantly reduce a card's grade even if the rest of the card looks perfect.
+                        </div>
+                    </div>
+                    <div class="faq-item">
+                        <button class="faq-question" onclick="toggleItem(this)">
+                            How do I check for surface issues?
+                            <span class="faq-chevron">&#8964;</span>
+                        </button>
+                        <div class="faq-divider"></div>
+                        <div class="faq-answer">
+                            Hold the card under a bright light and tilt it slowly at different angles. Scratches and print lines will catch the light and become visible. For holo cards, look specifically at the foil area for any dullness or swirl patterns that indicate surface wear.
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Grading FAQ section: shown after categories -->
+                <h2 class="section-heading">Grading FAQ</h2>
+
+                <!-- FAQ button: expands dropdown list -->
+                <button class="faq-btn" onclick="toggleFaq()">Grading FAQ</button>
+
+                <!-- FAQ dropdown list: hidden until button is tapped -->
                 <div class="faq-list" id="faqList" style="display:none;">
 
                     <div class="faq-item">
@@ -279,6 +425,7 @@
                     </div>
 
                 </div>
+
             </div>
         </div>
     </main>
@@ -289,7 +436,11 @@
 
     <script>
         function toggleFaq() {
-            const list = document.getElementById('faqList');
+            toggleSection('faqList');
+        }
+
+        function toggleSection(id) {
+            const list = document.getElementById(id);
             list.style.display = list.style.display === 'none' ? 'flex' : 'none';
         }
 
