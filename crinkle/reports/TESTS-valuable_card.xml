@@ -1,0 +1,37 @@
+<testsuite name="valuable_card.Card Tracking" tests="3" errors="0" failures="0" skipped="0" time="1.39394" timestamp="2026-04-06T00:54:41.015092" hostname="Taras-MacBook-Pro.local"><testcase classname="valuable_card.Card Tracking" name="Cards with value above threshold are valuable" status="passed" time="0.461478"><system-out>
+<![CDATA[
+@scenario.begin
+  Scenario: Cards with value above threshold are valuable
+    Given I am logged in ... passed in 0.442s
+    Given I have a collection of cards of value 50 ... passed in 0.010s
+    When I set a value threshold of 40 ... passed in 0.000s
+    Then it is "True" that my cards are valuable ... passed in 0.009s
+
+@scenario.end
+--------------------------------------------------------------------------------
+]]>
+</system-out></testcase><testcase classname="valuable_card.Card Tracking" name="Cards with value below threshold are not valuable" status="passed" time="0.457103"><system-out>
+<![CDATA[
+@scenario.begin
+  Scenario: Cards with value below threshold are not valuable
+    Given I am logged in ... passed in 0.440s
+    Given I have a collection of cards of value 39 ... passed in 0.008s
+    When I set a value threshold of 40 ... passed in 0.000s
+    Then it is "False" that my cards are valuable ... passed in 0.009s
+
+@scenario.end
+--------------------------------------------------------------------------------
+]]>
+</system-out></testcase><testcase classname="valuable_card.Card Tracking" name="Cards matching threshold are valuable" status="passed" time="0.475359"><system-out>
+<![CDATA[
+@scenario.begin
+  Scenario: Cards matching threshold are valuable
+    Given I am logged in ... passed in 0.458s
+    Given I have a collection of cards of value 40 ... passed in 0.008s
+    When I set a value threshold of 40 ... passed in 0.000s
+    Then it is "True" that my cards are valuable ... passed in 0.009s
+
+@scenario.end
+--------------------------------------------------------------------------------
+]]>
+</system-out></testcase></testsuite>
