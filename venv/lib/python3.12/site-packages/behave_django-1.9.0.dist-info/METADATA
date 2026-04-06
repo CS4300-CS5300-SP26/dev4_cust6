@@ -1,0 +1,116 @@
+Metadata-Version: 2.4
+Name: behave-django
+Version: 1.9.0
+Summary: Behave BDD integration for Django
+Author-email: Mitchel Cabuloy <mixxorz@gmail.com>, Peter Bittner <django@bittner.it>
+Maintainer-email: Peter Bittner <django@bittner.it>, Javier Buzzi <buzzi.javier@gmail.com>
+License-Expression: MIT
+Project-URL: Source, https://github.com/behave/behave-django
+Project-URL: Documentation, https://behave-django.readthedocs.io/
+Keywords: bdd,behave,django,testing
+Classifier: Development Status :: 5 - Production/Stable
+Classifier: Environment :: Console
+Classifier: Environment :: Plugins
+Classifier: Environment :: Web Environment
+Classifier: Framework :: Django
+Classifier: Framework :: Django :: 4.2
+Classifier: Framework :: Django :: 5.0
+Classifier: Framework :: Django :: 5.1
+Classifier: Framework :: Django :: 5.2
+Classifier: Intended Audience :: Developers
+Classifier: Operating System :: OS Independent
+Classifier: Programming Language :: Python
+Classifier: Programming Language :: Python :: 3
+Classifier: Programming Language :: Python :: 3.9
+Classifier: Programming Language :: Python :: 3.10
+Classifier: Programming Language :: Python :: 3.11
+Classifier: Programming Language :: Python :: 3.12
+Classifier: Programming Language :: Python :: 3.13
+Classifier: Programming Language :: Python :: 3.14
+Classifier: Topic :: Internet :: WWW/HTTP
+Classifier: Topic :: Internet :: WWW/HTTP :: Dynamic Content
+Classifier: Topic :: Software Development :: Testing
+Requires-Python: >=3.9
+Description-Content-Type: text/x-rst
+License-File: LICENSE
+License-File: AUTHORS.rst
+Requires-Dist: behave>=1.3.3
+Requires-Dist: django>=4.2
+Requires-Dist: beautifulsoup4
+Dynamic: license-file
+
+behave-django |latest-version|
+==============================
+
+|check-status| |test-status| |python-support| |license| |docs-status| |gitter|
+
+Behave BDD integration for Django
+
+.. features-marker
+
+Features
+--------
+
+- Web browser automation ready
+- Database transactions per scenario
+- Use Django's test client
+- Use unittest + Django assert library
+- Use behave's command line arguments
+- Use behave's configuration file
+- Fixture loading
+- Page objects
+
+.. support-marker
+
+Version Support
+---------------
+
+*behave-django* is `tested against`_ the officially supported combinations of
+Python and Django (Django 4.2, 5.0, 5.1, 5.2 on Python 3.9 through 3.14).
+
+Installs the latest stable version of `behave`_ as a dependency.
+
+.. docs-marker
+
+Documentation
+-------------
+
+- Documentation is available from `behave-django.readthedocs.io`_
+- Read more about *behave* at `behave.readthedocs.io`_
+
+.. contribute-marker
+
+How to Contribute
+-----------------
+
+Please, read the `contributing guide`_ in the docs.
+
+.. references-marker
+
+
+.. _tested against: https://github.com/behave/behave-django/actions/workflows/test.yml
+.. _behave: https://pypi.org/project/behave/
+.. _behave-django.readthedocs.io: https://behave-django.readthedocs.io/en/latest/
+.. _behave.readthedocs.io: https://behave.readthedocs.io/en/latest/usecase_django/
+.. _contributing guide: https://behave-django.readthedocs.io/en/latest/contribute.html
+.. |latest-version| image:: https://img.shields.io/pypi/v/behave-django.svg
+    :target: https://pypi.org/project/behave-django/
+    :alt: Latest version
+.. |check-status| image:: https://github.com/behave/behave-django/actions/workflows/check.yml/badge.svg
+    :target: https://github.com/behave/behave-django/actions/workflows/check.yml
+    :alt: Code checks status
+.. |test-status| image:: https://github.com/behave/behave-django/actions/workflows/test.yml/badge.svg
+    :target: https://github.com/behave/behave-django/actions/workflows/test.yml
+    :alt: Test suite status
+.. |python-support| image:: https://img.shields.io/pypi/pyversions/behave-django.svg
+    :target: https://pypi.org/project/behave-django/
+    :alt: Python versions
+.. |license| image:: https://img.shields.io/pypi/l/behave-django.svg
+    :target: https://github.com/behave/behave-django/blob/main/LICENSE
+    :alt: Software license
+.. |docs-status| image:: https://img.shields.io/readthedocs/behave-django/stable.svg
+    :target: https://readthedocs.org/projects/behave-django/
+    :alt: Documentation Status
+.. |gitter| image:: https://img.shields.io/gitter/room/behave/behave-django.svg
+    :alt: Gitter chat room
+    :target: https://gitter.im/behave/behave-django
