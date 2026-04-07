@@ -14,4 +14,4 @@ WORKDIR /app/crinkle
 
 RUN python manage.py collectstatic --noinput
 
-CMD sh -c "python manage.py migrate && gunicorn crinkle.wsgi:application --bind 0.0.0.0:${PORT:-10000}"
+CMD sh -c "python manage.py migrate && python manage.py load_mock_prices && gunicorn crinkle.wsgi:application --bind 0.0.0.0:${PORT:-10000}"
