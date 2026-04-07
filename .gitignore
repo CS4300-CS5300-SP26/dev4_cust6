@@ -1,6 +1,7 @@
 __pycache__/
 db.sqlite3
 *.pyc
+venv/
 echo ".coverage" >> .gitignore
 echo "reports/" >> .gitignore
 git add .gitignore
