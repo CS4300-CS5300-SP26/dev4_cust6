@@ -79,9 +79,10 @@
             z-index: 2;
             pointer-events: none;
         }
+
         .overlay::before {
             content: "";
-         position: absolute;
+            position: absolute;
             top: 0;
             left: 0;
             right: 0;
@@ -91,8 +92,8 @@
                 rgba(0,0,0,0.85),
                 rgba(0,0,0,0.6),
                 rgba(0,0,0,0)
-                );
-             pointer-events: none;
+            );
+            pointer-events: none;
         }
 
         .instruction {
@@ -113,7 +114,7 @@
             color: #ffffff;
             text-shadow: 0 2px 8px rgba(0,0,0,0.8);
             opacity: 0.7;
-        }       
+        }
 
         .instruction p {
             margin: 0;
@@ -340,7 +341,7 @@
                 </button>
 
                 {% if user.is_authenticated %}
-                <a href="{% url 'submission:start' %}" 
+                <a href="{% url 'submission:start' %}"
                    style="display:block; width:100%; min-height:52px; margin-top:10px;
                           background:#0D9488; color:#fff; border-radius:14px;
                           font-size:16px; font-weight:600; text-decoration:none;
@@ -348,14 +349,13 @@
                     Submit for Grading
                 </a>
                 {% endif %}
-                    <button class="btn btn-secondary" id="retakeBtn" type="button">
-                        Retake photo
-                    </button>
-                </div>
+                <button class="btn btn-secondary" id="retakeBtn" type="button">
+                    Retake photo
+                </button>
             </div>
-
-            <canvas id="canvas"></canvas>
         </div>
+
+        <canvas id="canvas"></canvas>
     </div>
 
 <script>
@@ -373,25 +373,46 @@
     const ctx = canvas.getContext("2d");
 
     async function startCamera() {
-    try {
-        const stream = await navigator.mediaDevices.getUserMedia({
-            video: {
-                facingMode: { ideal: "environment" },
-                width: { ideal: 1280 },
-                height: { ideal: 720 }
-            },
-            audio: false
-        });
+        try {
+            if (!window.isSecureContext) {
+                throw new Error("Camera requires HTTPS or localhost.");
+            }
 
-        video.srcObject = stream;
+            if (!navigator.mediaDevices || !navigator.mediaDevices.getUserMedia) {
+                throw new Error("Camera is not supported in this browser/context.");
+            }
 
-        video.onloadedmetadata = () => {
-            feedback.style.display = "none"; // hide message when camera is ready
-        };
+            const stream = await navigator.mediaDevices.getUserMedia({
+                video: {
+                    facingMode: { ideal: "environment" },
+                    width: { ideal: 1280 },
+                    height: { ideal: 720 }
+                },
+                audio: false
+            });
 
-    } catch (err) {
-        feedback.textContent = "Unable to access the camera";
-    }
+            video.srcObject = stream;
+
+            video.onloadedmetadata = () => {
+                feedback.style.display = "none";
+            };
+        } catch (err) {
+            console.error("Camera access failed:", err);
+
+            switch (err.name) {
+                case "NotAllowedError":
+                    feedback.textContent = "Camera permission was denied.";
+                    break;
+                case "NotFoundError":
+                    feedback.textContent = "No camera was found on this device.";
+                    break;
+                case "NotReadableError":
+                    feedback.textContent = "The camera is already in use by another app.";
+                    break;
+                default:
+                    feedback.textContent = err.message || "Unable to access the camera.";
+            }
+        }
     }
 
     captureBtn.addEventListener("click", () => {
@@ -459,6 +480,7 @@
         postCaptureCard.classList.remove("active");
         captureControls.style.display = "flex";
         overlay.style.display = "block";
+        feedback.style.display = "block";
         feedback.textContent = "Align your card inside the frame";
     });
 
