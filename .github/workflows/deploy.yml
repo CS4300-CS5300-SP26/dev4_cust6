@@ -34,12 +34,14 @@ jobs:
 
       - name: Install dependencies
         run: |
+          set -euo pipefail
           python -m pip install --upgrade pip
           pip install -r requirements.txt
 
       - name: Run Django tests
         working-directory: crinkle
         run: |
+          set -euo pipefail
           python manage.py test
           python manage.py behave
 
@@ -56,6 +58,7 @@ jobs:
 
       - name: Install rsync
         run: |
+          set -euo pipefail
           sudo apt-get update
           sudo apt-get install -y rsync
 
@@ -86,7 +89,7 @@ jobs:
           set -euo pipefail
           PORT="${PROD_PORT:-22}"
           ssh -o BatchMode=yes -o StrictHostKeyChecking=yes -p "$PORT" "${PROD_USER}@${PROD_HOST}" "
-            sudo install -d -o '${PROD_USER}' -g '${PROD_USER}' '${PROD_APP_DIR}'
+            sudo -n install -d -o '${PROD_USER}' -g '${PROD_USER}' '${PROD_APP_DIR}'
           "
 
       - name: Sync repo to server
@@ -140,8 +143,8 @@ jobs:
               python manage.py migrate --noinput
               python manage.py collectstatic --noinput
 
-              sudo systemctl restart "$SERVICE_NAME"
-              sudo systemctl is-active --quiet "$SERVICE_NAME"
+              sudo -n systemctl restart "$SERVICE_NAME"
+              sudo -n systemctl is-active --quiet "$SERVICE_NAME"
           EOF
 
       - name: Health check
