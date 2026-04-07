@@ -2,6 +2,7 @@ __pycache__/
 db.sqlite3
 *.pyc
 venv/
+.venv/
 crinkle/staticfiles/
 echo ".coverage" >> .gitignore
 echo "reports/" >> .gitignore
