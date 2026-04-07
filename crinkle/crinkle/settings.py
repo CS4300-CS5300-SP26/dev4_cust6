@@ -131,13 +131,11 @@ STATIC_ROOT = BASE_DIR / 'staticfiles'
 MEDIA_URL = '/media/'
 MEDIA_ROOT = BASE_DIR / 'media'
 
-TESTING = 'test' in sys.argv
+TESTING = 'test' in sys.argv or 'behave' in sys.argv
 
-# Enforce HTTPS in production so camera APIs work in a secure context.
-SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
-SECURE_SSL_REDIRECT = not TESTING
-SESSION_COOKIE_SECURE = not TESTING
-CSRF_COOKIE_SECURE = not TESTING
+SECURE_SSL_REDIRECT = not DEBUG and not TESTING
+SESSION_COOKIE_SECURE = not DEBUG and not TESTING
+CSRF_COOKIE_SECURE = not DEBUG and not TESTING
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/4.2/ref/settings/#default-auto-field
