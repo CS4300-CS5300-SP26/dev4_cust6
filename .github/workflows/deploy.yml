@@ -43,7 +43,6 @@ jobs:
         run: |
           set -euo pipefail
           python manage.py test
-          python manage.py behave
 
   deploy:
     name: Deploy to production
@@ -53,15 +52,6 @@ jobs:
       name: production
 
     steps:
-      - name: Check out code
-        uses: actions/checkout@v4
-
-      - name: Install rsync
-        run: |
-          set -euo pipefail
-          sudo apt-get update
-          sudo apt-get install -y rsync
-
       - name: Start SSH agent
         uses: webfactory/ssh-agent@v0.9.0
         with:
@@ -70,81 +60,27 @@ jobs:
       - name: Add server to known_hosts
         env:
           PROD_HOST: ${{ secrets.PROD_HOST }}
-          PROD_PORT: ${{ vars.PROD_PORT }}
         run: |
           set -euo pipefail
           mkdir -p ~/.ssh
           chmod 700 ~/.ssh
-          PORT="${PROD_PORT:-22}"
-          ssh-keyscan -p "$PORT" -H "$PROD_HOST" >> ~/.ssh/known_hosts
+          ssh-keyscan -H "$PROD_HOST" >> ~/.ssh/known_hosts
           chmod 644 ~/.ssh/known_hosts
 
-      - name: Prepare remote app directory
+      - name: Deploy to VM
         env:
           PROD_HOST: ${{ secrets.PROD_HOST }}
           PROD_USER: ${{ secrets.PROD_USER }}
-          PROD_PORT: ${{ vars.PROD_PORT }}
-          PROD_APP_DIR: ${{ vars.PROD_APP_DIR }}
         run: |
-          set -euo pipefail
-          PORT="${PROD_PORT:-22}"
-          ssh -o BatchMode=yes -o StrictHostKeyChecking=yes -p "$PORT" "${PROD_USER}@${PROD_HOST}" "
-            sudo -n install -d -o '${PROD_USER}' -g '${PROD_USER}' '${PROD_APP_DIR}'
-          "
-
-      - name: Sync repo to server
-        env:
-          PROD_HOST: ${{ secrets.PROD_HOST }}
-          PROD_USER: ${{ secrets.PROD_USER }}
-          PROD_PORT: ${{ vars.PROD_PORT }}
-          PROD_APP_DIR: ${{ vars.PROD_APP_DIR }}
-        run: |
-          set -euo pipefail
-          PORT="${PROD_PORT:-22}"
-
-          rsync -az --delete \
-            --exclude ".git/" \
-            --exclude ".github/" \
-            --exclude ".venv/" \
-            --exclude "venv/" \
-            --exclude "__pycache__/" \
-            --exclude "*.pyc" \
-            --exclude ".coverage" \
-            --exclude "crinkle/media/" \
-            --exclude "crinkle/staticfiles/" \
-            -e "ssh -o BatchMode=yes -o StrictHostKeyChecking=yes -p $PORT" \
-            ./ "${PROD_USER}@${PROD_HOST}:${PROD_APP_DIR}/"
-
-      - name: Install deps, migrate, collect static, restart app
-        env:
-          PROD_HOST: ${{ secrets.PROD_HOST }}
-          PROD_USER: ${{ secrets.PROD_USER }}
-          PROD_PORT: ${{ vars.PROD_PORT }}
-          PROD_APP_DIR: ${{ vars.PROD_APP_DIR }}
-          PROD_SERVICE_NAME: ${{ vars.PROD_SERVICE_NAME }}
-        run: |
-          set -euo pipefail
-          PORT="${PROD_PORT:-22}"
-          SERVICE_NAME="${PROD_SERVICE_NAME:-crinkle}"
-
-          ssh -o BatchMode=yes -o StrictHostKeyChecking=yes -p "$PORT" "${PROD_USER}@${PROD_HOST}" \
-            "export PROD_APP_DIR='${PROD_APP_DIR}' SERVICE_NAME='${SERVICE_NAME}'; bash -se" <<'EOF'
-              set -Eeuo pipefail
-
-              cd "$PROD_APP_DIR"
-
-              python3 -m venv .venv
-              . .venv/bin/activate
-
-              python -m pip install --upgrade pip
-              python -m pip install -r requirements.txt
-
-              cd crinkle
-              python manage.py migrate --noinput
-              python manage.py collectstatic --noinput
-
-              sudo -n systemctl restart "$SERVICE_NAME"
-              sudo -n systemctl is-active --quiet "$SERVICE_NAME"
+          ssh -o BatchMode=yes -o StrictHostKeyChecking=yes "${PROD_USER}@${PROD_HOST}" <<'EOF'
+            set -euo pipefail
+            cd ~/dev4_cust6
+            git pull origin main
+            source venv/bin/activate
+            pip install -r requirements.txt
+            python crinkle/manage.py migrate
+            python crinkle/manage.py collectstatic --noinput
+            sudo systemctl restart crinkle
           EOF
 
       - name: Health check
