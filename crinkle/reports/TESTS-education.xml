@@ -1,15 +1,15 @@
-<testsuite name="education.Education Page" tests="4" errors="0" failures="0" skipped="0" time="0.006932" timestamp="2026-04-06T00:37:40.061040" hostname="bholland-21-5cdb5db5d6-gb674"><testcase classname="education.Education Page" name="Education page loads successfully" status="passed" time="0.002425"><system-out>
+<testsuite name="education.Education Page" tests="4" errors="0" failures="0" skipped="0" time="0.008665" timestamp="2026-04-06T05:45:20.894092" hostname="Taras-MacBook-Pro.local"><testcase classname="education.Education Page" name="Education page loads successfully" status="passed" time="0.005549"><system-out>
 <![CDATA[
 @scenario.begin
   Scenario: Education page loads successfully
-    Given the app is running ... passed in 0.000s
-    When I visit the education page ... passed in 0.002s
+    Given the app is running ... passed in 0.002s
+    When I visit the education page ... passed in 0.003s
     Then I should see a 200 response ... passed in 0.000s
 
 @scenario.end
 --------------------------------------------------------------------------------
 ]]>
-</system-out></testcase><testcase classname="education.Education Page" name="Education page contains grading categories" status="passed" time="0.001653"><system-out>
+</system-out></testcase><testcase classname="education.Education Page" name="Education page contains grading categories" status="passed" time="0.001175"><system-out>
 <![CDATA[
 @scenario.begin
   Scenario: Education page contains grading categories
@@ -23,7 +23,7 @@
 @scenario.end
 --------------------------------------------------------------------------------
 ]]>
-</system-out></testcase><testcase classname="education.Education Page" name="Education page contains how to grade section" status="passed" time="0.00146"><system-out>
+</system-out></testcase><testcase classname="education.Education Page" name="Education page contains how to grade section" status="passed" time="0.000958"><system-out>
 <![CDATA[
 @scenario.begin
   Scenario: Education page contains how to grade section
@@ -34,7 +34,7 @@
 @scenario.end
 --------------------------------------------------------------------------------
 ]]>
-</system-out></testcase><testcase classname="education.Education Page" name="Education page contains FAQ section" status="passed" time="0.001395"><system-out>
+</system-out></testcase><testcase classname="education.Education Page" name="Education page contains FAQ section" status="passed" time="0.000983"><system-out>
 <![CDATA[
 @scenario.begin
   Scenario: Education page contains FAQ section
