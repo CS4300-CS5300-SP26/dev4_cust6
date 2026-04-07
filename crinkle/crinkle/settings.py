@@ -39,6 +39,7 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'rest_framework',
     'behave_django',
+    'home',
     'history',
     'tracking',
     'accounts',
