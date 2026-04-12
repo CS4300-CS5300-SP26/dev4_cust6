@@ -1,4 +1,4 @@
-name: Pylint
+name: Flake8 Linting
 
 on:
   push:
@@ -36,16 +36,14 @@ jobs:
           flake8 --verbose --statistics $(git ls-files '*.py') | tee -a flake8_report.md
           echo \`\`\` >> flake8_report.md
       
-      # Upload code coverage
-      - name: Upload Coverage Report
+      - name: Upload Flake8 Linting Report
         if: github.event_name == 'pull_request'
         uses: actions/upload-artifact@v4
         with:
-          name: coverage-artifact
+          name: flake8-linting-artifact
           path: flake8_report.md
       
-      # Attach report to pull request
-      - name: Attach Coverage Report to Pull Request
+      - name: Attach flake8 report to pull request
         if: github.event_name == 'pull_request'
         uses: thollander/actions-comment-pull-request@v3.0.1
         with:
