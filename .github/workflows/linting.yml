@@ -32,7 +32,8 @@ jobs:
       # it's a bit hacky but better than looking at plain white text in my opinion.
       - name: Analysing the code with flake8
         run: |
-          echo \`\`\`python > flake8_report.md
+          echo "## Flake8 Linting Report" > flake8_report.md
+          echo \`\`\`python >> flake8_report.md
           flake8 --verbose --statistics $(git ls-files '*.py') | tee -a flake8_report.md
           echo \`\`\` >> flake8_report.md
       
