@@ -10,7 +10,7 @@ permissions:
 
 jobs:
   ai-code-review:
-
+    if: github.actor != 'dependabot[bot]'
     # Specify running environment and python version
     runs-on: ubuntu-latest
     strategy:
@@ -20,6 +20,7 @@ jobs:
 
     steps:
     # Check out repo using depth of 2 to get previous for diff
+    
     - name: Checkout repos
       uses: actions/checkout@v4
       with:
