@@ -87,20 +87,28 @@ def market_search(request):
     if set_filter:
         cards_qs = cards_qs.filter(card_set=set_filter)
 
-    unique_cards = cards_qs.values('card_name', 'card_set').distinct()
+    unique_cards = cards_qs.values('card_name', 'card_set', 'tcg_player_id').distinct()
 
     card_list = []
+    seen = set()
     for card in unique_cards:
-        tier = grade_filter if grade_filter else 'ungraded'
+        key = card['tcg_player_id'] or f"{card['card_name']}_{card['card_set']}"
+        if key in seen:
+            continue
+        seen.add(key)
+
+        tier = grade_filter if grade_filter else 'near_mint'
         latest = CardPricing.objects.filter(
             card_name=card['card_name'],
             card_set=card['card_set'],
             grade_tier=tier,
         ).order_by('-date_recorded').first()
+
         card_list.append({
             'card_name': card['card_name'],
             'card_set': card['card_set'],
             'price': latest.price if latest else None,
+            'image_url': latest.image_url if latest else '',
         })
 
     if sort == '-name':
@@ -120,9 +128,9 @@ def market_search(request):
         'sets': sets,
         'current_set': set_filter,
         'current_sort': sort,
-        
     }
     return render(request, 'tracking/market_search.html', context)
+
 
 def card_pricing(request):
     card_name = request.GET.get('name', '')
@@ -131,10 +139,13 @@ def card_pricing(request):
     if not card_name:
         return redirect('tracking:market')
 
-    tiers = ['ungraded', 'psa_7', 'psa_8', 'psa_9', 'psa_10']
+    tiers = ['near_mint', 'lightly_played', 'moderately_played', 'heavily_played', 'damaged']
     tier_labels = {
-        'ungraded': 'Ungraded', 'psa_7': 'PSA 7', 'psa_8': 'PSA 8',
-        'psa_9': 'PSA 9', 'psa_10': 'PSA 10',
+        'near_mint': 'Near Mint',
+        'lightly_played': 'Lightly Played',
+        'moderately_played': 'Moderately Played',
+        'heavily_played': 'Heavily Played',
+        'damaged': 'Damaged',
     }
 
     tier_prices = []
@@ -148,9 +159,10 @@ def card_pricing(request):
             'tier': tier,
             'label': tier_labels[tier],
             'price': latest.price if latest else None,
+            'image_url': latest.image_url if latest else '',
         })
 
-    selected_tier = request.GET.get('tier', 'ungraded')
+    selected_tier = request.GET.get('tier', 'near_mint')
     history = CardPricing.objects.filter(
         card_name=card_name,
         card_set=card_set,
@@ -170,6 +182,8 @@ def card_pricing(request):
                 'delta': delta,
             })
 
+    image_url = tier_prices[0]['image_url'] if tier_prices else ''
+
     context = {
         'card_name': card_name,
         'card_set': card_set,
@@ -179,5 +193,6 @@ def card_pricing(request):
         'selected_tier': selected_tier,
         'tier_labels': tier_labels,
         'compare_data': compare_data,
+        'image_url': image_url,
     }
     return render(request, 'tracking/card_pricing.html', context)

@@ -9,7 +9,6 @@
     <h1 class="market-title">PokeMart</h1>
     <p class="market-subtitle">Browse and compare card prices across all grade tiers</p>
 </div>
-
 <div class="market-search">
     <form method="get" novalidate>
         <input type="text" name="q" value="{{ query }}" placeholder="Search cards..." class="market-search-input">
@@ -22,23 +21,26 @@
             </select>
             <select name="grade" class="market-filter-select">
                 <option value="">All Grades</option>
-                <option value="ungraded" {% if current_grade == 'ungraded' %}selected{% endif %}>Ungraded</option>
-                <option value="psa_7" {% if current_grade == 'psa_7' %}selected{% endif %}>PSA 7</option>
-                <option value="psa_8" {% if current_grade == 'psa_8' %}selected{% endif %}>PSA 8</option>
-                <option value="psa_9" {% if current_grade == 'psa_9' %}selected{% endif %}>PSA 9</option>
-                <option value="psa_10" {% if current_grade == 'psa_10' %}selected{% endif %}>PSA 10</option>
+                <option value="near_mint" {% if current_grade == 'near_mint' %}selected{% endif %}>Near Mint</option>
+                <option value="lightly_played" {% if current_grade == 'lightly_played' %}selected{% endif %}>Lightly Played</option>
+                <option value="moderately_played" {% if current_grade == 'moderately_played' %}selected{% endif %}>Moderately Played</option>
+                <option value="heavily_played" {% if current_grade == 'heavily_played' %}selected{% endif %}>Heavily Played</option>
+                <option value="damaged" {% if current_grade == 'damaged' %}selected{% endif %}>Damaged</option>
             </select>
             <button type="submit" class="market-filter-btn">Apply</button>
         </div>
     </form>
 </div>
-
 {% if cards %}
 <div class="market-grid">
     {% for card in cards %}
     <a href="{% url 'tracking:card_pricing' %}?name={{ card.card_name }}&set={{ card.card_set }}" class="market-card">
         <div class="market-card-image">
+            {% if card.image_url %}
+            <img src="{{ card.image_url }}" alt="{{ card.card_name }}" style="width:100%;height:100%;object-fit:contain;">
+            {% else %}
             <span class="market-card-initial">{{ card.card_name|first }}</span>
+            {% endif %}
         </div>
         <div class="market-card-info">
             <span class="market-card-name">{{ card.card_name }}</span>
