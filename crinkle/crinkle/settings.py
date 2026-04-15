@@ -24,10 +24,10 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = 'django-insecure-v6apk9l#igpq(9@%stou5&o75hmsgoiezmu+wm*-(@)l%46872'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = False
 
-#ALLOWED_HOSTS = ['20.94.201.231', 'crinkle.ink', 'www.crinkle.ink']
-ALLOWED_HOSTS = ["*"]
+ALLOWED_HOSTS = ['20.94.201.231', 'crinkle.ink', 'www.crinkle.ink']
+#ALLOWED_HOSTS = ["*"]
 
 # Application definition
 
