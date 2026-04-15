@@ -7,22 +7,80 @@
 {% endblock %}
 
 {% block content %}
-<h1> Grading Report </h1>
+<style>
+  .grade-badge {
+    display: inline-block;
+    background: linear-gradient(135deg, #1a274a, #0d9488);
+    color: #fff;
+    font-size: 48px;
+    font-weight: 700;
+    border-radius: 50%;
+    width: 90px;
+    height: 90px;
+    line-height: 90px;
+    text-align: center;
+    margin: 16px auto;
+  }
+  .grade-section { text-align: center; margin-bottom: 20px; }
+  .criteria-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 12px;
+    margin: 16px 0;
+  }
+  .criteria-card {
+    background: #f5f5f5;
+    border: 1px solid #e0e0e0;
+    border-radius: 12px;
+    padding: 12px;
+    min-height: 80px;
+  }
+  .criteria-label {
+    font-size: 11px;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    color: #0d9488;
+    margin-bottom: 4px;
+    font-weight: 600;
+  }
+  .criteria-text { font-size: 13px; color: #333333; line-height: 1.5; }
+</style>
 
-<img src="{{ report_image }}" style="max-width:75vw; max-height:60vh; border-radius:12px;">
+<img src="{{ report_image }}" style="max-width:75vw; max-height:45vh; border-radius:12px; display:block; margin:0 auto 12px;">
 
-{% comment %} grade info {% endcomment %}
-<div>
-    <h3> User: {{ user_label }} </h3>
-    <h3> Card Name: Invalid </h3>
-    <h3> Grade: None</h3>
-    <h3> Date: {% now "jS F Y" %} </h3>
+<div class="grade-section">
+  <div class="grade-badge">{{ psa_grade }}</div>
+  <h2 style="margin:8px 0 4px;">{{ card_name }}</h2>
+  <p style="color:#666; font-size:13px;">PSA Grade Estimate · {{ user_label }}</p>
+  <p style="color:#999; font-size:12px;">{% now "jS F Y" %}</p>
 </div>
 
+{% if corners or edges or centering or surface %}
+<h3 style="margin:16px 0 8px;">Grade Breakdown</h3>
+<div class="criteria-grid">
+  <div class="criteria-card">
+    <div class="criteria-label">Corners</div>
+    <div class="criteria-text">{{ corners }}</div>
+  </div>
+  <div class="criteria-card">
+    <div class="criteria-label">Edges</div>
+    <div class="criteria-text">{{ edges }}</div>
+  </div>
+  <div class="criteria-card">
+    <div class="criteria-label">Centering</div>
+    <div class="criteria-text">{{ centering }}</div>
+  </div>
+  <div class="criteria-card">
+    <div class="criteria-label">Surface</div>
+    <div class="criteria-text">{{ surface }}</div>
+  </div>
+</div>
+{% endif %}
+
 {% if can_save_to_collection %}
-<a class="btn-save" href="{% url 'cards:save_report' %}"> Save To Collection </a>
+<a class="btn-save" href="{% url 'cards:save_report' %}">Save To Collection</a>
 {% else %}
 <p>Create an account to save this scan to your collection.</p>
-<a class="btn-save" href="{% url 'login' %}?next={% url 'cards:save_report' %}"> Log in to Save </a>
+<a class="btn-save" href="{% url 'login' %}?next={% url 'cards:save_report' %}">Log in to Save</a>
 {% endif %}
 {% endblock %}
