@@ -8,7 +8,7 @@ API_KEY = os.environ.get('POKEMON_PRICE_API_KEY', '')
 BASE_URL = 'https://www.pokemonpricetracker.com/api/v2/cards'
 
 CARDS = [
-    'Charizard',
+    'Charizard EX',
     'Pikachu',
     'Mewtwo',
     'Blastoise',
@@ -20,6 +20,44 @@ CARDS = [
     'Rayquaza',
     'Gardevoir',
     'Gyarados',
+    'Gengar',
+    'Dragonite',
+    'Machamp',
+    'Raichu',
+    'Articuno',
+    'Zapdos',
+    'Moltres',
+    'Mew',
+    'Jolteon',
+    'Vaporeon',
+    'Flareon',
+    'Snorlax',
+    'Lapras',
+    'Arcanine',
+    'Ninetales',
+    'Scyther',
+    'Pinsir',
+    'Magmar',
+    'Electabuzz',
+    'Hitmonchan',
+    'Kangaskhan',
+    'Clefable',
+    'Wigglytuff',
+    'Nidoking',
+    'Nidoqueen',
+    'Slowbro',
+    'Hypno',
+    'Exeggutor',
+    'Starmie',
+    'Poliwrath',
+    'Victreebel',
+    'Vileplume',
+    'Golem',
+    'Magneton',
+    'Haunter',
+    'Kadabra',
+    'Wartortle',
+    'Charmeleon',
 ]
 
 CONDITION_MAP = {
@@ -66,7 +104,6 @@ class Command(BaseCommand):
                 card_set = card.get('setName', '')
                 tcg_player_id = card.get('tcgPlayerId', '')
                 image_url = card.get('imageCdnUrl200', '')
-
                 history = card.get('priceHistory', {}).get('conditions', {})
 
                 for condition_label, condition_key in CONDITION_MAP.items():
