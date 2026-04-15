@@ -196,3 +196,68 @@ def card_pricing(request):
         'image_url': image_url,
     }
     return render(request, 'tracking/card_pricing.html', context)
+
+
+
+def market_watch(request):
+    if request.method == 'POST':
+        card_name = request.POST.get('card_name', '')
+        card_set = request.POST.get('card_set', '')
+        grade_tier = request.POST.get('grade_tier', 'ungraded')
+        if card_name:
+            existing = TrackedCard.objects.filter(
+                card_name=card_name, card_set=card_set
+            ).first()
+            if not existing:
+                TrackedCard.objects.create(
+                    card_name=card_name,
+                    card_set=card_set,
+                    grade_tier=grade_tier,
+                    status='watching',
+                )
+    return redirect('tracking:market')
+
+
+def market_compare(request):
+    names = request.GET.getlist('name')
+    sets = request.GET.getlist('set')
+
+    cards = []
+    tiers = ['near_mint', 'lightly_played', 'moderately_played', 'heavily_played', 'damaged']
+    tier_labels = {
+        'near_mint': 'Near Mint',
+        'lightly_played': 'Lightly Played',
+        'moderately_played': 'Moderately Played',
+        'heavily_played': 'Heavily Played',
+        'damaged': 'Damaged',
+    }
+
+    for card_name, card_set in zip(names, sets):
+        tier_prices = []
+        image_url = ''
+        for tier in tiers:
+            latest = CardPricing.objects.filter(
+                card_name=card_name,
+                card_set=card_set,
+                grade_tier=tier,
+            ).order_by('-date_recorded').first()
+            if latest and not image_url:
+                image_url = latest.image_url
+            tier_prices.append({
+                'tier': tier,
+                'label': tier_labels[tier],
+                'price': latest.price if latest else None,
+            })
+        cards.append({
+            'card_name': card_name,
+            'card_set': card_set,
+            'image_url': image_url,
+            'tier_prices': tier_prices,
+        })
+
+    context = {
+        'cards': cards,
+        'tiers': tiers,
+        'tier_labels': tier_labels,
+    }
+    return render(request, 'tracking/market_compare.html', context)

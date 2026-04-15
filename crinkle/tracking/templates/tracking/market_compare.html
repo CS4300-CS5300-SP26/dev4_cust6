@@ -1,0 +1,57 @@
+{% extends "tracking/base.html" %}
+{% load tracking_extras %}
+{% block title %}Compare Cards — PokeMart{% endblock %}
+{% block header_left %}
+<a href="{% url 'tracking:market' %}" class="back-link">&larr;</a>
+<span class="page-title">Compare Cards</span>
+{% endblock %}
+{% block content %}
+<div class="compare-hero">
+    <h1 class="market-title">Card Comparison</h1>
+    <p class="market-subtitle">Price comparison across all condition tiers</p>
+</div>
+{% if cards %}
+<div class="compare-wrapper" style="overflow-x: auto;">
+    <table class="compare-table-full" style="width:100%; border-collapse: collapse; margin-top: 20px;">
+        <thead>
+            <tr>
+                <th style="text-align:left; padding: 12px;">Condition</th>
+                {% for card in cards %}
+                <th style="text-align:center; padding: 12px;">
+                    {% if card.image_url %}
+                    <img src="{{ card.image_url }}" alt="{{ card.card_name }}" style="width:60px;height:auto;display:block;margin:0 auto 6px;">
+                    {% endif %}
+                    <span style="display:block; font-weight:600;">{{ card.card_name }}</span>
+                    <span style="display:block; font-size:0.75rem; color:#888;">{{ card.card_set }}</span>
+                </th>
+                {% endfor %}
+            </tr>
+        </thead>
+        <tbody>
+            {% for tier in tiers %}
+            <tr style="border-top: 1px solid #eee;">
+                <td style="padding: 12px; font-weight: 500;">{{ tier_labels|get_item:tier }}</td>
+                {% for card in cards %}
+                <td style="text-align:center; padding: 12px;">
+                    {% for tp in card.tier_prices %}
+                    {% if tp.tier == tier %}
+                    {% if tp.price %}
+                    <span style="color: #2C4BFB; font-weight:600;">${{ tp.price|floatformat:2 }}</span>
+                    {% else %}
+                    <span style="color: #aaa;">N/A</span>
+                    {% endif %}
+                    {% endif %}
+                    {% endfor %}
+                </td>
+                {% endfor %}
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+{% else %}
+<div class="empty-state">
+    <p class="empty-text">No cards selected for comparison.</p>
+</div>
+{% endif %}
+{% endblock %}

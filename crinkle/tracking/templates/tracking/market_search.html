@@ -12,7 +12,7 @@
 <div class="market-search">
     <form method="get" novalidate>
         <input type="text" name="q" value="{{ query }}" placeholder="Search cards..." class="market-search-input">
-        <div class="market-filters">
+        <div class="market-filters" style="flex-wrap: wrap;">
             <select name="set" class="market-filter-select">
                 <option value="">All Sets</option>
                 {% for set in sets %}
@@ -28,9 +28,41 @@
                 <option value="damaged" {% if current_grade == 'damaged' %}selected{% endif %}>Damaged</option>
             </select>
             <button type="submit" class="market-filter-btn">Apply</button>
+            <a href="#" id="compare-open-btn" class="market-filter-btn" style="background:#2C4BFB; color:white; text-decoration:none; text-align:center;">Compare</a>
         </div>
     </form>
 </div>
+
+<div id="compare-modal" style="display:none; position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.5); z-index:200; align-items:center; justify-content:center;">
+    <div style="background:white; border-radius:16px; padding:24px; width:90%; max-width:500px; max-height:80vh; overflow-y:auto;">
+        <h2 style="margin-bottom:16px;">Select Cards to Compare</h2>
+        <input type="text" id="modal-search" placeholder="Search cards..." style="width:100%; padding:10px; border:1px solid #ddd; border-radius:8px; margin-bottom:16px; box-sizing:border-box;">
+        <div id="modal-card-list">
+            {% for card in cards %}
+            <div class="modal-card-item" data-name="{{ card.card_name }}" data-set="{{ card.card_set }}"
+                style="display:flex; align-items:center; gap:12px; padding:10px; border-radius:8px; cursor:pointer; margin-bottom:6px; border:2px solid transparent;">
+                {% if card.image_url %}
+                <img src="{{ card.image_url }}" alt="{{ card.card_name }}" style="width:40px;height:auto;">
+                {% else %}
+                <div style="width:40px;height:40px;background:#eee;border-radius:6px;display:flex;align-items:center;justify-content:center;">{{ card.card_name|first }}</div>
+                {% endif %}
+                <div>
+                    <div style="font-weight:600;">{{ card.card_name }}</div>
+                    <div style="font-size:0.8rem;color:#888;">{{ card.card_set }}</div>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+        <div style="margin-top:16px; display:flex; justify-content:space-between; align-items:center;">
+            <span id="modal-selected-count" style="color:#888;">0 selected</span>
+            <div style="display:flex; gap:10px;">
+                <button id="modal-cancel" style="padding:10px 20px; border-radius:8px; border:1px solid #ddd; cursor:pointer;">Cancel</button>
+                <a id="modal-compare-btn" href="#" style="padding:10px 20px; background:#2C4BFB; color:white; border-radius:8px; text-decoration:none; pointer-events:none; opacity:0.5;">Compare</a>
+            </div>
+        </div>
+    </div>
+</div>
+
 {% if cards %}
 <div class="market-grid">
     {% for card in cards %}
@@ -57,4 +89,60 @@
     <p class="empty-text">{% if query %}No results for "{{ query }}"{% else %}No cards available{% endif %}</p>
 </div>
 {% endif %}
+
+<script>
+const selected = [];
+const modal = document.getElementById('compare-modal');
+const openBtn = document.getElementById('compare-open-btn');
+const cancelBtn = document.getElementById('modal-cancel');
+const compareBtn = document.getElementById('modal-compare-btn');
+const countLabel = document.getElementById('modal-selected-count');
+const modalSearch = document.getElementById('modal-search');
+
+openBtn.addEventListener('click', e => {
+    e.preventDefault();
+    modal.style.display = 'flex';
+});
+
+cancelBtn.addEventListener('click', () => {
+    modal.style.display = 'none';
+});
+
+modalSearch.addEventListener('input', () => {
+    const q = modalSearch.value.toLowerCase();
+    document.querySelectorAll('.modal-card-item').forEach(item => {
+        const name = item.dataset.name.toLowerCase();
+        item.style.display = name.includes(q) ? 'flex' : 'none';
+    });
+});
+
+document.querySelectorAll('.modal-card-item').forEach(item => {
+    item.addEventListener('click', () => {
+        const name = item.dataset.name;
+        const set = item.dataset.set;
+        const key = name + '|' + set;
+        const idx = selected.findIndex(c => c.key === key);
+        if (idx === -1) {
+            selected.push({ key, name, set });
+            item.style.border = '2px solid #2C4BFB';
+            item.style.background = '#f0f4ff';
+        } else {
+            selected.splice(idx, 1);
+            item.style.border = '2px solid transparent';
+            item.style.background = 'white';
+        }
+        countLabel.textContent = selected.length + ' selected';
+        if (selected.length >= 2) {
+            const params = selected.map(c => 'name=' + encodeURIComponent(c.name) + '&set=' + encodeURIComponent(c.set)).join('&');
+            compareBtn.href = '{% url "tracking:market_compare" %}?' + params;
+            compareBtn.style.pointerEvents = 'auto';
+            compareBtn.style.opacity = '1';
+        } else {
+            compareBtn.href = '#';
+            compareBtn.style.pointerEvents = 'none';
+            compareBtn.style.opacity = '0.5';
+        }
+    });
+});
+</script>
 {% endblock %}
