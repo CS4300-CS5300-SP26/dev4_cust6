@@ -1,7 +1,7 @@
 Feature: Card Tracking
   As a Crinkle user
-  I want to track Pokémon cards I'm watching or have submitted for grading
-  So that I can monitor my collection and watchlist
+  I want to track Pokémon cards I'm watching or have sold
+  So that I can monitor my watchlist and sales
 
   Scenario: Add a card to tracking
     Given I am on the tracking add page
@@ -45,8 +45,8 @@ Feature: Card Tracking
 
   Scenario: Edit a tracked card
     Given a card "Mewtwo" with status "Watching"
-    When I edit "Mewtwo" and change status to "Submitted for Grading"
-    Then the card "Mewtwo" should have status "submitted"
+    When I edit "Mewtwo" and change status to "Sold"
+    Then the card "Mewtwo" should have status "sold"
 
   Scenario: Delete a tracked card
     Given a card "Jigglypuff" with status "Watching"
@@ -74,4 +74,4 @@ Feature: Card Tracking
     Given a pricing entry for "Mewtwo" in "Base Set"
     When I view pricing for "Mewtwo" in "Base Set"
     Then I should see "Mewtwo" on the page
-    And I should see "Ungraded" on the page
+    And I should see "Near Mint" on the page
