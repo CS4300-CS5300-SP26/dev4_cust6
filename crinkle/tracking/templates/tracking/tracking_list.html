@@ -12,44 +12,72 @@
     <a href="{% url 'tracking:list' %}" class="tab {% if current_filter == 'all' %}active{% endif %}">All</a>
     <a href="{% url 'tracking:market' %}" class="tab">Market</a>
     {% for value, label in status_choices %}
-<a href="{% url 'tracking:list' %}?status={{ value }}" class="tab {% if current_filter == value %}active{% endif %}">{{ label }}</a>
+    <a href="{% url 'tracking:list' %}?status={{ value }}" class="tab {% if current_filter == value %}active{% endif %}">{{ label }}</a>
     {% endfor %}
 </div>
-
 {% if current_filter == 'sold' %}
 <div class="chart-container">
     <h3 class="section-label">Total Sold</h3>
     <p class="detail-price">${{ sold_total|floatformat:2 }}</p>
 </div>
 {% endif %}
-
-
 {% if tracked_cards %}
-<ul class="card-list">
-    {% for card in tracked_cards %}
-    <li class="card-item">
-        <a href="{% url 'tracking:detail' card.pk %}">
-            <div class="card-row">
-                <div class="card-info">
-                    <span class="card-name">{{ card.card_name }}</span>
-                    {% if card.card_set %}
-                    <span class="card-set">{{ card.card_set }}{% if card.card_year %} &middot; {{ card.card_year }}{% endif %}</span>
+<div style="display:flex; flex-direction:column; gap:12px; padding:16px;">
+    {% for item in tracked_cards %}
+    <div style="position:relative;">
+        <a href="{% url 'tracking:detail' item.card.pk %}" style="text-decoration:none; color:inherit;">
+            <div style="display:flex; align-items:center; gap:14px; background:white; border-radius:14px; padding:12px; padding-right:48px; box-shadow:0 1px 4px rgba(0,0,0,0.08);">
+                <div style="width:64px; height:64px; border-radius:10px; overflow:hidden; flex-shrink:0; background:linear-gradient(135deg, #2C4BFB, #D9111D); display:flex; align-items:center; justify-content:center;">
+                    {% if item.image_url %}
+                    <img src="{{ item.image_url }}" alt="{{ item.card.card_name }}" style="width:100%;height:100%;object-fit:contain;">
+                    {% else %}
+                    <span style="color:white; font-size:1.4rem; font-weight:700;">{{ item.card.card_name|first }}</span>
                     {% endif %}
                 </div>
-                <div class="card-meta">
-                    <span class="grade-badge">{{ card.get_grade_tier_display }}</span>
-                    <span class="status-badge status-{{ card.status }}">{{ card.get_status_display }}</span>
+                <div style="flex:1; min-width:0;">
+                    <div style="font-weight:700; font-size:0.95rem; white-space:nowrap; overflow:hidden; text-overflow:ellipsis;">{{ item.card.card_name }}</div>
+                    {% if item.card.card_set %}
+                    <div style="font-size:0.78rem; color:#888; margin-top:2px;">{{ item.card.card_set }}</div>
+                    {% endif %}
+                    <div style="display:flex; gap:6px; margin-top:6px; flex-wrap:wrap;">
+                        <span style="font-size:0.72rem; background:#f0f4ff; color:#2C4BFB; border-radius:20px; padding:2px 8px;">{{ item.card.get_grade_tier_display }}</span>
+                        <span style="font-size:0.72rem; background:#eefaf0; color:#1a7a3a; border-radius:20px; padding:2px 8px;">{{ item.card.get_status_display }}</span>
+                    </div>
+                </div>
+                <div style="text-align:right; flex-shrink:0;">
+                    {% if item.card.status == 'sold' and item.card.sold_price %}
+                    <div style="font-weight:700; color:#1a7a3a; font-size:1rem;">${{ item.card.sold_price|floatformat:2 }}</div>
+                    <div style="font-size:0.7rem; color:#aaa; margin-top:2px;">Sold</div>
+                    {% if item.market_price %}
+                    <div style="font-size:0.75rem; color:#888; margin-top:4px;">${{ item.market_price|floatformat:2 }} market</div>
+                    {% endif %}
+                    {% elif item.market_price %}
+                    <div style="font-weight:700; color:#2C4BFB; font-size:1rem;">${{ item.market_price|floatformat:2 }}</div>
+                    {% if item.trend == 'up' %}
+                    <div style="color:#1a7a3a; font-size:0.75rem;">▲ Rising</div>
+                    {% elif item.trend == 'down' %}
+                    <div style="color:#c0392b; font-size:0.75rem;">▼ Falling</div>
+                    {% elif item.trend == 'stable' %}
+                    <div style="color:#888; font-size:0.75rem;">— Stable</div>
+                    {% endif %}
+                    <div style="font-size:0.7rem; color:#aaa; margin-top:2px;">Market</div>
+                    {% else %}
+                    <div style="color:#ccc; font-size:0.85rem;">N/A</div>
+                    {% endif %}
                 </div>
             </div>
         </a>
-    </li>
+        <form method="post" action="{% url 'tracking:delete' item.card.pk %}" style="position:absolute; top:50%; right:10px; transform:translateY(-50%);">
+            {% csrf_token %}
+            <button type="submit" style="background:none; border:none; color:#ccc; font-size:1.2rem; cursor:pointer; padding:4px;" title="Remove">✕</button>
+        </form>
+    </div>
     {% endfor %}
-</ul>
+</div>
 {% else %}
 <div class="empty-state">
     <p class="empty-text">No cards being tracked yet.</p>
     <a href="{% url 'tracking:add' %}" class="btn-tracking btn-tracking-primary">Track Your First Card</a>
 </div>
 {% endif %}
-
 {% endblock %}

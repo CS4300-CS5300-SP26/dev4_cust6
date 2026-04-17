@@ -6,12 +6,15 @@ from datetime import date
 class TrackedCard(models.Model):
     STATUS_CHOICES = [
         ('watching', 'Watching'),
-        ('submitted', 'Submitted for Grading'),
-        ('graded', 'Graded'),
-        ('sold', 'Sold')
+        ('sold', 'Sold'),
     ]
     GRADE_CHOICES = [
         ('ungraded', 'Ungraded'),
+        ('near_mint', 'Near Mint'),
+        ('lightly_played', 'Lightly Played'),
+        ('moderately_played', 'Moderately Played'),
+        ('heavily_played', 'Heavily Played'),
+        ('damaged', 'Damaged'),
         ('psa_1', 'PSA 1'),
         ('psa_2', 'PSA 2'),
         ('psa_3', 'PSA 3'),
@@ -27,7 +30,7 @@ class TrackedCard(models.Model):
     card_set = models.CharField(max_length=200, blank=True, default='')
     card_year = models.PositiveIntegerField(null=True, blank=True)
     grade_tier = models.CharField(
-        max_length=10, choices=GRADE_CHOICES, default='ungraded',
+        max_length=20, choices=GRADE_CHOICES, default='ungraded',
     )
     status = models.CharField(
         max_length=20, choices=STATUS_CHOICES, default='watching',
@@ -46,6 +49,9 @@ class TrackedCard(models.Model):
     sold_price = models.DecimalField(
         max_digits=10, decimal_places=2, null=True, blank=True,
     )
+    target_price = models.DecimalField(
+        max_digits=10, decimal_places=2, null=True, blank=True,
+    )
 
     class Meta:
         ordering = ['-date_updated']
@@ -55,7 +61,6 @@ class TrackedCard(models.Model):
 
 
 class ValueSnapshot(models.Model):
-    """Stores the total collection value at a point in time."""
     total_value = models.DecimalField(max_digits=12, decimal_places=2)
     date = models.DateField(auto_now_add=True)
 

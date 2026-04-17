@@ -140,12 +140,12 @@ class TrackingViewsTest(TestCase):
             'card_set': 'Base Set',
             'card_year': 1999,
             'grade_tier': 'psa_10',
-            'status': 'submitted',
+            'status': 'watching',
             'notes': 'Sent to PSA',
         })
         self.assertEqual(response.status_code, 302)
         self.card.refresh_from_db()
-        self.assertEqual(self.card.status, 'submitted')
+        self.assertEqual(self.card.status, 'watching')
 
     def test_delete_view_get(self):
         response = self.client.get(reverse('tracking:delete', args=[self.card.pk]))

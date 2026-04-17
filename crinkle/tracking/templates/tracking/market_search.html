@@ -66,7 +66,7 @@
 {% if cards %}
 <div class="market-grid">
     {% for card in cards %}
-    <a href="{% url 'tracking:card_pricing' %}?name={{ card.card_name|urlencode }}&set={{ card.card_set|urlencode }}" class="market-card">
+    <a href="{% url 'tracking:card_pricing' %}?name={{ card.card_name|urlencode }}&set={{ card.card_set|urlencode }}" class="market-card" style="{% if forloop.counter > 6 %}display:none;{% endif %}" data-card-index="{{ forloop.counter }}">
         <div class="market-card-image">
             {% if card.image_url %}
             <img src="{{ card.image_url }}" alt="{{ card.card_name }}" style="width:100%;height:100%;object-fit:contain;">
@@ -83,6 +83,9 @@
         </div>
     </a>
     {% endfor %}
+</div>
+<div id="load-more-container" style="text-align:center; padding:16px; {% if cards|length <= 6 %}display:none;{% endif %}">
+    <button id="load-more-btn" class="market-filter-btn" style="background:#2C4BFB; color:white; padding:12px 32px;">Load More</button>
 </div>
 {% else %}
 <div class="empty-state">
@@ -144,5 +147,25 @@ document.querySelectorAll('.modal-card-item').forEach(item => {
         }
     });
 });
+
+let visibleCount = 6;
+const allCards = document.querySelectorAll('.market-card');
+const loadMoreBtn = document.getElementById('load-more-btn');
+const loadMoreContainer = document.getElementById('load-more-container');
+
+if (loadMoreBtn) {
+    loadMoreBtn.addEventListener('click', () => {
+        const next = visibleCount + 6;
+        allCards.forEach((card, idx) => {
+            if (idx < next) {
+                card.style.display = '';
+            }
+        });
+        visibleCount = next;
+        if (visibleCount >= allCards.length) {
+            loadMoreContainer.style.display = 'none';
+        }
+    });
+}
 </script>
 {% endblock %}

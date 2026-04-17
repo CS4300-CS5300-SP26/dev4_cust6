@@ -12,8 +12,52 @@ def tracking_list(request):
     if status_filter and status_filter in dict(TrackedCard.STATUS_CHOICES):
         tracked_cards = tracked_cards.filter(status=status_filter)
 
+    cards_with_data = []
+    for card in tracked_cards:
+        pricing = CardPricing.objects.filter(
+            card_name=card.card_name,
+            card_set=card.card_set,
+            grade_tier=card.grade_tier,
+        ).order_by('-date_recorded').first()
+
+        if not pricing:
+            pricing = CardPricing.objects.filter(
+                card_name=card.card_name,
+                card_set=card.card_set,
+            ).order_by('-date_recorded').first()
+
+        grade_tier_for_history = card.grade_tier if pricing and CardPricing.objects.filter(
+            card_name=card.card_name,
+            card_set=card.card_set,
+            grade_tier=card.grade_tier,
+        ).exists() else (pricing.grade_tier if pricing else '')
+
+        history = CardPricing.objects.filter(
+            card_name=card.card_name,
+            card_set=card.card_set,
+            grade_tier=grade_tier_for_history,
+        ).order_by('date_recorded')
+
+        trend = None
+        if history.count() >= 2:
+            oldest = history.first().price
+            newest = history.last().price
+            if newest > oldest:
+                trend = 'up'
+            elif newest < oldest:
+                trend = 'down'
+            else:
+                trend = 'stable'
+
+        cards_with_data.append({
+            'card': card,
+            'image_url': pricing.image_url if pricing else '',
+            'market_price': pricing.price if pricing else None,
+            'trend': trend,
+        })
+
     context = {
-        'tracked_cards': tracked_cards,
+        'tracked_cards': cards_with_data,
         'status_choices': TrackedCard.STATUS_CHOICES,
         'current_filter': status_filter or 'all',
         'sold_total': TrackedCard.objects.filter(status='sold').exclude(sold_price__isnull=True).aggregate(total=models.Sum('sold_price'))['total'] or 0,
@@ -23,7 +67,42 @@ def tracking_list(request):
 
 def tracking_detail(request, pk):
     card = get_object_or_404(TrackedCard, pk=pk)
-    return render(request, 'tracking/tracking_detail.html', {'card': card})
+
+    pricing = CardPricing.objects.filter(
+        card_name=card.card_name,
+        card_set=card.card_set,
+        grade_tier=card.grade_tier,
+    ).order_by('-date_recorded').first()
+
+    if not pricing:
+        pricing = CardPricing.objects.filter(
+            card_name=card.card_name,
+            card_set=card.card_set,
+        ).order_by('-date_recorded').first()
+
+    history = CardPricing.objects.filter(
+        card_name=card.card_name,
+        card_set=card.card_set,
+        grade_tier=pricing.grade_tier if pricing else '',
+    ).order_by('date_recorded')
+
+    trend = None
+    if history.count() >= 2:
+        oldest = history.first().price
+        newest = history.last().price
+        if newest > oldest:
+            trend = 'up'
+        elif newest < oldest:
+            trend = 'down'
+        else:
+            trend = 'stable'
+
+    return render(request, 'tracking/tracking_detail.html', {
+        'card': card,
+        'image_url': pricing.image_url if pricing else '',
+        'market_price': pricing.price if pricing else None,
+        'trend': trend,
+    })
 
 
 def tracking_add(request):
@@ -196,7 +275,6 @@ def card_pricing(request):
         'image_url': image_url,
     }
     return render(request, 'tracking/card_pricing.html', context)
-
 
 
 def market_watch(request):
