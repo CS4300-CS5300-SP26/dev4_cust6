@@ -212,6 +212,45 @@ class TrackingViewsTest(TestCase):
         self.assertContains(response, 'Near Mint')
         self.assertContains(response, 'Damaged')
 
+    def test_market_watch_post(self):
+        response = self.client.post(reverse('tracking:market_watch'), {
+            'card_name': 'Charizard',
+            'card_set': 'Base Set',
+            'grade_tier': 'near_mint',
+        })
+        self.assertEqual(response.status_code, 302)
+        self.assertTrue(TrackedCard.objects.filter(card_name='Charizard', status='watching').exists())
+
+    def test_market_watch_duplicate(self):
+        TrackedCard.objects.create(card_name='Charizard', card_set='Base Set', status='watching')
+        response = self.client.post(reverse('tracking:market_watch'), {
+            'card_name': 'Charizard',
+            'card_set': 'Base Set',
+            'grade_tier': 'near_mint',
+        })
+        self.assertEqual(response.status_code, 302)
+        self.assertEqual(TrackedCard.objects.filter(card_name='Charizard').count(), 1)
+
+    def test_market_compare_page(self):
+        CardPricing.objects.create(card_name='Charizard', card_set='Base Set', grade_tier='near_mint', price=100.00)
+        CardPricing.objects.create(card_name='Pikachu', card_set='Base Set', grade_tier='near_mint', price=50.00)
+        response = self.client.get(
+            reverse('tracking:market_compare') + '?name=Charizard&set=Base+Set&name=Pikachu&set=Base+Set'
+        )
+        self.assertEqual(response.status_code, 200)
+        self.assertContains(response, 'Charizard')
+        self.assertContains(response, 'Pikachu')
+
+    def test_tracking_detail_with_pricing(self):
+        CardPricing.objects.create(
+            card_name='Mewtwo', card_set='Base Set',
+            grade_tier='psa_10', price=500.00,
+            image_url='https://example.com/img.jpg'
+        )
+        response = self.client.get(reverse('tracking:detail', args=[self.card.pk]))
+        self.assertEqual(response.status_code, 200)
+        self.assertContains(response, 'Mewtwo')
+
 
 class TrackedCardFormTest(TestCase):
     def test_valid_form(self):

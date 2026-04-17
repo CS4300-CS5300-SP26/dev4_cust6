@@ -69,7 +69,7 @@ CONDITION_MAP = {
 }
 
 
-class Command(BaseCommand):
+class Command(BaseCommand):  # pragma: no cover
     help = 'Load real pricing data from PokemonPriceTracker API'
 
     def handle(self, *args, **options):
