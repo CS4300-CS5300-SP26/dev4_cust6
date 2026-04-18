@@ -459,3 +459,48 @@ class ScanReportAITests(TestCase):
         self.assertIsNotNone(session_grade)
         self.assertEqual(session_grade["psa_grade"], 8)
         self.assertEqual(session_grade["card_name"], "Bulbasaur")
+
+class SaveReportVmMediaTests(TestCase):
+    def setUp(self):
+        self.temp_media = tempfile.TemporaryDirectory()
+        self.override = override_settings(
+            MEDIA_ROOT=self.temp_media.name,
+            MEDIA_URL='/media/',
+        )
+        self.override.enable()
+        self.user = User.objects.create_user(username='vmuser', password='StrongPass123!')
+        self.client.login(username='vmuser', password='StrongPass123!')
+
+    def tearDown(self):
+        self.override.disable()
+        self.temp_media.cleanup()
+
+    def _store_captured_scan(self):
+        session = self.client.session
+        session['captured_scan_image'] = TEST_CAPTURED_IMAGE
+        session.save()
+
+    def test_save_report_writes_scan_under_media_root_and_links_card_to_user_collection(self):
+        self._store_captured_scan()
+
+        response = self.client.get(reverse('cards:save_report'), follow=True)
+
+        self.assertEqual(response.status_code, 200)
+        saved_card = Card.objects.get(user=self.user)
+        self.assertTrue(saved_card.picture_path.startswith('/media/scans/'))
+
+        relative_path = saved_card.picture_path.replace('/media/', '', 1)
+        saved_file = os.path.join(self.temp_media.name, relative_path)
+        self.assertTrue(os.path.exists(saved_file))
+        self.assertTrue(CardCollection.objects.filter(user=self.user, cards=saved_card).exists())
+
+    def test_collection_page_renders_saved_scan_image_for_logged_in_user(self):
+        self._store_captured_scan()
+        self.client.get(reverse('cards:save_report'), follow=True)
+
+        response = self.client.get(reverse('cards:collection'))
+
+        self.assertEqual(response.status_code, 200)
+        saved_card = Card.objects.get(user=self.user)
+        self.assertContains(response, saved_card.picture_path)
+        self.assertContains(response, saved_card.name)
