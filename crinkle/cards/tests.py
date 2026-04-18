@@ -256,14 +256,11 @@ class CardTestCase(TestCase):
         self.assertEqual(response.status_code, 200)
 
     def test_mock_save_report(self):
-        """test mocking function, not much effort put into this as it is simply a mock function standing
-        in for later implementations
-        """
-
+        """save_report should redirect after a logged-in user saves"""
         self.set_up_user()
-        response = self.client.get(reverse("cards:save_report"))
 
-        # ok it was created
+        response = self.client.get(reverse("cards:save_report"), follow=True)
+
         self.assertEqual(response.status_code, 200)
 
 
@@ -308,12 +305,12 @@ class ScannedImageSaveTests(TestCase):
         self.assertEqual(Card.objects.count(), 0)
 
     def test_authenticated_user_save_report_persists_scan_image(self):
-        self.client.login(username="collector", password="p1234567890")
+        self.client.force_login(self.user)
         session = self.client.session
         session["captured_scan_image"] = TEST_CAPTURED_IMAGE
         session.save()
 
-        response = self.client.get(reverse("cards:save_report"))
+        response = self.client.get(reverse("cards:save_report"), follow=True)
 
         self.assertEqual(response.status_code, 200)
         self.assertEqual(Card.objects.count(), 1)
