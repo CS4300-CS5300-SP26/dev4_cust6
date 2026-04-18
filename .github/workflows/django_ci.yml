@@ -35,6 +35,8 @@ jobs:
     # if no duplicate actions are occuring then run tests and coverage
     if: needs.check-duplicate.outputs.should_skip != 'true'
     runs-on: ubuntu-latest
+    env:
+      CRINKLE_MEDIA_ROOT: ${{ github.workspace }}/media
     strategy:
       max-parallel: 4
       matrix:
