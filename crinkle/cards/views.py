@@ -10,7 +10,7 @@ from rest_framework import viewsets, status, permissions
 from rest_framework.decorators import action
 from rest_framework.response import Response
 from rest_framework.renderers import TemplateHTMLRenderer
-
+from .ai_grading import analyze_card_with_gemini
 from .models import GradeReport, Card, CardCollection
 from .serializers import GradeReportSerializer, CardSerializer, CardCollectionSerializer
 from .forms import CollectionSettingsForm
@@ -129,9 +129,19 @@ def _save_captured_image(data_url):
     return f"{settings.MEDIA_URL}{saved_path}"
 
 
+GRADE_SESSION_KEY = "card_grade_result"
+
 def scan_report_view(request):
-    """Mock grading report that supports guest grading and authenticated saving."""
+    """AI grading report that supports guest grading and authenticated saving."""
     captured_image = _captured_image_from_request(request)
+
+    # run AI analysis on POST (coming from scan page)
+    if request.method == 'POST' and captured_image:
+        grade_result = analyze_card_with_gemini(captured_image)
+        request.session[GRADE_SESSION_KEY] = grade_result
+        request.session.modified = True 
+    else:
+        grade_result = request.session.get(GRADE_SESSION_KEY, {})
 
     return render(
         request,
@@ -141,6 +151,12 @@ def scan_report_view(request):
             "user_label": request.user.username if request.user.is_authenticated else "Guest",
             "report_image": captured_image or static("invalid.jpg"),
             "can_save_to_collection": request.user.is_authenticated,
+            "psa_grade": grade_result.get("psa_grade", "—"),
+            "card_name": grade_result.get("card_name", "Unknown Card"),
+            "corners": grade_result.get("corners", ""),
+            "edges": grade_result.get("edges", ""),
+            "centering": grade_result.get("centering", ""),
+            "surface": grade_result.get("surface", ""),
         },
     )
 

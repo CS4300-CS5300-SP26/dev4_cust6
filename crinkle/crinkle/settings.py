@@ -24,10 +24,14 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = 'django-insecure-v6apk9l#igpq(9@%stou5&o75hmsgoiezmu+wm*-(@)l%46872'
 
 # SECURITY WARNING: don't run with debug turned on in production!
+#DEBUG = False
+
+#ALLOWED_HOSTS = ['20.94.201.231', 'crinkle.ink', 'www.crinkle.ink']
+
 DEBUG = False
 
-ALLOWED_HOSTS = ['20.94.201.231', 'crinkle.ink', 'www.crinkle.ink']
-#ALLOWED_HOSTS = ["*"]
+ALLOWED_HOSTS = ['20.94.201.231', 'crinkle.ink', 'www.crinkle.ink', '127.0.0.1', 'localhost']
+# ALLOWED_HOSTS = ["*"]
 
 # Application definition
 
@@ -145,3 +149,4 @@ CSRF_TRUSTED_ORIGINS = ['https://*.devedu.io', 'https://crinkle.ink', 'https://w
 LOGIN_URL = '/accounts/login/'
 LOGIN_REDIRECT_URL = '/accounts/profile/'
 LOGOUT_REDIRECT_URL = '/'
+GEMINI_API_KEY = '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'

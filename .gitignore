@@ -7,3 +7,4 @@ crinkle/staticfiles/
 echo ".coverage" >> .gitignore
 echo "reports/" >> .gitignore
 git add .gitignore
+crinkle/crinkle/settings.py

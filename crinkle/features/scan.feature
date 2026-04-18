@@ -62,3 +62,25 @@ Feature: Card Scanning
         Given I am on the camera page
         When I tap the back button
         Then I should be taken back to the landing page
+    Scenario: Guest receives AI grade after scanning a card
+    Given I am not logged in
+    And I have taken a captured scan image
+    When I request a grade for the captured scan
+    Then I should see the scan report page
+    And I should see a PSA grade on the report
+
+  Scenario: AI grade breakdown shows all four criteria
+    Given I am not logged in
+    And I have taken a captured scan image
+    When I request a grade for the captured scan
+    Then I should see the scan report page
+    And I should see corners analysis on the report
+    And I should see edges analysis on the report
+    And I should see centering analysis on the report
+    And I should see surface analysis on the report
+
+  Scenario: Grade result is stored in session after scanning
+    Given I am not logged in
+    And I have taken a captured scan image
+    When I request a grade for the captured scan
+    Then the grade result should be stored in the session    

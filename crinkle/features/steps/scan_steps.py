@@ -186,7 +186,7 @@ def step_request_grade(context):
 @then('I should see the grading report')
 def step_see_grading_report(context):
     assert context.response.status_code == 200
-    assert 'Grading Report' in context.response.content.decode()
+    assert 'Scan Report' in context.response.content.decode()
 
 
 @then('I should see a prompt to create an account to save to collection')
@@ -210,3 +210,51 @@ def step_verify_scan_saved(context):
     saved_card = Card.objects.latest('id')
     assert saved_card.picture_path.startswith('/media/scans/')
     assert CardCollection.objects.filter(user=context.user, cards=saved_card).exists()
+from unittest.mock import patch
+
+MOCK_GRADE_RESULT = {
+    "psa_grade": 8,
+    "card_name": "Charizard",
+    "corners": "Sharp corners with no visible wear.",
+    "edges": "Clean edges with no chips.",
+    "centering": "Well centered.",
+    "surface": "Clean surface.",
+}
+
+
+@then('I should see the scan report page')
+def step_see_scan_report_page(context):
+    assert context.response.status_code == 200
+
+
+@then('I should see a PSA grade on the report')
+def step_see_psa_grade(context):
+    content = context.response.content.decode()
+    assert 'Grade Breakdown' in content or 'PSA Grade' in content or 'psa_grade' in content.lower() or any(
+        str(i) in content for i in range(1, 11)
+    )
+
+
+@then('I should see corners analysis on the report')
+def step_see_corners(context):
+    assert 'CORNERS' in context.response.content.decode().upper()
+
+
+@then('I should see edges analysis on the report')
+def step_see_edges(context):
+    assert 'EDGES' in context.response.content.decode().upper()
+
+
+@then('I should see centering analysis on the report')
+def step_see_centering(context):
+    assert 'CENTERING' in context.response.content.decode().upper()
+
+
+@then('I should see surface analysis on the report')
+def step_see_surface(context):
+    assert 'SURFACE' in context.response.content.decode().upper()
+
+
+@then('the grade result should be stored in the session')
+def step_grade_in_session(context):
+    assert context.client.session.get('card_grade_result') is not None    

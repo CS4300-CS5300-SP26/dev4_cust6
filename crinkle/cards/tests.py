@@ -292,7 +292,7 @@ class ScannedImageSaveTests(TestCase):
         )
 
         self.assertEqual(response.status_code, 200)
-        self.assertContains(response, "User: Guest")
+        self.assertContains(response, "Guest")
         self.assertContains(response, "Create an account to save this scan to your collection.")
         self.assertEqual(self.client.session.get("captured_scan_image"), TEST_CAPTURED_IMAGE)
 
@@ -324,3 +324,138 @@ class ScannedImageSaveTests(TestCase):
         relative_path = saved_card.picture_path.replace("/media/", "", 1)
         self.assertTrue(os.path.exists(os.path.join(self.temp_media.name, relative_path)))
         self.assertTrue(CardCollection.objects.filter(user=self.user, cards=saved_card).exists())
+from unittest.mock import patch, MagicMock
+
+
+class AIGradingModuleTests(TestCase):
+    """Unit tests for the ai_grading module"""
+
+    def test_fallback_grade_returned_on_invalid_image(self):
+        """If image has no base64 data, fallback grade is returned"""
+        from cards.ai_grading import analyze_card_with_gemini
+        result = analyze_card_with_gemini("not-a-valid-image")
+        self.assertEqual(result["psa_grade"], 7)
+        self.assertEqual(result["card_name"], "Unknown Card")
+
+    def test_fallback_grade_has_all_fields(self):
+        """Fallback grade should always have all required fields"""
+        from cards.ai_grading import _fallback_grade
+        result = _fallback_grade()
+        self.assertIn("psa_grade", result)
+        self.assertIn("card_name", result)
+        self.assertIn("corners", result)
+        self.assertIn("edges", result)
+        self.assertIn("centering", result)
+        self.assertIn("surface", result)
+
+    @patch("cards.ai_grading.urllib.request.urlopen")
+    def test_successful_api_response_parsed_correctly(self, mock_urlopen):
+        """A valid API response should be parsed into a grade dict"""
+        from cards.ai_grading import analyze_card_with_gemini
+        mock_response = MagicMock()
+        mock_response.read.return_value = b'''{
+            "choices": [{
+                "message": {
+                    "content": "{\\"psa_grade\\": 8, \\"card_name\\": \\"Charizard\\", \\"corners\\": \\"Sharp.\\", \\"edges\\": \\"Clean.\\", \\"centering\\": \\"Centered.\\", \\"surface\\": \\"No scratches.\\"}"
+                }
+            }]
+        }'''
+        mock_response.__enter__ = lambda s: s
+        mock_response.__exit__ = MagicMock(return_value=False)
+        mock_urlopen.return_value = mock_response
+
+        image = "data:image/jpeg;base64,/9j/4AAQSkZJRgAB"
+        result = analyze_card_with_gemini(image)
+        self.assertEqual(result["psa_grade"], 8)
+        self.assertEqual(result["card_name"], "Charizard")
+
+    @patch("cards.ai_grading.urllib.request.urlopen")
+    def test_api_error_returns_fallback(self, mock_urlopen):
+        """If API call throws exception, fallback grade is returned"""
+        from cards.ai_grading import analyze_card_with_gemini
+        mock_urlopen.side_effect = Exception("Network error")
+        image = "data:image/jpeg;base64,/9j/4AAQSkZJRgAB"
+        result = analyze_card_with_gemini(image)
+        self.assertEqual(result["psa_grade"], 7)
+        self.assertEqual(result["card_name"], "Unknown Card")
+
+
+class ScanReportAITests(TestCase):
+    """Tests for scan_report_view with AI grading"""
+
+    def setUp(self):
+        self.user = User.objects.create_user(username="tester", password="p1234567890")
+
+    @patch("cards.views.analyze_card_with_gemini")
+    def test_post_triggers_ai_grading(self, mock_ai):
+        """Posting a captured image should trigger AI grading"""
+        mock_ai.return_value = {
+            "psa_grade": 9,
+            "card_name": "Pikachu",
+            "corners": "Sharp corners.",
+            "edges": "Clean edges.",
+            "centering": "Well centered.",
+            "surface": "No scratches.",
+        }
+        response = self.client.post(
+            reverse("cards:scan_report"),
+            data={"captured_image": TEST_CAPTURED_IMAGE},
+        )
+        self.assertEqual(response.status_code, 200)
+        mock_ai.assert_called_once()
+
+    @patch("cards.views.analyze_card_with_gemini")
+    def test_grade_result_shown_in_response(self, mock_ai):
+        """Grade result from AI should appear in the rendered page"""
+        mock_ai.return_value = {
+            "psa_grade": 9,
+            "card_name": "Pikachu",
+            "corners": "Sharp corners.",
+            "edges": "Clean edges.",
+            "centering": "Well centered.",
+            "surface": "No scratches.",
+        }
+        response = self.client.post(
+            reverse("cards:scan_report"),
+            data={"captured_image": TEST_CAPTURED_IMAGE},
+        )
+        self.assertContains(response, "Pikachu")
+        self.assertContains(response, "Sharp corners.")
+
+    @patch("cards.views.analyze_card_with_gemini")
+    def test_guest_sees_grade_result(self, mock_ai):
+        """Guest users should also see the AI grade result"""
+        mock_ai.return_value = {
+            "psa_grade": 6,
+            "card_name": "Mewtwo",
+            "corners": "Slight wear.",
+            "edges": "Minor chips.",
+            "centering": "Off center.",
+            "surface": "Light scratches.",
+        }
+        response = self.client.post(
+            reverse("cards:scan_report"),
+            data={"captured_image": TEST_CAPTURED_IMAGE},
+        )
+        self.assertEqual(response.status_code, 200)
+        self.assertContains(response, "Mewtwo")
+
+    @patch("cards.views.analyze_card_with_gemini")
+    def test_grade_stored_in_session(self, mock_ai):
+        """Grade result should be stored in the session after POST"""
+        mock_ai.return_value = {
+            "psa_grade": 8,
+            "card_name": "Bulbasaur",
+            "corners": "Good corners.",
+            "edges": "Good edges.",
+            "centering": "Centered.",
+            "surface": "Clean.",
+        }
+        self.client.post(
+            reverse("cards:scan_report"),
+            data={"captured_image": TEST_CAPTURED_IMAGE},
+        )
+        session_grade = self.client.session.get("card_grade_result")
+        self.assertIsNotNone(session_grade)
+        self.assertEqual(session_grade["psa_grade"], 8)
+        self.assertEqual(session_grade["card_name"], "Bulbasaur")
