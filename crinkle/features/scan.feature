@@ -51,6 +51,7 @@ Feature: Card Scanning
         When I try to save the scanned card to my collection
         Then I should be redirected to the login page
 
+    @stub_ai
     Scenario: Logged in user can save a scanned image to the collection
         Given I am logged in
         And I have taken a captured scan image
