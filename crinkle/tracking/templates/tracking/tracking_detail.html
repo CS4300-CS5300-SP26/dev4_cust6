@@ -9,26 +9,100 @@
 {% endblock %}
 {% block content %}
 <div class="detail-card">
-    <h2 class="detail-name">{{ card.card_name }}</h2>
-    {% if card.card_set %}
-    <p class="detail-set">{{ card.card_set }}{% if card.card_year %} &middot; {{ card.card_year }}{% endif %}</p>
-    {% endif %}
-    <div class="detail-badges">
-        <span class="grade-badge lg">{{ card.get_grade_tier_display }}</span>
-        <span class="status-badge status-{{ card.status }} lg">{{ card.get_status_display }}</span>
+    <div style="display:flex; gap:16px; align-items:flex-start; margin-bottom:16px;">
+        <div style="width:80px; height:80px; border-radius:12px; overflow:hidden; flex-shrink:0; background:linear-gradient(135deg, #2C4BFB, #D9111D); display:flex; align-items:center; justify-content:center;">
+            {% if image_url %}
+            <img src="{{ image_url }}" alt="{{ card.card_name }}" style="width:100%;height:100%;object-fit:contain;">
+            {% else %}
+            <span style="color:white; font-size:1.8rem; font-weight:700;">{{ card.card_name|first }}</span>
+            {% endif %}
+        </div>
+        <div style="flex:1;">
+            <h2 class="detail-name" style="margin:0 0 4px;">{{ card.card_name }}</h2>
+            {% if card.card_set %}
+            <p class="detail-set" style="margin:0 0 8px;">{{ card.card_set }}{% if card.card_year %} &middot; {{ card.card_year }}{% endif %}</p>
+            {% endif %}
+            <div class="detail-badges">
+                <span class="grade-badge lg">{{ card.get_grade_tier_display }}</span>
+                <span class="status-badge status-{{ card.status }} lg">{{ card.get_status_display }}</span>
+            </div>
+        </div>
     </div>
+
+    {% if market_price %}
+    <div class="detail-section" style="display:flex; justify-content:space-between; align-items:center;">
+        <div>
+            <h3 class="section-label">Market Price</h3>
+            <p style="font-size:1.4rem; font-weight:700; color:#2C4BFB; margin:0;">${{ market_price|floatformat:2 }}</p>
+        </div>
+        <div style="text-align:right;">
+            {% if trend == 'up' %}
+            <span style="color:#1a7a3a; font-size:1rem;">▲ Rising</span>
+            {% elif trend == 'down' %}
+            <span style="color:#c0392b; font-size:1rem;">▼ Falling</span>
+            {% elif trend == 'stable' %}
+            <span style="color:#888; font-size:1rem;">— Stable</span>
+            {% endif %}
+        </div>
+    </div>
+    {% endif %}
+
+    {% if card.sold_price %}
+    <div class="detail-section">
+        <h3 class="section-label">Sold For</h3>
+        <p class="detail-price">${{ card.sold_price|floatformat:2 }}</p>
+    </div>
+    {% endif %}
+
     {% if card.notes %}
     <div class="detail-section">
         <h3 class="section-label">Notes</h3>
         <p>{{ card.notes }}</p>
     </div>
     {% endif %}
+
     <div class="detail-section">
         <p class="muted">Added {{ card.date_added|date:"M d, Y" }} &middot; Updated {{ card.date_updated|date:"M d, Y" }}</p>
     </div>
 </div>
+
+{% if card.status != 'sold' %}
+<div style="padding: 0 16px 16px;">
+    <button id="mark-sold-btn" style="width:100%; padding:12px; background:#eefaf0; color:#1a7a3a; border:1px solid #1a7a3a; border-radius:10px; font-size:0.95rem; cursor:pointer;">Mark as Sold</button>
+    <div id="sold-form" style="display:none; margin-top:12px;">
+        <form method="post" action="{% url 'tracking:edit' card.pk %}">
+            {% csrf_token %}
+            <input type="hidden" name="card_name" value="{{ card.card_name }}">
+            <input type="hidden" name="card_set" value="{{ card.card_set }}">
+            <input type="hidden" name="card_year" value="{{ card.card_year }}">
+            <input type="hidden" name="grade_tier" value="{{ card.grade_tier }}">
+            <input type="hidden" name="status" value="sold">
+            <input type="hidden" name="notes" value="{{ card.notes }}">
+            <div style="display:flex; gap:10px; align-items:center;">
+                <input type="number" name="sold_price" placeholder="Sold price ($)" step="0.01" min="0"
+                    style="flex:1; padding:10px; border:1px solid #ddd; border-radius:8px; font-size:0.95rem;">
+                <button type="submit" style="padding:10px 20px; background:#1a7a3a; color:white; border:none; border-radius:8px; cursor:pointer;">Confirm</button>
+            </div>
+        </form>
+    </div>
+</div>
+{% endif %}
+
 <div class="detail-actions">
+    {% if card.card_set %}
+    <a href="{% url 'tracking:card_pricing' %}?name={{ card.card_name|urlencode }}&set={{ card.card_set|urlencode }}" class="btn-tracking btn-tracking-primary">View in PokeMart</a>
+    {% endif %}
     <a href="{% url 'tracking:edit' card.pk %}" class="btn-tracking btn-tracking-primary">Edit Card</a>
     <a href="{% url 'tracking:delete' card.pk %}" class="btn-tracking btn-tracking-danger">Remove from Tracking</a>
 </div>
+
+<script>
+const markSoldBtn = document.getElementById('mark-sold-btn');
+if (markSoldBtn) {
+    markSoldBtn.addEventListener('click', () => {
+        document.getElementById('sold-form').style.display = 'block';
+        markSoldBtn.style.display = 'none';
+    });
+}
+</script>
 {% endblock %}

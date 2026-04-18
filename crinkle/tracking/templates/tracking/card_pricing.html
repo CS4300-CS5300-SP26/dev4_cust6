@@ -7,12 +7,32 @@
 {% block content %}
 <div class="pricing-hero">
     <div class="pricing-card-image">
+        {% if image_url %}
+        <img src="{{ image_url }}" alt="{{ card_name }}" style="width:100%;height:100%;object-fit:contain;">
+        {% else %}
         <span class="market-card-initial">{{ card_name|first }}</span>
+        {% endif %}
     </div>
     <h2 class="pricing-name">{{ card_name }}</h2>
     <p class="pricing-set">{{ card_set }}</p>
 </div>
-
+<div class="pricing-section">
+    <h3 class="section-label">Watch This Card</h3>
+    <form method="post" action="{% url 'tracking:market_watch' %}" style="display:flex; gap:10px; align-items:center; flex-wrap:wrap;">
+        {% csrf_token %}
+        <input type="hidden" name="card_name" value="{{ card_name }}">
+        <input type="hidden" name="card_set" value="{{ card_set }}">
+        <select name="grade_tier" style="flex:1; padding:10px; border:1px solid #ddd; border-radius:8px; font-size:0.95rem;">
+            <option value="ungraded">Ungraded</option>
+            <option value="near_mint">Near Mint</option>
+            <option value="lightly_played">Lightly Played</option>
+            <option value="moderately_played">Moderately Played</option>
+            <option value="heavily_played">Heavily Played</option>
+            <option value="damaged">Damaged</option>
+        </select>
+        <button type="submit" style="padding:10px 20px; background:#2C4BFB; color:white; border:none; border-radius:8px; cursor:pointer; font-size:0.95rem;">Watch</button>
+    </form>
+</div>
 <div class="pricing-section">
     <h3 class="section-label">Price by Grade</h3>
     <div class="pricing-table">
@@ -24,12 +44,11 @@
         {% endfor %}
     </div>
 </div>
-
 <div class="pricing-section">
     <h3 class="section-label">Price History</h3>
     <div class="pricing-tier-select">
         {% for key, label in tier_labels.items %}
-        <a href="{% url 'tracking:card_pricing' %}?name={{ card_name }}&set={{ card_set }}&tier={{ key }}"
+        <a href="{% url 'tracking:card_pricing' %}?name={{ card_name|urlencode }}&set={{ card_set|urlencode }}&tier={{ key }}"
            class="tab {% if key == selected_tier %}active{% endif %}">{{ label }}</a>
         {% endfor %}
     </div>
@@ -38,7 +57,6 @@
     <p class="muted" style="text-align: center; margin-top: 10px;">No history data</p>
     {% endif %}
 </div>
-
 {% if compare_data %}
 <div class="pricing-section">
     <h3 class="section-label">Grade Comparison</h3>
@@ -54,40 +72,39 @@
     </div>
 </div>
 {% endif %}
-
 {% if chart_dates %}
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 <script>
-    const ctx = document.getElementById('priceChart').getContext('2d');
-    new Chart(ctx, {
-        type: 'line',
-        data: {
-            labels: {{ chart_dates|safe }},
-            datasets: [{
-                label: 'Price ($)',
-                data: {{ chart_prices|safe }},
-                borderColor: '#2C4BFB',
-                backgroundColor: 'rgba(44, 75, 251, 0.1)',
-                fill: true,
-                tension: 0.3,
-                pointBackgroundColor: '#2C4BFB',
-            }]
+const ctx = document.getElementById('priceChart').getContext('2d');
+new Chart(ctx, {
+    type: 'line',
+    data: {
+        labels: {{ chart_dates|safe }},
+        datasets: [{
+            label: 'Price ($)',
+            data: {{ chart_prices|safe }},
+            borderColor: '#2C4BFB',
+            backgroundColor: 'rgba(44, 75, 251, 0.1)',
+            fill: true,
+            tension: 0.3,
+            pointBackgroundColor: '#2C4BFB',
+        }]
+    },
+    options: {
+        responsive: true,
+        plugins: {
+            legend: { display: false }
         },
-        options: {
-            responsive: true,
-            plugins: {
-                legend: { display: false }
-            },
-            scales: {
-                y: {
-                    beginAtZero: false,
-                    ticks: {
-                        callback: function(value) { return '$' + value; }
-                    }
+        scales: {
+            y: {
+                beginAtZero: false,
+                ticks: {
+                    callback: function(value) { return '$' + value.toFixed(2); }
                 }
             }
         }
-    });
+    }
+});
 </script>
 {% endif %}
 {% endblock %}

@@ -51,7 +51,7 @@ class CardPricingModelTest(TestCase):
     def test_pricing_creation(self):
         pricing = CardPricing.objects.create(
             card_name='Charizard', card_set='Base Set',
-            grade_tier='psa_10', price=5000.00,
+            grade_tier='near_mint', price=5000.00,
         )
         self.assertEqual(pricing.card_name, 'Charizard')
         self.assertEqual(float(pricing.price), 5000.00)
@@ -59,7 +59,7 @@ class CardPricingModelTest(TestCase):
     def test_pricing_str(self):
         pricing = CardPricing.objects.create(
             card_name='Charizard', card_set='Base Set',
-            grade_tier='psa_10', price=5000.00,
+            grade_tier='near_mint', price=5000.00,
         )
         self.assertIn('Charizard', str(pricing))
         self.assertIn('5000', str(pricing))
@@ -140,12 +140,12 @@ class TrackingViewsTest(TestCase):
             'card_set': 'Base Set',
             'card_year': 1999,
             'grade_tier': 'psa_10',
-            'status': 'submitted',
+            'status': 'watching',
             'notes': 'Sent to PSA',
         })
         self.assertEqual(response.status_code, 302)
         self.card.refresh_from_db()
-        self.assertEqual(self.card.status, 'submitted')
+        self.assertEqual(self.card.status, 'watching')
 
     def test_delete_view_get(self):
         response = self.client.get(reverse('tracking:delete', args=[self.card.pk]))
@@ -174,7 +174,7 @@ class TrackingViewsTest(TestCase):
     def test_market_search_with_query(self):
         CardPricing.objects.create(
             card_name='Charizard', card_set='Base Set',
-            grade_tier='ungraded', price=50.00,
+            grade_tier='near_mint', price=50.00,
         )
         response = self.client.get(reverse('tracking:market') + '?q=Charizard')
         self.assertEqual(response.status_code, 200)
@@ -188,7 +188,7 @@ class TrackingViewsTest(TestCase):
     def test_card_pricing_page(self):
         CardPricing.objects.create(
             card_name='Charizard', card_set='Base Set',
-            grade_tier='ungraded', price=50.00,
+            grade_tier='near_mint', price=50.00,
         )
         response = self.client.get(
             reverse('tracking:card_pricing') + '?name=Charizard&set=Base+Set'
@@ -201,7 +201,7 @@ class TrackingViewsTest(TestCase):
         self.assertEqual(response.status_code, 302)
 
     def test_card_pricing_shows_tiers(self):
-        for tier in ['ungraded', 'psa_7', 'psa_8', 'psa_9', 'psa_10']:
+        for tier in ['near_mint', 'lightly_played', 'moderately_played', 'heavily_played', 'damaged']:
             CardPricing.objects.create(
                 card_name='Pikachu', card_set='Base Set',
                 grade_tier=tier, price=100.00,
@@ -209,8 +209,47 @@ class TrackingViewsTest(TestCase):
         response = self.client.get(
             reverse('tracking:card_pricing') + '?name=Pikachu&set=Base+Set'
         )
-        self.assertContains(response, 'Ungraded')
-        self.assertContains(response, 'PSA 10')
+        self.assertContains(response, 'Near Mint')
+        self.assertContains(response, 'Damaged')
+
+    def test_market_watch_post(self):
+        response = self.client.post(reverse('tracking:market_watch'), {
+            'card_name': 'Charizard',
+            'card_set': 'Base Set',
+            'grade_tier': 'near_mint',
+        })
+        self.assertEqual(response.status_code, 302)
+        self.assertTrue(TrackedCard.objects.filter(card_name='Charizard', status='watching').exists())
+
+    def test_market_watch_duplicate(self):
+        TrackedCard.objects.create(card_name='Charizard', card_set='Base Set', status='watching')
+        response = self.client.post(reverse('tracking:market_watch'), {
+            'card_name': 'Charizard',
+            'card_set': 'Base Set',
+            'grade_tier': 'near_mint',
+        })
+        self.assertEqual(response.status_code, 302)
+        self.assertEqual(TrackedCard.objects.filter(card_name='Charizard').count(), 1)
+
+    def test_market_compare_page(self):
+        CardPricing.objects.create(card_name='Charizard', card_set='Base Set', grade_tier='near_mint', price=100.00)
+        CardPricing.objects.create(card_name='Pikachu', card_set='Base Set', grade_tier='near_mint', price=50.00)
+        response = self.client.get(
+            reverse('tracking:market_compare') + '?name=Charizard&set=Base+Set&name=Pikachu&set=Base+Set'
+        )
+        self.assertEqual(response.status_code, 200)
+        self.assertContains(response, 'Charizard')
+        self.assertContains(response, 'Pikachu')
+
+    def test_tracking_detail_with_pricing(self):
+        CardPricing.objects.create(
+            card_name='Mewtwo', card_set='Base Set',
+            grade_tier='psa_10', price=500.00,
+            image_url='https://example.com/img.jpg'
+        )
+        response = self.client.get(reverse('tracking:detail', args=[self.card.pk]))
+        self.assertEqual(response.status_code, 200)
+        self.assertContains(response, 'Mewtwo')
 
 
 class TrackedCardFormTest(TestCase):
