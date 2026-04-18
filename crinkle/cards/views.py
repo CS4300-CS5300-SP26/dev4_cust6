@@ -164,8 +164,13 @@ def scan_report_view(request):
 @login_required
 def save_report_view(request):
     """Save the latest captured scan to the authenticated user's collection."""
+    captured_image = request.session.get(CAPTURED_SCAN_SESSION_KEY)
+    if not captured_image:
+        return redirect("cards:scan_report")
+
     report = GradeReport.objects.create(grade="No Grade")
-    picture_path = _save_captured_image(request.session.get(CAPTURED_SCAN_SESSION_KEY))
+    picture_path = _save_captured_image(captured_image)
+
     card = Card.objects.create(
         user=request.user,
         name="Scanned Card",
@@ -173,22 +178,15 @@ def save_report_view(request):
         picture_path=picture_path,
         user_notes="",
     )
-    card.name += f"-{card.pk}"
+    card.name = f"{card.name}-{card.pk}"
     card.save()
 
     collection = CardCollection.objects.get_or_create(user=request.user)[0]
     collection.cards.add(card)
-    collection.save()
 
-    return render(
-        request,
-        template_name="cards/collection.html",
-        context={
-            "collection": CardCollectionSerializer(collection).data,
-            "cards": CardSerializer(collection.cards.all(), many=True).data,
-        },
-    )
+    request.session.pop(CAPTURED_SCAN_SESSION_KEY, None)
 
+    return redirect("cards:collection")
 
 @login_required
 @require_POST
