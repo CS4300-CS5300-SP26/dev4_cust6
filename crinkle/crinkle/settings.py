@@ -11,6 +11,7 @@ https://docs.djangoproject.com/en/4.2/ref/settings/
 """
 
 from pathlib import Path
+from django.core.exceptions import ImproperlyConfigured
 import sys
 import os
 
@@ -150,4 +151,8 @@ CSRF_TRUSTED_ORIGINS = ['https://*.devedu.io', 'https://crinkle.ink', 'https://w
 LOGIN_URL = '/accounts/login/'
 LOGIN_REDIRECT_URL = '/accounts/profile/'
 LOGOUT_REDIRECT_URL = '/'
-GEMINI_API_KEY = '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'
+GEMINI_API_KEY = os.environ.get("GEMINI_API_KEY")
+if not GEMINI_API_KEY:
+    raise ImproperlyConfigured(
+        "Missing required environment variable: GEMINI_API_KEY"
+    )
