@@ -79,6 +79,7 @@ jobs:
             source venv/bin/activate
             pip install -r requirements.txt
             python crinkle/manage.py migrate
+            python crinkle/manage.py load_prices_from_api
             python crinkle/manage.py collectstatic --noinput
             sudo systemctl restart crinkle
           EOF
