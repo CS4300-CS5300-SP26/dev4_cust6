@@ -134,7 +134,7 @@ USE_TZ = True
 STATIC_URL = "/static/"
 STATIC_ROOT = BASE_DIR / "staticfiles"
 MEDIA_URL = "/media/"
-MEDIA_ROOT = Path(os.environ.get("CRINKLE_MEDIA_ROOT", "/var/lib/crinkle/media"))
+MEDIA_ROOT = Path(os.environ.get("CRINKLE_MEDIA_ROOT", BASE_DIR / "media"))
 MEDIA_ROOT.mkdir(parents=True, exist_ok=True)
 TESTING = 'test' in sys.argv or 'behave' in sys.argv
 
