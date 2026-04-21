@@ -73,8 +73,9 @@ jobs:
         env:
           PROD_HOST: ${{ secrets.PROD_HOST }}
           PROD_USER: ${{ secrets.PROD_USER }}
+          GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
         run: |
-          ssh -o BatchMode=yes -o StrictHostKeyChecking=yes "${PROD_USER}@${PROD_HOST}" <<'EOF'
+          ssh -o BatchMode=yes -o StrictHostKeyChecking=yes "${PROD_USER}@${PROD_HOST}" <<EOF
             set -euo pipefail
             cd ~/dev4_cust6
             git pull origin main
