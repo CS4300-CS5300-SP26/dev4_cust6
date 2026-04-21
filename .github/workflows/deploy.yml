@@ -35,6 +35,7 @@ jobs:
         working-directory: crinkle
         env:
           GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
+          POKEMON_PRICE_API_KEY: ${{ secrets.POKEMON_PRICE_API_KEY }}
         run: |
           set -euo pipefail
           python manage.py test
@@ -63,9 +64,11 @@ jobs:
           PROD_HOST: ${{ secrets.PROD_HOST }}
           PROD_USER: ${{ secrets.PROD_USER }}
           GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
+          POKEMON_PRICE_API_KEY: ${{ secrets.POKEMON_PRICE_API_KEY }}
         run: |
           ssh -o BatchMode=yes -o StrictHostKeyChecking=yes "${PROD_USER}@${PROD_HOST}" \
-            "export GEMINI_API_KEY='${GEMINI_API_KEY}'; bash -se" <<'EOF'
+            "export GEMINI_API_KEY='${GEMINI_API_KEY}'; 
+            export POKEMON_PRICE_API_KEY='${POKEMON_PRICE_API_KEY}'; bash -se" <<'EOF'
             set -euo pipefail
             cd ~/dev4_cust6
             git pull origin main
