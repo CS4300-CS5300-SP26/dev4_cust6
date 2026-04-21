@@ -81,6 +81,7 @@ jobs:
             git pull origin main
             source venv/bin/activate
             pip install -r requirements.txt
+            export GEMINI_API_KEY=$(sudo systemctl show crinkle --property=Environment | grep -oP 'GEMINI_API_KEY=\K[^ ]+')
             python crinkle/manage.py migrate
             python crinkle/manage.py load_prices_from_api
             python crinkle/manage.py collectstatic --noinput
