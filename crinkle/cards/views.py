@@ -139,7 +139,7 @@ def scan_report_view(request):
     if request.method == 'POST' and captured_image:
         grade_result = analyze_card_with_gemini(captured_image)
         request.session[GRADE_SESSION_KEY] = grade_result
-        request.session.modified = True 
+        request.session.modified = True
     else:
         grade_result = request.session.get(GRADE_SESSION_KEY, {})
 
@@ -164,11 +164,12 @@ def scan_report_view(request):
 @login_required
 def save_report_view(request):
     """Save the latest captured scan to the authenticated user's collection."""
+    grade_result = request.session.get(GRADE_SESSION_KEY, {})
     captured_image = request.session.get(CAPTURED_SCAN_SESSION_KEY)
     if not captured_image:
         return redirect("cards:scan_report")
 
-    report = GradeReport.objects.create(grade="No Grade")
+    report = GradeReport.objects.create(grade=grade_result.get("psa_grade", "—"))
     picture_path = _save_captured_image(captured_image)
 
     card = Card.objects.create(
