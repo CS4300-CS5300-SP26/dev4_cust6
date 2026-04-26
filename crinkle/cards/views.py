@@ -86,7 +86,7 @@ class CardViewSet(viewsets.ModelViewSet):
 
     @action(detail=False, methods=["GET"])
     def history(self, request):
-        cards = self.queryset.filter(user=request.user.id)
+        cards = self.queryset.filter(user=request.user.id).order_by("date_scanned")
 
         cards_data = CardSerializer(cards, many=True).data
 
