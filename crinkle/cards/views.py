@@ -84,6 +84,19 @@ class CardViewSet(viewsets.ModelViewSet):
     permission_classes = [permissions.IsAuthenticated]
     renderer_classes = [TemplateHTMLRenderer]
 
+    @action(detail=False, methods=["GET"])
+    def history(self, request):
+        cards = self.queryset.filter(user=request.user.id)
+
+        cards_data = CardSerializer(cards, many=True).data
+
+        response = Response(
+            data={"cards": cards_data},
+            template_name="history.html",
+            status=status.HTTP_200_OK,
+        )
+        return response
+
     def retrieve(self, request, pk=None):
         """Retrieve a card of a given primary key."""
         response = super(CardViewSet, self).retrieve(request, pk=pk)
