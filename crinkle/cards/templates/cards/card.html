@@ -7,8 +7,68 @@
 {% endblock %}
 
 {% block content %}
-{{data}}
+<style>
+    .grade-badge {
+      display: inline-block;
+      background: linear-gradient(135deg, #1a274a, #0d9488);
+      color: #fff;
+      font-size: 48px;
+      font-weight: 700;
+      border-radius: 50%;
+      width: 90px;
+      height: 90px;
+      line-height: 90px;
+      text-align: center;
+      margin: 16px auto;
+    }
+    .grade-section { text-align: center; margin-bottom: 20px; }
+    .criteria-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 12px;
+      margin: 16px 0;
+    }
+    .criteria-card {
+      background: #f5f5f5;
+      border: 1px solid #e0e0e0;
+      border-radius: 12px;
+      padding: 12px;
+      min-height: 80px;
+    }
+    .criteria-label {
+      font-size: 11px;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      color: #0d9488;
+      margin-bottom: 4px;
+      font-weight: 600;
+    }
+    .criteria-text { font-size: 13px; color: #333333; line-height: 1.5; }
+  </style>
+
 <img src="{{picture_path}}" style="max-width:75vw; max-height:50vh; border-radius:12px;">
+
+{% if grading_notes.corners or grading_notes.edges or grading_notes.centering or grading_notes.surface %}
+<h3 style="margin:16px 0 8px;">Grade Breakdown</h3>
+<div class="criteria-grid">
+  <div class="criteria-card">
+    <div class="criteria-label">Corners</div>
+    <div class="criteria-text">{{ grading_notes.corners }}</div>
+  </div>
+  <div class="criteria-card">
+    <div class="criteria-label">Edges</div>
+    <div class="criteria-text">{{ grading_notes.edges }}</div>
+  </div>
+  <div class="criteria-card">
+    <div class="criteria-label">Centering</div>
+    <div class="criteria-text">{{ grading_notes.centering }}</div>
+  </div>
+  <div class="criteria-card">
+    <div class="criteria-label">Surface</div>
+    <div class="criteria-text">{{ grading_notes.surface }}</div>
+  </div>
+</div>
+{% endif %}
 
 <form method="post" class="form-group" action="{% url 'cards:collection' %}{{id}}/save">
     {% csrf_token %}
