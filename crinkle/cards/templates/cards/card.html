@@ -44,9 +44,27 @@
       font-weight: 600;
     }
     .criteria-text { font-size: 13px; color: #333333; line-height: 1.5; }
-  </style>
+</style>
 
-<img src="{{picture_path}}" style="max-width:75vw; max-height:50vh; border-radius:12px;">
+<div class="card-summary-panel">
+  <img src="{{picture_path}}" class="card-detail-image">
+  <div class="card-summary-info">
+    <h2>{{name}}</h3>
+
+    <h3>Grade</h3>
+    <div class="card-summary-detail">
+      {{grading_notes.grade}}
+    </div>
+
+    <h3>Value</h3>
+    <div class="card-summary-detail">
+      ${{estimated_value}}
+    </div>
+
+    <h4 class="card-summary-date">Date Scanned: {{date_scanned}}</h4>
+  </div>
+</div>
+
 
 {% if grading_notes.corners or grading_notes.edges or grading_notes.centering or grading_notes.surface %}
 <h3 style="margin:16px 0 8px;">Grade Breakdown</h3>
@@ -70,14 +88,15 @@
 </div>
 {% endif %}
 
+<h3 style="margin:16px 0 8px;">User Notes</h3>
 <form method="post" class="form-group" action="{% url 'cards:collection' %}{{id}}/save">
-    {% csrf_token %}
+  {% csrf_token %}
 
-    <div class="card-collection">
+  <div class="card-collection">
 
-        <textarea class="notes-area" name="user_notes" maxlength="300">{{user_notes}}</textarea>
+    <textarea class="notes-area" name="user_notes" maxlength="300">{{user_notes}}</textarea>
 
-        <input type="submit" value="Save" class="save-btn">
-    </div>
+    <input type="submit" value="Save" class="save-btn">
+  </div>
 <form>
 {% endblock %}
