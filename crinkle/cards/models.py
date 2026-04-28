@@ -4,7 +4,11 @@ from django.core.validators import MinValueValidator
 
 
 class GradeReport(models.Model):
-    grade = models.TextField()
+    grade = models.TextField(default="")
+    corners = models.TextField(default="")
+    edges = models.TextField(default="")
+    centering = models.TextField(default="")
+    surface = models.TextField(default="")
 
     def __str__(self):
         return self.grade

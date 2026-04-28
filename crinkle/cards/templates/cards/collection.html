@@ -20,11 +20,11 @@
             <p class="card-info card-title"> {{card.name}} </p>
             <p class="card-info card-date"> {{card.date_scanned}} </p>
 
-            <a href="{% url 'cards:view_card' card.id %}" class="card-btn">View/Edit Notes</a>
+            <a href="{% url 'cards:view_card' card.id %}" class="card-btn view-btn">View/Edit Notes</a>
 
             <form method="post" action="{% url 'cards:delete_card' card.id %}">
                 {% csrf_token %}
-                <button type="submit" class="card-btn">Delete</button>
+                <button type="submit" class="card-btn delete-btn">Delete</button>
             </form>
         </div>
 
