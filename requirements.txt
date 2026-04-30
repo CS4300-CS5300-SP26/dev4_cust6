@@ -21,3 +21,4 @@ typing_extensions==4.15.0
 wheel==0.42.0
 Pillow==12.1.1
 
+stripe==15.1.0
