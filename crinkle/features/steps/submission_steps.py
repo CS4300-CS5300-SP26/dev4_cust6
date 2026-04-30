@@ -26,9 +26,6 @@ def step_submission_exists(context, card_name, service):
         city='Salt Lake City',
         state='UT',
         zip_code='84101',
-        card_number='4111111111111111',
-        expiry='12/26',
-        cvv='123',
     )
 
 
@@ -55,9 +52,6 @@ def step_fill_details(context):
         'city': 'Salt Lake City',
         'state': 'UT',
         'zip_code': '84101',
-        'card_number': '4111111111111111',
-        'expiry': '12/26',
-        'cvv': '123',
     }
 
 
@@ -87,7 +81,7 @@ def step_on_details(context):
 @then('I should see the confirmation page')
 def step_see_confirmation(context):
     assert context.response.status_code == 302
-    assert '/submission/confirmation/' in context.response['Location']
+    assert '/submission/checkout/' in context.response['Location']
 
 
 @then('the submission should exist in the database')
