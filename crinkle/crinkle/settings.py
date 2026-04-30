@@ -33,7 +33,7 @@ SECRET_KEY = 'django-insecure-v6apk9l#igpq(9@%stou5&o75hmsgoiezmu+wm*-(@)l%46872
 DEBUG = False
 
 ALLOWED_HOSTS = ['20.94.201.231', 'crinkle.ink', 'www.crinkle.ink', '127.0.0.1', 'localhost']
-# ALLOWED_HOSTS = ["*"]
+#ALLOWED_HOSTS = ["*"]
 
 # Application definition
 

@@ -1,14 +1,11 @@
 {% extends "accounts/base_auth.html" %}
-{% block title %}Shipping & Payment — Crinkle{% endblock %}
-{% block screen_title %}Shipping & Payment{% endblock %}
-
+{% block title %}Shipping Details — Crinkle{% endblock %}
+{% block screen_title %}Shipping Details{% endblock %}
 {% block content %}
 <h1 class="screen-heading">Complete your submission</h1>
-<p class="screen-subheading">Enter your shipping and payment details below.</p>
-
+<p class="screen-subheading">Enter your shipping details below. You'll be taken to a secure checkout to complete payment.</p>
 <form method="post" novalidate>
     {% csrf_token %}
-
     <h2 style="font-size:16px; font-weight:700; margin:16px 0 8px;">Card Details</h2>
     <div class="field">
         <label>Card Name</label>
@@ -18,7 +15,6 @@
         <label>Grading Service</label>
         {{ form.grading_service }}
     </div>
-
     <h2 style="font-size:16px; font-weight:700; margin:16px 0 8px;">Shipping Details</h2>
     <div class="field">
         <label>Full Name</label>
@@ -42,28 +38,10 @@
         <label>ZIP Code</label>
         {{ form.zip_code }}
     </div>
-
-    <h2 style="font-size:16px; font-weight:700; margin:16px 0 8px;">Payment Details</h2>
-    <div class="field">
-        <label>Card Number</label>
-        {{ form.card_number }}
-        {% if form.card_number.errors %}<div class="field-error">{{ form.card_number.errors|join:", " }}</div>{% endif %}
-    </div>
-    <div class="field">
-        <label>Expiry</label>
-        {{ form.expiry }}
-    </div>
-    <div class="field">
-        <label>CVV</label>
-        {{ form.cvv }}
-    </div>
-
-    <button type="submit" class="btn-primary">Submit for Grading</button>
+    <button type="submit" class="btn-primary">Proceed to Payment</button>
 </form>
-
 <div class="footer-link">
     <a href="{% url 'submission:start' %}">Back</a>
 </div>
 {% endblock %}
-
 {% block nav_user %}active{% endblock %}

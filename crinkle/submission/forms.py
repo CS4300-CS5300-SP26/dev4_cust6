@@ -8,7 +8,6 @@ class SubmissionForm(forms.ModelForm):
         fields = [
             'card_name', 'grading_service',
             'full_name', 'address', 'city', 'state', 'zip_code',
-            'card_number', 'expiry', 'cvv',
         ]
         widgets = {
             'card_name': forms.TextInput(attrs={'placeholder': 'Card name'}),
@@ -18,7 +17,4 @@ class SubmissionForm(forms.ModelForm):
             'city': forms.TextInput(attrs={'placeholder': 'City'}),
             'state': forms.TextInput(attrs={'placeholder': 'State'}),
             'zip_code': forms.TextInput(attrs={'placeholder': 'ZIP code'}),
-            'card_number': forms.TextInput(attrs={'placeholder': '1234 5678 9012 3456'}),
-            'expiry': forms.TextInput(attrs={'placeholder': 'MM/YY'}),
-            'cvv': forms.TextInput(attrs={'placeholder': 'CVV'}),
         }
