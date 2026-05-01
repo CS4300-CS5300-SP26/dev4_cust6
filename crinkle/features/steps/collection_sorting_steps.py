@@ -10,6 +10,7 @@ def login(context):
     username = "username"
     password = "p1234567890"
     context.user = User.objects.create_user(username=username, password=password)
+    context.user.save()
     context.client.login(username=username, password=password)
 
 

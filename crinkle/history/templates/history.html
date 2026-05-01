@@ -298,94 +298,34 @@
                     <div class="card-entry" onclick="openModal({
                         name: '{{ card.name|default:"Unknown Card"|escapejs }}',
                         set: '{{ card.set_name|default:"Unknown Set"|escapejs }}',
-                        grade: '{{ card.grade|default:""|escapejs }}',
-                        date: '{{ card.date_scanned|date:"M d, Y · g:i A"|escapejs }}',
-                        imageUrl: '{% if card.image %}{{ card.image.url|escapejs }}{% endif %}'
+                        grade: '{{ card.grading_notes.grade|default:""|escapejs }}',
+                        date: '{{ card.date_scanned|escapejs }}', {% comment %} |date:"M d, Y · g:i A" {% endcomment %}
+                        imageUrl: '{% if card.picture_path %}{{ card.picture_path|escapejs }}{% endif %}',
+                        estimated_value: '${{card.estimated_value}}',
                     })">
-                        {% if card.image %}
-                            <img class="card-thumbnail" src="{{ card.image.url }}" alt="{{ card.name }}">
+                        {% if card.picture_path %}
+                            <img class="card-thumbnail" src="{{ card.picture_path }}" alt="{{ card.name }}">
                         {% else %}
                             <div class="card-thumbnail-placeholder">🃏</div>
                         {% endif %}
                         <div class="card-info">
                             <div class="card-name">{{ card.name|default:"Unknown Card" }}</div>
                             <div class="card-meta">
-                                {% if card.grade %}
-                                    {% if card.grade >= 8 %}<span class="card-badge grade-high">⭐ Grade: {{ card.grade }}</span>
-                                    {% elif card.grade >= 6 %}<span class="card-badge grade-mid">⭐ Grade: {{ card.grade }}</span>
-                                    {% else %}<span class="card-badge grade-low">⭐ Grade: {{ card.grade }}</span>
+                                {% if card.grading_notes.grade %}
+                                    {% if card.grading_notes.grade >= 8 %}<span class="card-badge grade-high">⭐ Grade: {{ card.grading_notes.grade }}</span>
+                                    {% elif card.grading_notes.grade >= 6 %}<span class="card-badge grade-mid">⭐ Grade: {{ card.grading_notes.grade }}</span>
+                                    {% else %}<span class="card-badge grade-low">⭐ Grade: {{ card.grading_notes.grade }}</span>
                                     {% endif %}
                                 {% else %}
                                     <span class="card-badge">⭐ Grade: —</span>
                                 {% endif %}
                                 <span class="card-badge">{{ card.set_name|default:"Unknown Set" }}</span>
                             </div>
-                            <div class="card-date">Scanned {{ card.date_scanned|date:"M d, Y · g:i A" }}</div>
+                            <div class="card-date">Scanned {{ card.date_scanned }}</div>
                         </div>
                         <div class="card-arrow">›</div>
                     </div>
                     {% empty %}
-                    <!-- SAMPLE DATA — remove once real data is flowing -->
-                    <div class="card-entry" onclick="openModal({name:'Charizard VMAX',set:'Sword & Shield',grade:'9.5',date:'Mar 7, 2026 · 2:14 PM',imageUrl:null})">
-                        <div class="card-thumbnail-placeholder">🃏</div>
-                        <div class="card-info">
-                            <div class="card-name">Charizard VMAX</div>
-                            <div class="card-meta">
-                                <span class="card-badge grade-high">⭐ Grade: 9.5</span>
-                                <span class="card-badge">Sword & Shield</span>
-                            </div>
-                            <div class="card-date">Scanned Mar 7, 2026 · 2:14 PM</div>
-                        </div>
-                        <div class="card-arrow">›</div>
-                    </div>
-                    <div class="card-entry" onclick="openModal({name:'Pikachu Illustrator',set:'Promo',grade:'10',date:'Mar 6, 2026 · 11:02 AM',imageUrl:null})">
-                        <div class="card-thumbnail-placeholder">🃏</div>
-                        <div class="card-info">
-                            <div class="card-name">Pikachu Illustrator</div>
-                            <div class="card-meta">
-                                <span class="card-badge grade-high">⭐ Grade: 10</span>
-                                <span class="card-badge">Promo</span>
-                            </div>
-                            <div class="card-date">Scanned Mar 6, 2026 · 11:02 AM</div>
-                        </div>
-                        <div class="card-arrow">›</div>
-                    </div>
-                    <div class="card-entry" onclick="openModal({name:'Mewtwo EX',set:'Base Set',grade:'7.0',date:'Mar 5, 2026 · 4:45 PM',imageUrl:null})">
-                        <div class="card-thumbnail-placeholder">🃏</div>
-                        <div class="card-info">
-                            <div class="card-name">Mewtwo EX</div>
-                            <div class="card-meta">
-                                <span class="card-badge grade-mid">⭐ Grade: 7.0</span>
-                                <span class="card-badge">Base Set</span>
-                            </div>
-                            <div class="card-date">Scanned Mar 5, 2026 · 4:45 PM</div>
-                        </div>
-                        <div class="card-arrow">›</div>
-                    </div>
-                    <div class="card-entry" onclick="openModal({name:'Blastoise Holo',set:'Base Set',grade:'4.5',date:'Mar 3, 2026 · 9:30 AM',imageUrl:null})">
-                        <div class="card-thumbnail-placeholder">🃏</div>
-                        <div class="card-info">
-                            <div class="card-name">Blastoise Holo</div>
-                            <div class="card-meta">
-                                <span class="card-badge grade-low">⭐ Grade: 4.5</span>
-                                <span class="card-badge">Base Set</span>
-                            </div>
-                            <div class="card-date">Scanned Mar 3, 2026 · 9:30 AM</div>
-                        </div>
-                        <div class="card-arrow">›</div>
-                    </div>
-                    <div class="card-entry" onclick="openModal({name:'Umbreon VMAX Alt Art',set:'Evolving Skies',grade:'9.0',date:'Mar 1, 2026 · 6:18 PM',imageUrl:null})">
-                        <div class="card-thumbnail-placeholder">🃏</div>
-                        <div class="card-info">
-                            <div class="card-name">Umbreon VMAX Alt Art</div>
-                            <div class="card-meta">
-                                <span class="card-badge grade-high">⭐ Grade: 9.0</span>
-                                <span class="card-badge">Evolving Skies</span>
-                            </div>
-                            <div class="card-date">Scanned Mar 1, 2026 · 6:18 PM</div>
-                        </div>
-                        <div class="card-arrow">›</div>
-                    </div>
                     {% endfor %}
                 </div>
             </div>
@@ -469,7 +409,7 @@
             document.getElementById('sheetSetStat').textContent = card.set;
             document.getElementById('sheetDate').textContent = 'Scanned ' + card.date;
             document.getElementById('sheetCondition').textContent = gradeToCondition(card.grade);
-            document.getElementById('sheetValue').textContent = sampleValues[card.name] || '—';
+            document.getElementById('sheetValue').textContent = card.estimated_value || '—';
 
             const gradeEl = document.getElementById('sheetGrade');
             gradeEl.textContent = card.grade || '—';
