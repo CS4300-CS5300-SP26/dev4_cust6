@@ -20,3 +20,12 @@ omit = [
 
 [tool.behave]
 junit = true
+
+[tool.ruff]
+line-length = 88
+
+[tool.ruff.lint]
+select = ["E", "F"]
+
+[tool.ruff.lint.per-file-ignores]
+"crinkle/features/steps/*.py" = ["F811"]

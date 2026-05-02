@@ -4,25 +4,26 @@ from django.db import migrations, models
 
 
 class Migration(migrations.Migration):
-
     dependencies = [
-        ('home', '0001_initial'),
+        ("home", "0001_initial"),
     ]
 
     operations = [
         migrations.RenameField(
-            model_name='card',
-            old_name='scanned_at',
-            new_name='date_scanned',
+            model_name="card",
+            old_name="scanned_at",
+            new_name="date_scanned",
         ),
         migrations.AddField(
-            model_name='card',
-            name='grade',
-            field=models.DecimalField(blank=True, decimal_places=1, max_digits=3, null=True),
+            model_name="card",
+            name="grade",
+            field=models.DecimalField(
+                blank=True, decimal_places=1, max_digits=3, null=True
+            ),
         ),
         migrations.AddField(
-            model_name='card',
-            name='set_name',
-            field=models.CharField(blank=True, default='Unknown Set', max_length=100),
+            model_name="card",
+            name="set_name",
+            field=models.CharField(blank=True, default="Unknown Set", max_length=100),
         ),
     ]

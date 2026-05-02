@@ -1,0 +1,10 @@
+[flake8]
+max-line-length = 88
+extend-ignore = E203
+per-file-ignores =
+    features/*.py:E501
+    features/steps/*.py:E501,F811
+    */features/*.py:E501
+    */features/steps/*.py:E501,F811
+    scripts/ai_review.py:E501
+    */scripts/ai_review.py:E501

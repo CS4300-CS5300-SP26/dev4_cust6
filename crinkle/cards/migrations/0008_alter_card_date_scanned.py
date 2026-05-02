@@ -4,15 +4,14 @@ from django.db import migrations, models
 
 
 class Migration(migrations.Migration):
-
     dependencies = [
-        ('cards', '0007_alter_cardcollection_cards'),
+        ("cards", "0007_alter_cardcollection_cards"),
     ]
 
     operations = [
         migrations.AlterField(
-            model_name='card',
-            name='date_scanned',
+            model_name="card",
+            name="date_scanned",
             field=models.DateField(auto_created=True),
         ),
     ]

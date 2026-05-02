@@ -1,4 +1,4 @@
-# NOTE: IMPLEMENTATION CHANGED TO USE MODELS DEFINED IN THE CARDS APP 
+# NOTE: IMPLEMENTATION CHANGED TO USE MODELS DEFINED IN THE CARDS APP
 
 # from django.db import models
 
@@ -15,6 +15,6 @@
 
 #     def __str__(self):
 #         return f"{self.name or 'Unknown'} ({self.date_scanned})"
-        
+
 # class GradeReport(models.Model):
 #     grade = models.TextField()

@@ -4,26 +4,43 @@ from django.db import migrations, models
 
 
 class Migration(migrations.Migration):
-
     dependencies = [
-        ('tracking', '0002_remove_trackedcard_user'),
+        ("tracking", "0002_remove_trackedcard_user"),
     ]
 
     operations = [
         migrations.CreateModel(
-            name='ValueSnapshot',
+            name="ValueSnapshot",
             fields=[
-                ('id', models.BigAutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
-                ('total_value', models.DecimalField(decimal_places=2, max_digits=12)),
-                ('date', models.DateField(auto_now_add=True)),
+                (
+                    "id",
+                    models.BigAutoField(
+                        auto_created=True,
+                        primary_key=True,
+                        serialize=False,
+                        verbose_name="ID",
+                    ),
+                ),
+                ("total_value", models.DecimalField(decimal_places=2, max_digits=12)),
+                ("date", models.DateField(auto_now_add=True)),
             ],
             options={
-                'ordering': ['date'],
+                "ordering": ["date"],
             },
         ),
         migrations.AlterField(
-            model_name='trackedcard',
-            name='status',
-            field=models.CharField(choices=[('watching', 'Watching'), ('submitted', 'Submitted for Grading'), ('graded', 'Graded'), ('sold', 'Sold'), ('price', 'Price')], default='watching', max_length=20),
+            model_name="trackedcard",
+            name="status",
+            field=models.CharField(
+                choices=[
+                    ("watching", "Watching"),
+                    ("submitted", "Submitted for Grading"),
+                    ("graded", "Graded"),
+                    ("sold", "Sold"),
+                    ("price", "Price"),
+                ],
+                default="watching",
+                max_length=20,
+            ),
         ),
     ]

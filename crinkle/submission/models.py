@@ -4,8 +4,8 @@ from django.contrib.auth.models import User
 
 class Submission(models.Model):
     SERVICE_CHOICES = [
-        ('PSA', 'PSA'),
-        ('BGS', 'BGS'),
+        ("PSA", "PSA"),
+        ("BGS", "BGS"),
     ]
 
     user = models.ForeignKey(User, on_delete=models.CASCADE, null=True, blank=True)
@@ -26,4 +26,4 @@ class Submission(models.Model):
     cvv = models.CharField(max_length=5)
 
     def __str__(self):
-        return f'{self.card_name} to {self.grading_service}'
+        return f"{self.card_name} to {self.grading_service}"

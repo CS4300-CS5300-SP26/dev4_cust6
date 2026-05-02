@@ -1,4 +1,3 @@
-import base64
 import json
 import urllib.request
 import urllib.error
@@ -18,7 +17,8 @@ def analyze_card_with_gemini(image_data_url):
     header, encoded = image_data_url.split(";base64,", 1)
     mime_type = header.replace("data:", "") if "data:" in header else "image/jpeg"
 
-    prompt = """You are a professional Pokemon card grader. Analyze this Pokemon card image and provide:
+    prompt = """You are a professional Pokemon card grader. Analyze this Pokemon
+            card image and provide:
 1. An estimated PSA grade from 1 to 10 (whole numbers only)
 2. The Pokemon card name if visible
 3. Notes on each of these 4 criteria (1-2 sentences each):
@@ -37,23 +37,23 @@ Respond ONLY in this exact JSON format with no extra text:
   "surface": "Surface is clean with no visible scratches."
 }"""
 
-    payload = json.dumps({
-        "model": "meta-llama/llama-4-maverick",
-        "messages": [
-            {
-                "role": "user",
-                "content": [
-                    {"type": "text", "text": prompt},
-                    {
-                        "type": "image_url",
-                        "image_url": {
-                            "url": f"data:{mime_type};base64,{encoded}"
-                        }
-                    }
-                ]
-            }
-        ]
-    }).encode("utf-8")
+    payload = json.dumps(
+        {
+            "model": "meta-llama/llama-4-maverick",
+            "messages": [
+                {
+                    "role": "user",
+                    "content": [
+                        {"type": "text", "text": prompt},
+                        {
+                            "type": "image_url",
+                            "image_url": {"url": f"data:{mime_type};base64,{encoded}"},
+                        },
+                    ],
+                }
+            ],
+        }
+    ).encode("utf-8")
 
     req = urllib.request.Request(
         "https://openrouter.ai/api/v1/chat/completions",
@@ -62,7 +62,7 @@ Respond ONLY in this exact JSON format with no extra text:
             "Content-Type": "application/json",
             "Authorization": f"Bearer {api_key}",
         },
-        method="POST"
+        method="POST",
     )
 
     try:

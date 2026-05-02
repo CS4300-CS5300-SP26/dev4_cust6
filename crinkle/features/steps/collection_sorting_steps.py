@@ -48,7 +48,8 @@ def sort_cards(context, sort_order):
 @then('my cards will be ordered by "{sort_order}"')
 def check_sort(context, sort_order):
 
-    # order a set of cards by the intended order to compare to the returned cards
+    # order a set of cards by the intended order to compare to the returned
+    # cards
     cards_correct = context.collection.ordered_collection()
     response_cards = context.response.data["cards"]
 

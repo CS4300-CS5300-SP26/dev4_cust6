@@ -1,5 +1,7 @@
+from unittest.mock import patch, MagicMock
 import os
 import tempfile
+import json
 
 from django.test import TestCase, override_settings
 from django.urls import reverse
@@ -47,7 +49,8 @@ class CollectionTestCase(TestCase):
     def test_retrieve_no_login(self):
         """Test retrieval when not logged in"""
         response = self.client.get(reverse("cards:collection"))
-        # No response should be given, not authenticated should recieved 403 response
+        # No response should be given, not authenticated should recieved 403
+        # response
         self.assertEqual(response.status_code, 403)
         self.assertEqual(response.data["detail"].code, "not_authenticated")
 
@@ -63,7 +66,7 @@ class CollectionTestCase(TestCase):
         self.assertEqual(response.data["cards"], [])
 
     def test_retrieve_no_cards_belonging_to_user(self):
-        """If there are cards but they don't belong to the user, they shouldn't be shown"""
+        """Cards belonging to other users should not be shown."""
         user = User.objects.create(password="test_pass", username="inactive user")
         notes = GradeReport.objects.create(grade="Grade")
         card = Card.objects.create(
@@ -80,7 +83,8 @@ class CollectionTestCase(TestCase):
 
         self.assertEqual(response.status_code, 200)
 
-        # check that no cards were returned as the only card belongs to another user
+        # check that no cards were returned as the only card belongs to another
+        # user
         self.assertEqual(response.data["cards"], [])
 
     def test_retrieve_collection_with_cards(self):
@@ -124,7 +128,8 @@ class CollectionTestCase(TestCase):
         # order the cards by the intended order
         ordered_cards = self.collection.ordered_collection()
 
-        # The ordered cards should be in the same order as the collection's cards
+        # The ordered cards should be in the same order as the collection's
+        # cards
         for card in range(len(response.data["cards"])):
             # The cards of the responses should be in the same ordering
             response_card = response.data["cards"][card]["id"]
@@ -177,7 +182,6 @@ class CollectionTestCase(TestCase):
             self.assertEqual(self.collection.sort_order, sort_order)
 
 
-
 class CardTestCase(TestCase):
     def set_up_user(self):
         """create and login a test user"""
@@ -203,7 +207,8 @@ class CardTestCase(TestCase):
     def test_retrieve_no_login(self):
         """The user must be logged in to view cards"""
         response = self.client.get(reverse("cards:view_card", args=[1]))
-        # No response should be given, not authenticated should recieved 403 response
+        # No response should be given, not authenticated should recieved 403
+        # response
         self.assertEqual(response.status_code, 403)
         self.assertEqual(response.data["detail"].code, "not_authenticated")
 
@@ -215,7 +220,7 @@ class CardTestCase(TestCase):
         self.assertEqual(response.status_code, 404)
 
     def test_retrieve(self):
-        """With the user logged in and cards existing, the user should be able to retrieve a card"""
+        """A logged-in user can retrieve an existing card."""
         self.set_up_user()
         self.set_up_add_card()
         response = self.client.get(
@@ -228,10 +233,22 @@ class CardTestCase(TestCase):
         # on success the name of the returned card will be the first and only card
         # as only one was added
         self.assertEqual(response.data["name"], self.cards.first().name)
-        self.assertEqual(response.data["grading_notes"]["grade"], self.cards.first().grading_notes.grade)
-        self.assertEqual(response.data["grading_notes"]["corners"], self.cards.first().grading_notes.corners)
-        self.assertEqual(response.data["grading_notes"]["edges"], self.cards.first().grading_notes.edges)
-        self.assertEqual(response.data["grading_notes"]["centering"], self.cards.first().grading_notes.centering)
+        self.assertEqual(
+            response.data["grading_notes"]["grade"],
+            self.cards.first().grading_notes.grade,
+        )
+        self.assertEqual(
+            response.data["grading_notes"]["corners"],
+            self.cards.first().grading_notes.corners,
+        )
+        self.assertEqual(
+            response.data["grading_notes"]["edges"],
+            self.cards.first().grading_notes.edges,
+        )
+        self.assertEqual(
+            response.data["grading_notes"]["centering"],
+            self.cards.first().grading_notes.centering,
+        )
 
     def test_save_notes(self):
         """The user should be able to write and save notes to cards"""
@@ -245,13 +262,15 @@ class CardTestCase(TestCase):
             data={"user_notes": test_note},
         )
 
-        # a 200 status code should be recieved, and data of the updated card will be displayed
+        # a 200 status code should be recieved, and data of the updated card
+        # will be displayed
         self.assertEqual(response.status_code, 200)
         self.assertEqual(response.data["user_notes"], test_note)
 
     def test_mock_view_report(self):
-        """test mocking function, not much effort put into this as it is simply a mock function standing
-        in for later implementations
+        """Test the mock report view.
+
+        This is a placeholder for later implementations.
         """
 
         self.set_up_user()
@@ -271,7 +290,8 @@ class CardTestCase(TestCase):
 
 TEST_CAPTURED_IMAGE = (
     "data:image/png;base64,"
-    "iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mP8/x8AAwMCAO2R0xQAAAAASUVORK5CYII="
+    "iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mP8/"
+    "x8AAwMCAO2R0xQAAAAASUVORK5CYII="
 )
 
 
@@ -338,9 +358,6 @@ class ScannedImageSaveTests(TestCase):
         )
 
 
-from unittest.mock import patch, MagicMock
-
-
 class AIGradingModuleTests(TestCase):
     """Unit tests for the ai_grading module"""
 
@@ -370,13 +387,26 @@ class AIGradingModuleTests(TestCase):
         from cards.ai_grading import analyze_card_with_gemini
 
         mock_response = MagicMock()
-        mock_response.read.return_value = b"""{
-            "choices": [{
-                "message": {
-                    "content": "{\\"psa_grade\\": 8, \\"card_name\\": \\"Charizard\\", \\"corners\\": \\"Sharp.\\", \\"edges\\": \\"Clean.\\", \\"centering\\": \\"Centered.\\", \\"surface\\": \\"No scratches.\\"}"
-                }
-            }]
-        }"""
+        mock_response.read.return_value = json.dumps(
+            {
+                "choices": [
+                    {
+                        "message": {
+                            "content": json.dumps(
+                                {
+                                    "psa_grade": 8,
+                                    "card_name": "Charizard",
+                                    "corners": "Sharp.",
+                                    "edges": "Clean.",
+                                    "centering": "Centered.",
+                                    "surface": "No scratches.",
+                                }
+                            )
+                        }
+                    }
+                ]
+            }
+        ).encode()
         mock_response.__enter__ = lambda s: s
         mock_response.__exit__ = MagicMock(return_value=False)
         mock_urlopen.return_value = mock_response

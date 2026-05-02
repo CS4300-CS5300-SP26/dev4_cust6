@@ -26,13 +26,18 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = 'django-insecure-v6apk9l#igpq(9@%stou5&o75hmsgoiezmu+wm*-(@)l%46872'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-#DEBUG = False
+# DEBUG = False
 
-#ALLOWED_HOSTS = ['20.94.201.231', 'crinkle.ink', 'www.crinkle.ink']
+# ALLOWED_HOSTS = ['20.94.201.231', 'crinkle.ink', 'www.crinkle.ink']
 
 DEBUG = False
 
-ALLOWED_HOSTS = ['20.94.201.231', 'crinkle.ink', 'www.crinkle.ink', '127.0.0.1', 'localhost']
+ALLOWED_HOSTS = [
+    '20.94.201.231',
+    'crinkle.ink',
+    'www.crinkle.ink',
+    '127.0.0.1',
+    'localhost']
 # ALLOWED_HOSTS = ["*"]
 
 # Application definition
@@ -103,7 +108,8 @@ DATABASES = {
 
 AUTH_PASSWORD_VALIDATORS = [
     {
-        'NAME': 'django.contrib.auth.password_validation.UserAttributeSimilarityValidator',
+        'NAME':
+        'django.contrib.auth.password_validation.UserAttributeSimilarityValidator',
     },
     {
         'NAME': 'django.contrib.auth.password_validation.MinimumLengthValidator',
@@ -147,7 +153,10 @@ CSRF_COOKIE_SECURE = not DEBUG and not TESTING
 # https://docs.djangoproject.com/en/4.2/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
-CSRF_TRUSTED_ORIGINS = ['https://*.devedu.io', 'https://crinkle.ink', 'https://www.crinkle.ink']
+CSRF_TRUSTED_ORIGINS = [
+    'https://*.devedu.io',
+    'https://crinkle.ink',
+    'https://www.crinkle.ink']
 LOGIN_URL = '/accounts/login/'
 LOGIN_REDIRECT_URL = '/accounts/profile/'
 LOGOUT_REDIRECT_URL = '/'

@@ -35,7 +35,8 @@ class CardCollectionViewSet(viewsets.ModelViewSet):
     renderer_classes = [TemplateHTMLRenderer]
 
     def retrieve(self, request):
-        """If the user is authenticated, retrieve their collection in the order (if specified)"""
+        """If the user is authenticated, retrieve their collection in the
+        order (if specified)"""
         collection = self.queryset.get_or_create(user=request.user)[0]
         cards = collection.ordered_collection()
 
