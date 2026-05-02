@@ -178,7 +178,6 @@ def scan_report_view(request):
             "surface": grade_result.get("surface", ""),
         },
     )
-    
 
 
 @login_required
@@ -200,12 +199,13 @@ def save_report_view(request):
 
     card = Card.objects.create(
         user=request.user,
-        name="Scanned Card",
+        name=grade_result.get("card_name", "Unknown Card"),
+        set_name=grade_result.get("card_set", ""),
+        year=grade_result.get("card_year", ""),
         grading_notes=report,
         picture_path=picture_path,
         user_notes="",
     )
-    card.name = f"{card.name}-{card.pk}"
     card.save()
 
     collection = CardCollection.objects.get_or_create(user=request.user)[0]

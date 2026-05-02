@@ -17,6 +17,8 @@ class GradeReport(models.Model):
 class Card(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE, null=True)
     name = models.CharField(max_length=400)
+    set_name = models.CharField(max_length=400, default="unknown")
+    year = models.CharField(max_length=400, default="unknown")
     date_scanned = models.DateTimeField(auto_now_add=True)
     grading_notes = models.OneToOneField(GradeReport, on_delete=models.CASCADE)
 
@@ -75,7 +77,7 @@ class CardCollection(models.Model):
             cards = cards.order_by(self.sort_order)
 
         return cards
-    
+
     def is_valuable(self, value):
         """Helper to check and return if value is valuable
 

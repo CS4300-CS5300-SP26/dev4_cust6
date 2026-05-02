@@ -18,6 +18,8 @@ class CardSerializer(serializers.ModelSerializer):
             "id",
             "user",
             "name",
+            "set_name",
+            "year",
             "date_scanned",
             "grading_notes",
             "picture_path",
