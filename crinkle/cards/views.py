@@ -18,7 +18,6 @@ from .forms import CollectionSettingsForm
 import base64
 import uuid
 
-
 CAPTURED_SCAN_SESSION_KEY = "captured_scan_image"
 
 
@@ -84,6 +83,19 @@ class CardViewSet(viewsets.ModelViewSet):
     permission_classes = [permissions.IsAuthenticated]
     renderer_classes = [TemplateHTMLRenderer]
 
+    @action(detail=False, methods=["GET"])
+    def history(self, request):
+        cards = self.queryset.filter(user=request.user.id).order_by("date_scanned")
+
+        cards_data = CardSerializer(cards, many=True).data
+
+        response = Response(
+            data={"cards": cards_data},
+            template_name="history.html",
+            status=status.HTTP_200_OK,
+        )
+        return response
+
     def retrieve(self, request, pk=None):
         """Retrieve a card of a given primary key."""
         response = super(CardViewSet, self).retrieve(request, pk=pk)
@@ -131,15 +143,16 @@ def _save_captured_image(data_url):
 
 GRADE_SESSION_KEY = "card_grade_result"
 
+
 def scan_report_view(request):
     """AI grading report that supports guest grading and authenticated saving."""
     captured_image = _captured_image_from_request(request)
 
     # run AI analysis on POST (coming from scan page)
-    if request.method == 'POST' and captured_image:
+    if request.method == "POST" and captured_image:
         grade_result = analyze_card_with_gemini(captured_image)
         request.session[GRADE_SESSION_KEY] = grade_result
-        request.session.modified = True 
+        request.session.modified = True
     else:
         grade_result = request.session.get(GRADE_SESSION_KEY, {})
 
@@ -171,11 +184,18 @@ def scan_report_view(request):
 @login_required
 def save_report_view(request):
     """Save the latest captured scan to the authenticated user's collection."""
+    grade_result = request.session.get(GRADE_SESSION_KEY, {})
     captured_image = request.session.get(CAPTURED_SCAN_SESSION_KEY)
     if not captured_image:
         return redirect("cards:scan_report")
 
-    report = GradeReport.objects.create(grade="No Grade")
+    report = GradeReport.objects.create(
+        grade=grade_result.get("psa_grade", "—"),
+        corners=grade_result.get("corners", ""),
+        edges=grade_result.get("edges", ""),
+        centering=grade_result.get("centering", ""),
+        surface=grade_result.get("surface", ""),
+    )
     picture_path = _save_captured_image(captured_image)
 
     card = Card.objects.create(
@@ -194,6 +214,7 @@ def save_report_view(request):
     request.session.pop(CAPTURED_SCAN_SESSION_KEY, None)
 
     return redirect("cards:collection")
+
 
 @login_required
 @require_POST

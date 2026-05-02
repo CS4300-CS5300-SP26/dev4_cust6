@@ -33,7 +33,7 @@ SECRET_KEY = 'django-insecure-v6apk9l#igpq(9@%stou5&o75hmsgoiezmu+wm*-(@)l%46872
 DEBUG = False
 
 ALLOWED_HOSTS = ['20.94.201.231', 'crinkle.ink', 'www.crinkle.ink', '127.0.0.1', 'localhost']
-# ALLOWED_HOSTS = ["*"]
+#ALLOWED_HOSTS = ["*"]
 
 # Application definition
 
@@ -151,7 +151,7 @@ CSRF_TRUSTED_ORIGINS = ['https://*.devedu.io', 'https://crinkle.ink', 'https://w
 LOGIN_URL = '/accounts/login/'
 LOGIN_REDIRECT_URL = '/accounts/profile/'
 LOGOUT_REDIRECT_URL = '/'
-GEMINI_API_KEY = os.environ.get("GEMINI_API_KEY")
+GEMINI_API_KEY = os.environ.get("GEMINI_API_KEY", "")
 if not GEMINI_API_KEY:
     raise ImproperlyConfigured(
         "Missing required environment variable: GEMINI_API_KEY"
