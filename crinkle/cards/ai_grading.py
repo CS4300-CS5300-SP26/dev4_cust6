@@ -1,12 +1,16 @@
 import json
-import urllib.request
 import urllib.error
+import urllib.request
+
 from django.conf import settings
 
 
 def analyze_card_with_gemini(image_data_url):
     """
-    Send a Pokemon card image to OpenRouter and get back a PSA grade analysis.
+    Send a Pokemon card image to OpenRouter and get back:
+    - Quality check (is image good enough to grade?)
+    - Card identification (name, set, year)
+    - PSA grade + breakdown (corners, edges, centering, surface)
     """
     api_key = settings.GEMINI_API_KEY
 
@@ -17,25 +21,51 @@ def analyze_card_with_gemini(image_data_url):
     header, encoded = image_data_url.split(";base64,", 1)
     mime_type = header.replace("data:", "") if "data:" in header else "image/jpeg"
 
-    prompt = """You are a professional Pokemon card grader. Analyze this Pokemon
-            card image and provide:
-1. An estimated PSA grade from 1 to 10 (whole numbers only)
-2. The Pokemon card name if visible
-3. Notes on each of these 4 criteria (1-2 sentences each):
-   - Corners: any wear, bending, or damage
-   - Edges: any chips, nicks, or roughness
-   - Centering: how centered the image is on the card
-   - Surface: any scratches, print lines, or stains
-
-Respond ONLY in this exact JSON format with no extra text:
-{
-  "psa_grade": 8,
-  "card_name": "Charizard",
-  "corners": "Corners appear sharp with minimal wear.",
-  "edges": "Edges are clean with no visible chips.",
-  "centering": "Centering is slightly off to the left.",
-  "surface": "Surface is clean with no visible scratches."
-}"""
+    prompt = (
+        "You are a professional Pokemon card grader and identifier. Analyze "
+        "this image and respond in two stages:\n\n"
+        "STAGE 1 - IMAGE QUALITY CHECK:\n"
+        "First, assess if the image quality is sufficient for accurate "
+        "grading.\n"
+        "Check for:\n"
+        "- Brightness: is the image too dark or overexposed?\n"
+        "- Sharpness: is the image too blurry or out of focus?\n"
+        "- Framing: is the card properly centered and fully visible in the "
+        "frame?\n"
+        "- Subject: is this actually a Pokemon card, not a screen, digital "
+        "image, or non-card object?\n\n"
+        "STAGE 2 - CARD IDENTIFICATION AND GRADING:\n"
+        "Only if quality is sufficient, identify and grade the card.\n\n"
+        "Respond ONLY in this exact JSON format with no extra text:\n"
+        "{\n"
+        '  "quality_ok": true,\n'
+        '  "quality_issues": [],\n'
+        '  "psa_grade": 8,\n'
+        '  "card_name": "Charizard",\n'
+        '  "card_set": "Base Set",\n'
+        '  "card_year": "1999",\n'
+        '  "corners": "Corners appear sharp with minimal wear.",\n'
+        '  "edges": "Edges are clean with no visible chips.",\n'
+        '  "centering": "Centering is slightly off to the left.",\n'
+        '  "surface": "Surface is clean with no visible scratches."\n'
+        "}\n\n"
+        "Rules:\n"
+        "- quality_ok: true if image is good enough to grade, false "
+        "otherwise\n"
+        "- quality_issues: empty list if quality_ok is true; otherwise list "
+        'any of: "too dark", "too bright", "blurry", '
+        '"card not centered", "card not fully visible", '
+        '"not a physical card", "not a pokemon card"\n'
+        "- If quality_ok is false, set psa_grade to null and leave other "
+        "fields as null\n"
+        "- card_set: the Pokemon TCG set name, for example "
+        '"Base Set", "Jungle", or "Scarlet & Violet"; use '
+        '"Unknown Set" if not visible\n'
+        "- card_year: the year printed on the card or estimated from the "
+        'set; use "Unknown" if not visible\n'
+        "- psa_grade: whole number 1-10, or null if quality_ok is false\n"
+        "- All text fields should be null if quality_ok is false"
+    )
 
     payload = json.dumps(
         {
@@ -47,7 +77,9 @@ Respond ONLY in this exact JSON format with no extra text:
                         {"type": "text", "text": prompt},
                         {
                             "type": "image_url",
-                            "image_url": {"url": f"data:{mime_type};base64,{encoded}"},
+                            "image_url": {
+                                "url": f"data:{mime_type};base64,{encoded}",
+                            },
                         },
                     ],
                 }
@@ -83,8 +115,12 @@ Respond ONLY in this exact JSON format with no extra text:
 
 def _fallback_grade():
     return {
+        "quality_ok": True,
+        "quality_issues": [],
         "psa_grade": 7,
         "card_name": "Unknown Card",
+        "card_set": "Unknown Set",
+        "card_year": "Unknown",
         "corners": "Could not analyze corners.",
         "edges": "Could not analyze edges.",
         "centering": "Could not analyze centering.",

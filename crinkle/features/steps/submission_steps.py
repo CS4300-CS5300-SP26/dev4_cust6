@@ -1,4 +1,5 @@
-from behave import given, when, then
+from behave import given, then, when
+
 from submission.models import Submission
 
 
@@ -42,7 +43,10 @@ def step_enter_card_and_service(context, card_name, service):
 
 @when("I submit the start form")
 def step_submit_start(context):
-    context.response = context.client.post("/submission/start/", context.post_data)
+    context.response = context.client.post(
+        "/submission/start/",
+        context.post_data,
+    )
 
 
 @when("I fill in all shipping and payment details")
@@ -63,7 +67,10 @@ def step_fill_details(context):
 
 @when("I submit the details form")
 def step_submit_details(context):
-    context.response = context.client.post("/submission/details/", context.post_data)
+    context.response = context.client.post(
+        "/submission/details/",
+        context.post_data,
+    )
 
 
 @when("I submit the details form with missing fields")

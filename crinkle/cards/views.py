@@ -167,8 +167,12 @@ def scan_report_view(request):
             ),
             "report_image": captured_image or static("invalid.jpg"),
             "can_save_to_collection": request.user.is_authenticated,
+            "quality_ok": grade_result.get("quality_ok", True),
+            "quality_issues": grade_result.get("quality_issues", []),
             "psa_grade": grade_result.get("psa_grade", "—"),
             "card_name": grade_result.get("card_name", "Unknown Card"),
+            "card_set": grade_result.get("card_set", ""),
+            "card_year": grade_result.get("card_year", ""),
             "corners": grade_result.get("corners", ""),
             "edges": grade_result.get("edges", ""),
             "centering": grade_result.get("centering", ""),
@@ -196,12 +200,13 @@ def save_report_view(request):
 
     card = Card.objects.create(
         user=request.user,
-        name="Scanned Card",
+        name=grade_result.get("card_name", "Unknown Card"),
+        set_name=grade_result.get("card_set", ""),
+        year=grade_result.get("card_year", ""),
         grading_notes=report,
         picture_path=picture_path,
         user_notes="",
     )
-    card.name = f"{card.name}-{card.pk}"
     card.save()
 
     collection = CardCollection.objects.get_or_create(user=request.user)[0]

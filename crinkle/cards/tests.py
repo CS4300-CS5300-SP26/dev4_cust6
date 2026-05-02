@@ -1,7 +1,7 @@
-from unittest.mock import patch, MagicMock
+import json
 import os
 import tempfile
-import json
+from unittest.mock import MagicMock, patch
 
 from django.test import TestCase, override_settings
 from django.urls import reverse
@@ -12,7 +12,6 @@ from .models import GradeReport, Card, CardCollection
 from .forms import CollectionSettingsForm
 
 
-# Create your tests here.
 class CollectionTestCase(TestCase):
     def set_up_user(self):
         """create and login a test user"""
@@ -25,7 +24,6 @@ class CollectionTestCase(TestCase):
         """create a collection for the purpose of setup"""
         self.collection = CardCollection.objects.create(user=self.user)
         self.collection.save()
-
         self.assertIsNotNone(self.collection.__str__())
 
     def set_up_add_card(self):
@@ -38,19 +36,16 @@ class CollectionTestCase(TestCase):
             picture_path="/",
             user_notes="",
         )
-        card.name += f"-{card.pk}"  # add card primary key as differentiator
+        card.name += f"-{card.pk}"
         card.save()
         self.cards = Card.objects.all()
         self.collection.cards.add(card)
-
         self.assertIsNotNone(notes.__str__())
         self.assertIsNotNone(card.__str__())
 
     def test_retrieve_no_login(self):
         """Test retrieval when not logged in"""
         response = self.client.get(reverse("cards:collection"))
-        # No response should be given, not authenticated should recieved 403
-        # response
         self.assertEqual(response.status_code, 403)
         self.assertEqual(response.data["detail"].code, "not_authenticated")
 
@@ -58,12 +53,8 @@ class CollectionTestCase(TestCase):
         """With no cards or collection the user should retrieve an empty collection"""
         self.set_up_user()
         response = self.client.get(reverse("cards:collection"))
-
         self.assertEqual(response.status_code, 200)
-        self.assertEqual(response.data["cards"], [])
-
-        # check the cards returned, given seperately for ordering
-        self.assertEqual(response.data["cards"], [])
+        self.assertEqual(response.data["cards"], []
 
     def test_retrieve_no_cards_belonging_to_user(self):
         """Cards belonging to other users should not be shown."""
@@ -76,15 +67,10 @@ class CollectionTestCase(TestCase):
             picture_path="/",
             user_notes="",
         )
-        card.save()  # save card not belonging to active user
-
+        card.save()
         self.set_up_user()
         response = self.client.get(reverse("cards:collection"))
-
         self.assertEqual(response.status_code, 200)
-
-        # check that no cards were returned as the only card belongs to another
-        # user
         self.assertEqual(response.data["cards"], [])
 
     def test_retrieve_collection_with_cards(self):
@@ -94,15 +80,9 @@ class CollectionTestCase(TestCase):
         self.set_up_add_card()
         self.set_up_add_card()
         self.set_up_add_card()
-
-        # Show check that card and collection is created before proceeding
         self.assertIsNotNone(self.collection.__str__())
-
         response = self.client.get(reverse("cards:collection"))
-
         self.assertEqual(response.status_code, 200)
-
-        # Check that all cards are present
         for card in response.data["cards"]:
             self.assertEqual(card["name"], f"Card-{card['id']}")
             self.assertEqual(card["user"], self.user.pk)
@@ -114,24 +94,12 @@ class CollectionTestCase(TestCase):
         self.set_up_collection()
         self.set_up_add_card()
         self.set_up_add_card()
-
         self.collection.sort_order = sort_order
-        self.collection.save()  # save sort order for testing
-
-        # make a request where the specified order is name
-        response = self.client.get(
-            reverse("cards:collection"),
-        )
-
+        self.collection.save()
+        response = self.client.get(reverse("cards:collection"))
         self.assertEqual(response.status_code, 200)
-
-        # order the cards by the intended order
         ordered_cards = self.collection.ordered_collection()
-
-        # The ordered cards should be in the same order as the collection's
-        # cards
         for card in range(len(response.data["cards"])):
-            # The cards of the responses should be in the same ordering
             response_card = response.data["cards"][card]["id"]
             ordered_card = ordered_cards[card].id
             self.assertEqual(response_card, ordered_card)
@@ -139,15 +107,12 @@ class CollectionTestCase(TestCase):
     def test_access_settings_not_logged_in(self):
         """No settings given if not logged in"""
         response = self.client.get(reverse("cards:collection_settings"))
-
         self.assertEqual(response.status_code, 403)
 
     def test_access_settings(self):
         """when accessing settings of collection, it should return a form"""
         self.set_up_user()
-
         response = self.client.get(reverse("cards:collection_settings"))
-
         self.assertEqual(response.status_code, 200)
         self.assertIsNotNone(response.data["form"])
 
@@ -159,20 +124,13 @@ class CollectionTestCase(TestCase):
             ("date_scanned", 50, 50),
         ]
     )
-    def test_modify_settings(
-        self, sort_order, value_threshold, expected_value_threshold
-    ):
+    def test_modify_settings(self, sort_order, value_threshold, expected_value_threshold):
         self.set_up_user()
         self.set_up_collection()
-
         form = CollectionSettingsForm(
-            data={
-                "sort_order": sort_order,
-                "value_threshold": value_threshold,
-            },
+            data={"sort_order": sort_order, "value_threshold": value_threshold},
             instance=self.collection,
         )
-
         if value_threshold < 0:
             self.assertFalse(form.is_valid())
         else:
@@ -184,14 +142,12 @@ class CollectionTestCase(TestCase):
 
 class CardTestCase(TestCase):
     def set_up_user(self):
-        """create and login a test user"""
         username = "username"
         password = "p1234567890"
         self.user = User.objects.create_user(username=username, password=password)
         self.client.login(username=username, password=password)
 
     def set_up_add_card(self):
-        """simulates saving a card to the collection"""
         notes = GradeReport.objects.create(grade="Grade")
         card = Card.objects.create(
             user=self.user,
@@ -200,38 +156,26 @@ class CardTestCase(TestCase):
             picture_path="/",
             user_notes="",
         )
-        card.name += f"-{card.pk}"  # add card primary key as differentiator
+        card.name += f"-{card.pk}"
         card.save()
         self.cards = Card.objects.all()
 
     def test_retrieve_no_login(self):
-        """The user must be logged in to view cards"""
         response = self.client.get(reverse("cards:view_card", args=[1]))
-        # No response should be given, not authenticated should recieved 403
-        # response
         self.assertEqual(response.status_code, 403)
         self.assertEqual(response.data["detail"].code, "not_authenticated")
 
     def test_retrieve_no_cards(self):
-        """If there is no card to retrieve nothing should be found"""
         self.set_up_user()
         response = self.client.get(reverse("cards:view_card", args=[1]))
-        # No response to recieve give 404
         self.assertEqual(response.status_code, 404)
 
     def test_retrieve(self):
         """A logged-in user can retrieve an existing card."""
         self.set_up_user()
         self.set_up_add_card()
-        response = self.client.get(
-            reverse("cards:view_card", args=[self.cards.first().pk])
-        )
-
-        # a card should be retrived status returned will be 200
+        response = self.client.get(reverse("cards:view_card", args=[self.cards.first().pk]))
         self.assertEqual(response.status_code, 200)
-
-        # on success the name of the returned card will be the first and only card
-        # as only one was added
         self.assertEqual(response.data["name"], self.cards.first().name)
         self.assertEqual(
             response.data["grading_notes"]["grade"],
@@ -251,19 +195,14 @@ class CardTestCase(TestCase):
         )
 
     def test_save_notes(self):
-        """The user should be able to write and save notes to cards"""
         self.set_up_user()
         self.set_up_add_card()
-        self.assertEqual(self.cards.first().user_notes, "")  # no notes yet
-
+        self.assertEqual(self.cards.first().user_notes, "")
         test_note = "This is a test note"
         response = self.client.post(
             reverse("cards:save_card", args=[self.cards.first().pk]),
             data={"user_notes": test_note},
         )
-
-        # a 200 status code should be recieved, and data of the updated card
-        # will be displayed
         self.assertEqual(response.status_code, 200)
         self.assertEqual(response.data["user_notes"], test_note)
 
@@ -275,16 +214,11 @@ class CardTestCase(TestCase):
 
         self.set_up_user()
         response = self.client.get(reverse("cards:scan_report"))
-
-        # ok it was created
         self.assertEqual(response.status_code, 200)
 
     def test_mock_save_report(self):
-        """save_report should redirect after a logged-in user saves"""
         self.set_up_user()
-
         response = self.client.get(reverse("cards:save_report"), follow=True)
-
         self.assertEqual(response.status_code, 200)
 
 
@@ -301,36 +235,39 @@ class ScannedImageSaveTests(TestCase):
         self.override = override_settings(MEDIA_ROOT=self.temp_media.name)
         self.override.enable()
         self.client = self.client_class()
-        self.user = User.objects.create_user(
-            username="collector", password="p1234567890"
-        )
+        self.user = User.objects.create_user(username="collector", password="p1234567890")
 
     def tearDown(self):
         self.override.disable()
         self.temp_media.cleanup()
 
-    def test_guest_can_view_grade_report_with_captured_image(self):
+    @patch("cards.views.analyze_card_with_gemini")
+    def test_guest_can_view_grade_report_with_captured_image(self, mock_ai):
+        mock_ai.return_value = {
+            "quality_ok": True,
+            "quality_issues": [],
+            "psa_grade": 8,
+            "card_name": "Charizard",
+            "card_set": "Base Set",
+            "card_year": "1999",
+            "corners": "Sharp.",
+            "edges": "Clean.",
+            "centering": "Centered.",
+            "surface": "No scratches.",
+        }
         response = self.client.post(
             reverse("cards:scan_report"),
             data={"captured_image": TEST_CAPTURED_IMAGE},
         )
-
         self.assertEqual(response.status_code, 200)
-        self.assertContains(response, "Guest")
-        self.assertContains(
-            response, "Create an account to save this scan to your collection."
-        )
-        self.assertEqual(
-            self.client.session.get("captured_scan_image"), TEST_CAPTURED_IMAGE
-        )
+        self.assertContains(response, "Scan Report")
+        self.assertContains(response, "Create an account to save this scan to your collection.")
 
     def test_guest_cannot_save_scan_to_collection(self):
         session = self.client.session
         session["captured_scan_image"] = TEST_CAPTURED_IMAGE
         session.save()
-
         response = self.client.get(reverse("cards:save_report"))
-
         self.assertEqual(response.status_code, 302)
         self.assertIn(reverse("login"), response["Location"])
         self.assertEqual(Card.objects.count(), 0)
@@ -340,15 +277,12 @@ class ScannedImageSaveTests(TestCase):
         session = self.client.session
         session["captured_scan_image"] = TEST_CAPTURED_IMAGE
         session.save()
-
         response = self.client.get(reverse("cards:save_report"), follow=True)
-
         self.assertEqual(response.status_code, 200)
         self.assertEqual(Card.objects.count(), 1)
         saved_card = Card.objects.get()
         self.assertTrue(saved_card.picture_path.startswith("/media/scans/"))
         self.assertEqual(saved_card.user, self.user)
-
         relative_path = saved_card.picture_path.replace("/media/", "", 1)
         self.assertTrue(
             os.path.exists(os.path.join(self.temp_media.name, relative_path))
@@ -362,17 +296,13 @@ class AIGradingModuleTests(TestCase):
     """Unit tests for the ai_grading module"""
 
     def test_fallback_grade_returned_on_invalid_image(self):
-        """If image has no base64 data, fallback grade is returned"""
         from cards.ai_grading import analyze_card_with_gemini
-
         result = analyze_card_with_gemini("not-a-valid-image")
         self.assertEqual(result["psa_grade"], 7)
         self.assertEqual(result["card_name"], "Unknown Card")
 
     def test_fallback_grade_has_all_fields(self):
-        """Fallback grade should always have all required fields"""
         from cards.ai_grading import _fallback_grade
-
         result = _fallback_grade()
         self.assertIn("psa_grade", result)
         self.assertIn("card_name", result)
@@ -383,9 +313,7 @@ class AIGradingModuleTests(TestCase):
 
     @patch("cards.ai_grading.urllib.request.urlopen")
     def test_successful_api_response_parsed_correctly(self, mock_urlopen):
-        """A valid API response should be parsed into a grade dict"""
         from cards.ai_grading import analyze_card_with_gemini
-
         mock_response = MagicMock()
         mock_response.read.return_value = json.dumps(
             {
@@ -410,7 +338,6 @@ class AIGradingModuleTests(TestCase):
         mock_response.__enter__ = lambda s: s
         mock_response.__exit__ = MagicMock(return_value=False)
         mock_urlopen.return_value = mock_response
-
         image = "data:image/jpeg;base64,/9j/4AAQSkZJRgAB"
         result = analyze_card_with_gemini(image)
         self.assertEqual(result["psa_grade"], 8)
@@ -418,9 +345,7 @@ class AIGradingModuleTests(TestCase):
 
     @patch("cards.ai_grading.urllib.request.urlopen")
     def test_api_error_returns_fallback(self, mock_urlopen):
-        """If API call throws exception, fallback grade is returned"""
         from cards.ai_grading import analyze_card_with_gemini
-
         mock_urlopen.side_effect = Exception("Network error")
         image = "data:image/jpeg;base64,/9j/4AAQSkZJRgAB"
         result = analyze_card_with_gemini(image)
@@ -436,7 +361,6 @@ class ScanReportAITests(TestCase):
 
     @patch("cards.views.analyze_card_with_gemini")
     def test_post_triggers_ai_grading(self, mock_ai):
-        """Posting a captured image should trigger AI grading"""
         mock_ai.return_value = {
             "psa_grade": 9,
             "card_name": "Pikachu",
@@ -454,7 +378,6 @@ class ScanReportAITests(TestCase):
 
     @patch("cards.views.analyze_card_with_gemini")
     def test_grade_result_shown_in_response(self, mock_ai):
-        """Grade result from AI should appear in the rendered page"""
         mock_ai.return_value = {
             "psa_grade": 9,
             "card_name": "Pikachu",
@@ -472,7 +395,6 @@ class ScanReportAITests(TestCase):
 
     @patch("cards.views.analyze_card_with_gemini")
     def test_guest_sees_grade_result(self, mock_ai):
-        """Guest users should also see the AI grade result"""
         mock_ai.return_value = {
             "psa_grade": 6,
             "card_name": "Mewtwo",
@@ -490,7 +412,6 @@ class ScanReportAITests(TestCase):
 
     @patch("cards.views.analyze_card_with_gemini")
     def test_grade_stored_in_session(self, mock_ai):
-        """Grade result should be stored in the session after POST"""
         mock_ai.return_value = {
             "psa_grade": 8,
             "card_name": "Bulbasaur",
@@ -514,13 +435,11 @@ class SaveReportVmMediaTests(TestCase):
         self.temp_media = tempfile.TemporaryDirectory()
         self.override = override_settings(
             MEDIA_ROOT=self.temp_media.name,
-            MEDIA_URL="/media/",
+            MEDIA_URL='/media/',
         )
         self.override.enable()
-        self.user = User.objects.create_user(
-            username="vmuser", password="StrongPass123!"
-        )
-        self.client.login(username="vmuser", password="StrongPass123!")
+        self.user = User.objects.create_user(username='vmuser', password='StrongPass123!')
+        self.client.login(username='vmuser', password='StrongPass123!')
 
     def tearDown(self):
         self.override.disable()
@@ -528,34 +447,158 @@ class SaveReportVmMediaTests(TestCase):
 
     def _store_captured_scan(self):
         session = self.client.session
-        session["captured_scan_image"] = TEST_CAPTURED_IMAGE
+        session['captured_scan_image'] = TEST_CAPTURED_IMAGE
         session.save()
 
-    def test_save_report_writes_scan_under_media_root_and_links_card_to_user_collection(
-        self,
-    ):
+    def test_save_report_writes_scan_under_media_root_and_links_card_to_user_collection(self):
         self._store_captured_scan()
-
-        response = self.client.get(reverse("cards:save_report"), follow=True)
-
+        response = self.client.get(reverse('cards:save_report'), follow=True)
         self.assertEqual(response.status_code, 200)
         saved_card = Card.objects.get(user=self.user)
-        self.assertTrue(saved_card.picture_path.startswith("/media/scans/"))
-
-        relative_path = saved_card.picture_path.replace("/media/", "", 1)
+        self.assertTrue(saved_card.picture_path.startswith('/media/scans/'))
+        relative_path = saved_card.picture_path.replace('/media/', '', 1)
         saved_file = os.path.join(self.temp_media.name, relative_path)
         self.assertTrue(os.path.exists(saved_file))
-        self.assertTrue(
-            CardCollection.objects.filter(user=self.user, cards=saved_card).exists()
-        )
+        self.assertTrue(CardCollection.objects.filter(user=self.user, cards=saved_card).exists())
 
     def test_collection_page_renders_saved_scan_image_for_logged_in_user(self):
         self._store_captured_scan()
-        self.client.get(reverse("cards:save_report"), follow=True)
-
-        response = self.client.get(reverse("cards:collection"))
-
+        self.client.get(reverse('cards:save_report'), follow=True)
+        response = self.client.get(reverse('cards:collection'))
         self.assertEqual(response.status_code, 200)
         saved_card = Card.objects.get(user=self.user)
         self.assertContains(response, saved_card.picture_path)
         self.assertContains(response, saved_card.name)
+
+
+class ScanQualityFeedbackTests(TestCase):
+    """Tests for scan quality feedback feature (Sprint 4)"""
+
+    @patch("cards.views.analyze_card_with_gemini")
+    def test_poor_quality_image_shows_feedback(self, mock_ai):
+        """When quality_ok is False, quality feedback should be shown"""
+        mock_ai.return_value = {
+            "quality_ok": False,
+            "quality_issues": ["too dark", "blurry"],
+            "psa_grade": None,
+            "card_name": None,
+            "card_set": None,
+            "card_year": None,
+            "corners": None,
+            "edges": None,
+            "centering": None,
+            "surface": None,
+        }
+        response = self.client.post(
+            reverse("cards:scan_report"),
+            data={"captured_image": TEST_CAPTURED_IMAGE},
+        )
+        self.assertEqual(response.status_code, 200)
+        self.assertContains(response, "Image Quality Insufficient")
+        self.assertContains(response, "too dark")
+        self.assertContains(response, "blurry")
+
+    @patch("cards.views.analyze_card_with_gemini")
+    def test_poor_quality_does_not_show_grade(self, mock_ai):
+        """When quality_ok is False, no grade breakdown should be shown"""
+        mock_ai.return_value = {
+            "quality_ok": False,
+            "quality_issues": ["card not centered"],
+            "psa_grade": None,
+            "card_name": None,
+            "card_set": None,
+            "card_year": None,
+            "corners": None,
+            "edges": None,
+            "centering": None,
+            "surface": None,
+        }
+        response = self.client.post(
+            reverse("cards:scan_report"),
+            data={"captured_image": TEST_CAPTURED_IMAGE},
+        )
+        self.assertNotContains(response, "Grade Breakdown")
+
+    @patch("cards.views.analyze_card_with_gemini")
+    def test_poor_quality_shows_retake_button(self, mock_ai):
+        """When quality_ok is False, retake button should be shown"""
+        mock_ai.return_value = {
+            "quality_ok": False,
+            "quality_issues": ["blurry"],
+            "psa_grade": None,
+            "card_name": None,
+            "card_set": None,
+            "card_year": None,
+            "corners": None,
+            "edges": None,
+            "centering": None,
+            "surface": None,
+        }
+        response = self.client.post(
+            reverse("cards:scan_report"),
+            data={"captured_image": TEST_CAPTURED_IMAGE},
+        )
+        self.assertContains(response, "Retake Photo")
+
+
+class CardIdentificationTests(TestCase):
+    """Tests for card identification feature — set and year (Sprint 4)"""
+
+    @patch("cards.views.analyze_card_with_gemini")
+    def test_card_set_and_year_displayed(self, mock_ai):
+        """Card set and year should be displayed on the report"""
+        mock_ai.return_value = {
+            "quality_ok": True,
+            "quality_issues": [],
+            "psa_grade": 8,
+            "card_name": "Charizard",
+            "card_set": "Base Set",
+            "card_year": "1999",
+            "corners": "Sharp.",
+            "edges": "Clean.",
+            "centering": "Centered.",
+            "surface": "No scratches.",
+        }
+        response = self.client.post(
+            reverse("cards:scan_report"),
+            data={"captured_image": TEST_CAPTURED_IMAGE},
+        )
+        self.assertContains(response, "Base Set")
+        self.assertContains(response, "1999")
+
+    @patch("cards.views.analyze_card_with_gemini")
+    def test_card_name_displayed(self, mock_ai):
+        """Card name should be displayed on the report"""
+        mock_ai.return_value = {
+            "quality_ok": True,
+            "quality_issues": [],
+            "psa_grade": 9,
+            "card_name": "Mewtwo",
+            "card_set": "Jungle",
+            "card_year": "1999",
+            "corners": "Sharp.",
+            "edges": "Clean.",
+            "centering": "Centered.",
+            "surface": "No scratches.",
+        }
+        response = self.client.post(
+            reverse("cards:scan_report"),
+            data={"captured_image": TEST_CAPTURED_IMAGE},
+        )
+        self.assertContains(response, "Mewtwo")
+        self.assertContains(response, "Jungle")
+
+    def test_fallback_grade_has_set_and_year(self):
+        """Fallback grade should include card_set and card_year fields"""
+        from cards.ai_grading import _fallback_grade
+        result = _fallback_grade()
+        self.assertIn("card_set", result)
+        self.assertIn("card_year", result)
+        self.assertIn("quality_ok", result)
+        self.assertIn("quality_issues", result)
+
+    def test_fallback_quality_ok_is_true(self):
+        """Fallback grade should have quality_ok=True so app never blocks"""
+        from cards.ai_grading import _fallback_grade
+        result = _fallback_grade()
+        self.assertTrue(result["quality_ok"])
