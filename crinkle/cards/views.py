@@ -101,8 +101,6 @@ class CardViewSet(viewsets.ModelViewSet):
         response = super(CardViewSet, self).retrieve(request, pk=pk)
         response.template_name = "cards/card.html"
 
-        print(response.data)
-
         if response.data["user"] == request.user.id:
             response.template_name = "cards/card.html"
         else:
@@ -199,16 +197,11 @@ def save_report_view(request):
     )
     picture_path = _save_captured_image(captured_image)
 
-    card_year = grade_result.get("card_year", "")
-
-    if card_year == "Unknown" or card_year == "":
-        card_year = None
-
     card = Card.objects.create(
         user=request.user,
         name=grade_result.get("card_name", "Unknown Card"),
         set_name=grade_result.get("card_set", ""),
-        year=card_year,
+        year=grade_result.get("card_year", ""),
         grading_notes=report,
         picture_path=picture_path,
         user_notes="",
