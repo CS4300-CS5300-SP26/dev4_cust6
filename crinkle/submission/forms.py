@@ -48,3 +48,4 @@ class SubmissionForm(forms.ModelForm):
                 attrs={"placeholder": "CVV"}
             ),
         }
+        
