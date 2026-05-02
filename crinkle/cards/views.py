@@ -148,17 +148,24 @@ def scan_report_view(request):
         template_name="cards/card_report.html",
         context={
             "user": request.user,
-            "user_label": request.user.username if request.user.is_authenticated else "Guest",
+            "user_label": (
+                request.user.username if request.user.is_authenticated else "Guest"
+            ),
             "report_image": captured_image or static("invalid.jpg"),
             "can_save_to_collection": request.user.is_authenticated,
+            "quality_ok": grade_result.get("quality_ok", True),
+            "quality_issues": grade_result.get("quality_issues", []),
             "psa_grade": grade_result.get("psa_grade", "—"),
             "card_name": grade_result.get("card_name", "Unknown Card"),
+            "card_set": grade_result.get("card_set", ""),
+            "card_year": grade_result.get("card_year", ""),
             "corners": grade_result.get("corners", ""),
             "edges": grade_result.get("edges", ""),
             "centering": grade_result.get("centering", ""),
             "surface": grade_result.get("surface", ""),
         },
     )
+    
 
 
 @login_required
