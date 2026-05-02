@@ -126,3 +126,4 @@ def _fallback_grade():
         "centering": "Could not analyze centering.",
         "surface": "Could not analyze surface.",
     }
+    
