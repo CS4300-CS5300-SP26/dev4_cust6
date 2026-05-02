@@ -11,7 +11,7 @@ def analyze_card_with_gemini(image_data_url):
     - Card identification (name, set, year)
     - PSA grade + breakdown (corners, edges, centering, surface)
     """
-    api_key = settings.OPENROUTER_API_KEY
+    api_key = settings.GEMINI_API_KEY
 
     if ";base64," not in image_data_url:
         print("AI ERROR: no base64 data in image")
