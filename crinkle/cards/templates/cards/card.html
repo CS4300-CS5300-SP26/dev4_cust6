@@ -47,19 +47,23 @@
 </style>
 
 <div class="card-summary-panel">
+  
   <img src="{{picture_path}}" class="card-detail-image">
   <div class="card-summary-info">
-    <h2>{{name}}</h3>
+    <h2>{{name}}</h2>
+    <h4>{{set_name}}</h4>
 
     <h3>Grade</h3>
     <div class="card-summary-detail">
       {{grading_notes.grade}}
     </div>
 
-    <h3 style="margin-top: 12px;">Value</h3>
+    <h3 style="">Value</h3>
     <div class="card-summary-detail">
       ${{estimated_value}}
     </div>
+
+    
 
     <h4 class="card-summary-date">Date Scanned: {{date_scanned}}</h4>
   </div>

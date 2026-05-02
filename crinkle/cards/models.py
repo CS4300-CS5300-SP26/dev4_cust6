@@ -17,6 +17,8 @@ class GradeReport(models.Model):
 class Card(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE, null=True)
     name = models.CharField(max_length=400)
+    set_name = models.CharField(max_length=400, default="unknown")
+    year = models.DateField(null=True)
     date_scanned = models.DateTimeField(auto_now_add=True)
     grading_notes = models.OneToOneField(GradeReport, on_delete=models.CASCADE)
 
