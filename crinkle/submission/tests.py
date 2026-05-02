@@ -300,3 +300,4 @@ class SubmissionModelTests(TestCase):
             cvv="123",
         )
         self.assertIsNone(submission.user)
+        
