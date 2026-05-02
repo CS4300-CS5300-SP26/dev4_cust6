@@ -22,6 +22,16 @@
     margin: 16px auto;
   }
   .grade-section { text-align: center; margin-bottom: 20px; }
+  .card-meta { display: flex; justify-content: center; gap: 12px; margin: 8px 0; flex-wrap: wrap; }
+  .card-meta-tag {
+    background: #f0faf9;
+    border: 1px solid #0d9488;
+    color: #0d9488;
+    font-size: 12px;
+    font-weight: 600;
+    padding: 3px 10px;
+    border-radius: 20px;
+  }
   .criteria-grid {
     display: grid;
     grid-template-columns: 1fr 1fr;
@@ -44,43 +54,99 @@
     font-weight: 600;
   }
   .criteria-text { font-size: 13px; color: #333333; line-height: 1.5; }
+  .quality-alert {
+    background: #fff3cd;
+    border: 1px solid #ffc107;
+    border-radius: 12px;
+    padding: 16px;
+    margin: 16px 0;
+    text-align: center;
+  }
+  .quality-alert h3 { color: #856404; margin: 0 0 8px; font-size: 16px; }
+  .quality-alert p { color: #664d03; font-size: 13px; margin: 4px 0; }
+  .quality-issues-list { list-style: none; padding: 0; margin: 8px 0; }
+  .quality-issues-list li {
+    display: inline-block;
+    background: #ffc107;
+    color: #000;
+    font-size: 12px;
+    font-weight: 600;
+    padding: 3px 10px;
+    border-radius: 20px;
+    margin: 3px;
+  }
+  .retake-btn {
+    display: block;
+    background: #0d9488;
+    color: #fff;
+    text-align: center;
+    padding: 12px;
+    border-radius: 12px;
+    margin: 12px 0;
+    font-weight: 600;
+    text-decoration: none;
+  }
 </style>
 
 <img src="{{ report_image }}" style="max-width:75vw; max-height:45vh; border-radius:12px; display:block; margin:0 auto 12px;">
 
-<div class="grade-section">
-  <div class="grade-badge">{{ psa_grade }}</div>
-  <h2 style="margin:8px 0 4px;">{{ card_name }}</h2>
-  <p style="color:#666; font-size:13px;">PSA Grade Estimate · {{ user_label }}</p>
-  <p style="color:#999; font-size:12px;">{% now "jS F Y" %}</p>
-</div>
+{% if not quality_ok %}
+  <div class="quality-alert">
+    <h3>⚠️ Image Quality Insufficient</h3>
+    <p>We could not produce an accurate grade from this image. Please retake the photo.</p>
+    {% if quality_issues %}
+    <ul class="quality-issues-list">
+      {% for issue in quality_issues %}
+      <li>{{ issue }}</li>
+      {% endfor %}
+    </ul>
+    {% endif %}
+    <p style="font-size:12px; margin-top:10px; color:#664d03;">
+      <strong>Tips:</strong> Hold the card flat, ensure good lighting, keep the full card in frame, and use a physical card.
+    </p>
+  </div>
+  <a class="retake-btn" href="{% url 'scan' %}">↩ Retake Photo</a>
 
-{% if corners or edges or centering or surface %}
-<h3 style="margin:16px 0 8px;">Grade Breakdown</h3>
-<div class="criteria-grid">
-  <div class="criteria-card">
-    <div class="criteria-label">Corners</div>
-    <div class="criteria-text">{{ corners }}</div>
-  </div>
-  <div class="criteria-card">
-    <div class="criteria-label">Edges</div>
-    <div class="criteria-text">{{ edges }}</div>
-  </div>
-  <div class="criteria-card">
-    <div class="criteria-label">Centering</div>
-    <div class="criteria-text">{{ centering }}</div>
-  </div>
-  <div class="criteria-card">
-    <div class="criteria-label">Surface</div>
-    <div class="criteria-text">{{ surface }}</div>
-  </div>
-</div>
-{% endif %}
-
-{% if can_save_to_collection %}
-<a class="btn-save" href="{% url 'cards:save_report' %}">Save To Collection</a>
 {% else %}
-<p>Create an account to save this scan to your collection.</p>
-<a class="btn-save" href="{% url 'login' %}?next={% url 'cards:save_report' %}">Log in to Save</a>
+  <div class="grade-section">
+    <div class="grade-badge">{{ psa_grade }}</div>
+    <h2 style="margin:8px 0 4px;">{{ card_name }}</h2>
+    <div class="card-meta">
+      {% if card_set %}<span class="card-meta-tag">{{ card_set }}</span>{% endif %}
+      {% if card_year %}<span class="card-meta-tag">{{ card_year }}</span>{% endif %}
+    </div>
+    <p style="color:#666; font-size:13px;">PSA Grade Estimate · {{ user_label }}</p>
+    <p style="color:#999; font-size:12px;">{% now "jS F Y" %}</p>
+  </div>
+
+  {% if corners or edges or centering or surface %}
+  <h3 style="margin:16px 0 8px;">Grade Breakdown</h3>
+  <div class="criteria-grid">
+    <div class="criteria-card">
+      <div class="criteria-label">Corners</div>
+      <div class="criteria-text">{{ corners }}</div>
+    </div>
+    <div class="criteria-card">
+      <div class="criteria-label">Edges</div>
+      <div class="criteria-text">{{ edges }}</div>
+    </div>
+    <div class="criteria-card">
+      <div class="criteria-label">Centering</div>
+      <div class="criteria-text">{{ centering }}</div>
+    </div>
+    <div class="criteria-card">
+      <div class="criteria-label">Surface</div>
+      <div class="criteria-text">{{ surface }}</div>
+    </div>
+  </div>
+  {% endif %}
+
+  {% if can_save_to_collection %}
+  <a class="btn-save" href="{% url 'cards:save_report' %}">Save To Collection</a>
+  {% else %}
+  <p>Create an account to save this scan to your collection.</p>
+  <a class="btn-save" href="{% url 'login' %}?next={% url 'cards:save_report' %}">Log in to Save</a>
+  {% endif %}
 {% endif %}
+
 {% endblock %}

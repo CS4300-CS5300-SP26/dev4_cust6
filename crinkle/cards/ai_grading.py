@@ -1,4 +1,3 @@
-import base64
 import json
 import urllib.request
 import urllib.error
@@ -7,7 +6,10 @@ from django.conf import settings
 
 def analyze_card_with_gemini(image_data_url):
     """
-    Send a Pokemon card image to OpenRouter and get back a PSA grade analysis.
+    Send a Pokemon card image to OpenRouter and get back:
+    - Quality check (is image good enough to grade?)
+    - Card identification (name, set, year)
+    - PSA grade + breakdown (corners, edges, centering, surface)
     """
     api_key = settings.GEMINI_API_KEY
 
@@ -18,24 +20,41 @@ def analyze_card_with_gemini(image_data_url):
     header, encoded = image_data_url.split(";base64,", 1)
     mime_type = header.replace("data:", "") if "data:" in header else "image/jpeg"
 
-    prompt = """You are a professional Pokemon card grader. Analyze this Pokemon card image and provide:
-1. An estimated PSA grade from 1 to 10 (whole numbers only)
-2. The Pokemon card name if visible
-3. Notes on each of these 4 criteria (1-2 sentences each):
-   - Corners: any wear, bending, or damage
-   - Edges: any chips, nicks, or roughness
-   - Centering: how centered the image is on the card
-   - Surface: any scratches, print lines, or stains
+    prompt = """You are a professional Pokemon card grader and identifier. Analyze this image and respond in two stages:
+
+STAGE 1 - IMAGE QUALITY CHECK:
+First, assess if the image quality is sufficient for accurate grading.
+Check for:
+- Brightness: is the image too dark or overexposed?
+- Sharpness: is the image too blurry or out of focus?
+- Framing: is the card properly centered and fully visible in the frame?
+- Subject: is this actually a Pokemon card (not a screen, digital image, or non-card object)?
+
+STAGE 2 - CARD IDENTIFICATION AND GRADING (only if quality is sufficient):
+If the image is good enough, identify and grade the card.
 
 Respond ONLY in this exact JSON format with no extra text:
 {
+  "quality_ok": true,
+  "quality_issues": [],
   "psa_grade": 8,
   "card_name": "Charizard",
+  "card_set": "Base Set",
+  "card_year": "1999",
   "corners": "Corners appear sharp with minimal wear.",
   "edges": "Edges are clean with no visible chips.",
   "centering": "Centering is slightly off to the left.",
   "surface": "Surface is clean with no visible scratches."
-}"""
+}
+
+Rules:
+- quality_ok: true if image is good enough to grade, false otherwise
+- quality_issues: empty list if quality_ok is true, otherwise list any of: "too dark", "too bright", "blurry", "card not centered", "card not fully visible", "not a physical card", "not a pokemon card"
+- If quality_ok is false, set psa_grade to null and leave other fields as null
+- card_set: the Pokemon TCG set name (e.g. "Base Set", "Jungle", "Scarlet & Violet") or "Unknown Set" if not visible
+- card_year: the year printed on the card or estimated from the set, or "Unknown" if not visible
+- psa_grade: whole number 1-10, or null if quality_ok is false
+- All text fields should be null if quality_ok is false"""
 
     payload = json.dumps({
         "model": "meta-llama/llama-4-maverick",
@@ -83,8 +102,12 @@ Respond ONLY in this exact JSON format with no extra text:
 
 def _fallback_grade():
     return {
+        "quality_ok": True,
+        "quality_issues": [],
         "psa_grade": 7,
         "card_name": "Unknown Card",
+        "card_set": "Unknown Set",
+        "card_year": "Unknown",
         "corners": "Could not analyze corners.",
         "edges": "Could not analyze edges.",
         "centering": "Could not analyze centering.",
