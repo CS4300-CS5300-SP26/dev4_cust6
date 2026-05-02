@@ -54,7 +54,7 @@ class CollectionTestCase(TestCase):
         self.set_up_user()
         response = self.client.get(reverse("cards:collection"))
         self.assertEqual(response.status_code, 200)
-        self.assertEqual(response.data["cards"], []
+        self.assertEqual(response.data["cards"], [])
 
     def test_retrieve_no_cards_belonging_to_user(self):
         """Cards belonging to other users should not be shown."""
