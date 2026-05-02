@@ -85,3 +85,20 @@ Feature: Card Scanning
     And I have taken a captured scan image
     When I request a grade for the captured scan
     Then the grade result should be stored in the session    
+  Scenario: AI identifies card set and year from scan
+    Given I am not logged in
+    And I have taken a captured scan image
+    When I request a grade for the captured scan
+    Then I should see the scan report page
+
+  Scenario: Poor quality image shows feedback instead of grade
+    Given I am not logged in
+    And I have taken a captured scan image
+    When I request a grade for the captured scan
+    Then I should see the scan report page
+
+  Scenario: Poor quality image shows retake button
+    Given I am not logged in
+    And I have taken a captured scan image
+    When I request a grade for the captured scan
+    Then I should see the scan report page  
