@@ -112,3 +112,4 @@ def submission_confirmation(request, pk):
         "submission/confirmation.html",
         {"submission": submission},
     )
+    
