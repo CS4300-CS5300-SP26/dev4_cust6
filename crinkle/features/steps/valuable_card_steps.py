@@ -1,6 +1,5 @@
 from behave import given, when, then
 from django.urls import reverse
-from django.contrib.auth.models import User
 
 from cards.models import CardCollection, Card, GradeReport
 

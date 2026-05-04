@@ -7,28 +7,47 @@ class TrackedCardForm(forms.ModelForm):
         # Which model this form is for
         model = TrackedCard
 
-        # Which fields show up on the form (user and dates are handled automatically)
-        fields = ['card_name', 'card_set', 'card_year', 'grade_tier', 'status', 'sold_price','notes']
+        # Which fields show up on the form (user and dates are handled
+        # automatically)
+        fields = [
+            "card_name",
+            "card_set",
+            "card_year",
+            "grade_tier",
+            "status",
+            "sold_price",
+            "notes",
+        ]
 
         # Customize how each field looks in HTML
         widgets = {
-            'card_name': forms.TextInput(attrs={
-                'placeholder': 'e.g. Charizard',
-            }),
-            'card_set': forms.TextInput(attrs={
-                'placeholder': 'e.g. Base Set',
-            }),
-            'card_year': forms.NumberInput(attrs={
-                'placeholder': 'e.g. 2025',
-                'min': 1996,
-                'max': 2027,
-            }), 
-            'sold_price': forms.NumberInput(attrs={
-                'placeholder': 'e.g. 127.00',
-                'step': '0.01',
-            }),
-            'notes': forms.Textarea(attrs={
-                'placeholder': 'Any notes about this card...',
-                'rows': 3,
-            }),
+            "card_name": forms.TextInput(
+                attrs={
+                    "placeholder": "e.g. Charizard",
+                }
+            ),
+            "card_set": forms.TextInput(
+                attrs={
+                    "placeholder": "e.g. Base Set",
+                }
+            ),
+            "card_year": forms.NumberInput(
+                attrs={
+                    "placeholder": "e.g. 2025",
+                    "min": 1996,
+                    "max": 2027,
+                }
+            ),
+            "sold_price": forms.NumberInput(
+                attrs={
+                    "placeholder": "e.g. 127.00",
+                    "step": "0.01",
+                }
+            ),
+            "notes": forms.Textarea(
+                attrs={
+                    "placeholder": "Any notes about this card...",
+                    "rows": 3,
+                }
+            ),
         }

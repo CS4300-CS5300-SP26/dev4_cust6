@@ -4,15 +4,14 @@ from django.db import migrations, models
 
 
 class Migration(migrations.Migration):
-
     dependencies = [
-        ('cards', '0006_remove_cardcollection_cards_cardcollection_cards'),
+        ("cards", "0006_remove_cardcollection_cards_cardcollection_cards"),
     ]
 
     operations = [
         migrations.AlterField(
-            model_name='cardcollection',
-            name='cards',
-            field=models.ManyToManyField(to='cards.card'),
+            model_name="cardcollection",
+            name="cards",
+            field=models.ManyToManyField(to="cards.card"),
         ),
     ]

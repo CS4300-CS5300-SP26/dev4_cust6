@@ -4,32 +4,31 @@ from django.db import migrations, models
 
 
 class Migration(migrations.Migration):
-
     dependencies = [
-        ('submission', '0001_initial'),
+        ("submission", "0001_initial"),
     ]
 
     operations = [
         migrations.RemoveField(
-            model_name='submission',
-            name='card_number',
+            model_name="submission",
+            name="card_number",
         ),
         migrations.RemoveField(
-            model_name='submission',
-            name='cvv',
+            model_name="submission",
+            name="cvv",
         ),
         migrations.RemoveField(
-            model_name='submission',
-            name='expiry',
+            model_name="submission",
+            name="expiry",
         ),
         migrations.AddField(
-            model_name='submission',
-            name='paid',
+            model_name="submission",
+            name="paid",
             field=models.BooleanField(default=False),
         ),
         migrations.AddField(
-            model_name='submission',
-            name='stripe_session_id',
-            field=models.CharField(blank=True, default='', max_length=200),
+            model_name="submission",
+            name="stripe_session_id",
+            field=models.CharField(blank=True, default="", max_length=200),
         ),
     ]

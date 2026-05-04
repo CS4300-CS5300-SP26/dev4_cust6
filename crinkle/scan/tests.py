@@ -1,11 +1,9 @@
 from django.test import TestCase
 from django.urls import reverse, resolve
-from home.views import index, scan_page
-
+from home.views import scan_page
 
 
 class CameraPageTests(TestCase):
-
     def test_landing_page_links_to_scan(self):
         """Landing page should contain a link to the camera scan page"""
         response = self.client.get(reverse("index"))
@@ -35,5 +33,5 @@ class CameraPageTests(TestCase):
 
         self.assertTrue(
             any(word in content for word in keywords),
-            "Camera UI not detected on scan page"
+            "Camera UI not detected on scan page",
         )

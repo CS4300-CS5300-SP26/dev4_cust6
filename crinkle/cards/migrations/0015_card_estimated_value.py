@@ -4,7 +4,6 @@ from django.db import migrations, models
 
 
 class Migration(migrations.Migration):
-
     dependencies = [
         ("cards", "0014_alter_cardcollection_sort_order"),
     ]
@@ -13,6 +12,8 @@ class Migration(migrations.Migration):
         migrations.AddField(
             model_name="card",
             name="estimated_value",
-            field=models.DecimalField(decimal_places=2, default=50, max_digits=12),
+            field=models.DecimalField(
+                decimal_places=2, default=50, max_digits=12
+            ),
         ),
     ]

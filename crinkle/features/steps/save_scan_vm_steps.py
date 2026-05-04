@@ -10,7 +10,8 @@ from cards.models import Card, CardCollection
 
 TEST_CAPTURED_IMAGE = (
     "data:image/png;base64,"
-    "iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mP8/x8AAwMCAO2R0xQAAAAASUVORK5CYII="
+    "iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQ"
+    "VR42mP8/x8AAwMCAO2R0xQAAAAASUVORK5CYII="
 )
 
 MOCK_GRADE_RESULT = {
@@ -27,7 +28,9 @@ MOCK_GRADE_RESULT = {
 def step_logged_in_collector_vm(context):
     username = "vmcollector"
     password = "StrongPass123!"
-    context.user = User.objects.create_user(username=username, password=password)
+    context.user = User.objects.create_user(
+        username=username, password=password
+    )
     assert context.client.login(username=username, password=password)
 
 

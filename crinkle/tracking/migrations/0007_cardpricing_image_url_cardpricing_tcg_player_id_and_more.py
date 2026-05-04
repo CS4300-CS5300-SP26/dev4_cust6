@@ -4,30 +4,38 @@ from django.db import migrations, models
 
 
 class Migration(migrations.Migration):
-
     dependencies = [
-        ('tracking', '0006_alter_trackedcard_status'),
+        ("tracking", "0006_alter_trackedcard_status"),
     ]
 
     operations = [
         migrations.AddField(
-            model_name='cardpricing',
-            name='image_url',
-            field=models.URLField(blank=True, default=''),
+            model_name="cardpricing",
+            name="image_url",
+            field=models.URLField(blank=True, default=""),
         ),
         migrations.AddField(
-            model_name='cardpricing',
-            name='tcg_player_id',
-            field=models.CharField(blank=True, default='', max_length=50),
+            model_name="cardpricing",
+            name="tcg_player_id",
+            field=models.CharField(blank=True, default="", max_length=50),
         ),
         migrations.AlterField(
-            model_name='cardpricing',
-            name='date_recorded',
+            model_name="cardpricing",
+            name="date_recorded",
             field=models.DateField(),
         ),
         migrations.AlterField(
-            model_name='cardpricing',
-            name='grade_tier',
-            field=models.CharField(choices=[('near_mint', 'Near Mint'), ('lightly_played', 'Lightly Played'), ('moderately_played', 'Moderately Played'), ('heavily_played', 'Heavily Played'), ('damaged', 'Damaged')], max_length=20),
+            model_name="cardpricing",
+            name="grade_tier",
+            field=models.CharField(
+                choices=[
+                    ("near_mint", "Near Mint"),
+                    ("lightly_played", "Lightly Played"),
+                    ("moderately_played", "Moderately Played"),
+                    ("heavily_played", "Heavily Played"),
+                    ("damaged", "Damaged"),
+                ],
+                max_length=20,
+            ),
         ),
     ]

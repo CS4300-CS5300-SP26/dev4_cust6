@@ -49,7 +49,9 @@ class CardCollection(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE)
     cards = models.ManyToManyField(Card)
 
-    sort_order = models.CharField(max_length=400, choices=SORT_CHOICES, default="name")
+    sort_order = models.CharField(
+        max_length=400, choices=SORT_CHOICES, default="name"
+    )
     value_threshold = models.DecimalField(
         max_digits=12,
         decimal_places=2,

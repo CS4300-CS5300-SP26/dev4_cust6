@@ -1,8 +1,6 @@
 from behave import given, when, then
-from django.test import Client
 from django.urls import reverse
 from cards.models import Card, GradeReport
-from decimal import Decimal
 
 
 @given('a card named "{name}" exists in the database')
@@ -30,4 +28,4 @@ def step_visit_history(context):
 
 @then('I should see "{text}" on the history page')
 def step_see_text(context, text):
-    assert text == context.response.data['cards'][0]['name']
+    assert text == context.response.data["cards"][0]["name"]

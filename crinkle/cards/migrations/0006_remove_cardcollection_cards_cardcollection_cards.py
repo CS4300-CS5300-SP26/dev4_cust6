@@ -4,19 +4,18 @@ from django.db import migrations, models
 
 
 class Migration(migrations.Migration):
-
     dependencies = [
-        ('cards', '0005_alter_cardcollection_cards'),
+        ("cards", "0005_alter_cardcollection_cards"),
     ]
 
     operations = [
         migrations.RemoveField(
-            model_name='cardcollection',
-            name='cards',
+            model_name="cardcollection",
+            name="cards",
         ),
         migrations.AddField(
-            model_name='cardcollection',
-            name='cards',
-            field=models.ManyToManyField(null=True, to='cards.card'),
+            model_name="cardcollection",
+            name="cards",
+            field=models.ManyToManyField(null=True, to="cards.card"),
         ),
     ]

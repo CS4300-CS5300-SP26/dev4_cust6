@@ -37,6 +37,7 @@ jobs:
     runs-on: ubuntu-latest
     env:
       CRINKLE_MEDIA_ROOT: ${{ github.workspace }}/media
+      DJANGO_SECRET_KEY: test-only-ci-secret
       GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
     strategy:
       max-parallel: 4

@@ -2,5 +2,5 @@ from django.urls import path
 from .views import education
 
 urlpatterns = [
-    path('', education, name='education'),
+    path("", education, name="education"),
 ]
