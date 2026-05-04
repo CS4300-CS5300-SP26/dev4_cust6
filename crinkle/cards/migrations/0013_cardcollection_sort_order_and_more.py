@@ -4,7 +4,6 @@ from django.db import migrations, models
 
 
 class Migration(migrations.Migration):
-
     dependencies = [
         ("cards", "0012_alter_card_user"),
     ]
@@ -18,6 +17,8 @@ class Migration(migrations.Migration):
         migrations.AddField(
             model_name="cardcollection",
             name="value_threshold",
-            field=models.DecimalField(decimal_places=2, default=100, max_digits=12),
+            field=models.DecimalField(
+                decimal_places=2, default=100, max_digits=12
+            ),
         ),
     ]

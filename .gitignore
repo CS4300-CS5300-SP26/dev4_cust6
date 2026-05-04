@@ -1,12 +1,24 @@
 __pycache__/
-db.sqlite3
-*.pyc
+*.py[cod]
+*$py.class
+
+# Local environments and secrets
+.env
+.env.*
+!.env.example
 venv/
 .venv/
+
+# Local database and generated files
+db.sqlite3
+*.sqlite3
+crinkle/db.sqlite3
 crinkle/staticfiles/
-echo ".coverage" >> .gitignore
-echo "reports/" >> .gitignore
-git add .gitignore
-crinkle/crinkle/settings.py
-media/
 crinkle/media/
+media/
+
+# Test/build artifacts
+.coverage
+crinkle/.coverage
+reports/
+crinkle/reports/

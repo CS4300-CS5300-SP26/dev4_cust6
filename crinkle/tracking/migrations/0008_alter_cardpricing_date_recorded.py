@@ -5,15 +5,17 @@ from django.db import migrations, models
 
 
 class Migration(migrations.Migration):
-
     dependencies = [
-        ('tracking', '0007_cardpricing_image_url_cardpricing_tcg_player_id_and_more'),
+        (
+            "tracking",
+            "0007_cardpricing_image_url_cardpricing_tcg_player_id_and_more",
+        ),
     ]
 
     operations = [
         migrations.AlterField(
-            model_name='cardpricing',
-            name='date_recorded',
+            model_name="cardpricing",
+            name="date_recorded",
             field=models.DateField(default=datetime.date.today),
         ),
     ]

@@ -6,7 +6,6 @@ import django.db.models.deletion
 
 
 class Migration(migrations.Migration):
-
     initial = True
 
     dependencies = [
@@ -15,21 +14,42 @@ class Migration(migrations.Migration):
 
     operations = [
         migrations.CreateModel(
-            name='Submission',
+            name="Submission",
             fields=[
-                ('id', models.BigAutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
-                ('card_name', models.CharField(max_length=400)),
-                ('grading_service', models.CharField(choices=[('PSA', 'PSA'), ('BGS', 'BGS')], max_length=10)),
-                ('created_at', models.DateTimeField(auto_now_add=True)),
-                ('full_name', models.CharField(max_length=200)),
-                ('address', models.CharField(max_length=400)),
-                ('city', models.CharField(max_length=100)),
-                ('state', models.CharField(max_length=100)),
-                ('zip_code', models.CharField(max_length=20)),
-                ('card_number', models.CharField(max_length=20)),
-                ('expiry', models.CharField(max_length=10)),
-                ('cvv', models.CharField(max_length=5)),
-                ('user', models.ForeignKey(blank=True, null=True, on_delete=django.db.models.deletion.CASCADE, to=settings.AUTH_USER_MODEL)),
+                (
+                    "id",
+                    models.BigAutoField(
+                        auto_created=True,
+                        primary_key=True,
+                        serialize=False,
+                        verbose_name="ID",
+                    ),
+                ),
+                ("card_name", models.CharField(max_length=400)),
+                (
+                    "grading_service",
+                    models.CharField(
+                        choices=[("PSA", "PSA"), ("BGS", "BGS")], max_length=10
+                    ),
+                ),
+                ("created_at", models.DateTimeField(auto_now_add=True)),
+                ("full_name", models.CharField(max_length=200)),
+                ("address", models.CharField(max_length=400)),
+                ("city", models.CharField(max_length=100)),
+                ("state", models.CharField(max_length=100)),
+                ("zip_code", models.CharField(max_length=20)),
+                ("card_number", models.CharField(max_length=20)),
+                ("expiry", models.CharField(max_length=10)),
+                ("cvv", models.CharField(max_length=5)),
+                (
+                    "user",
+                    models.ForeignKey(
+                        blank=True,
+                        null=True,
+                        on_delete=django.db.models.deletion.CASCADE,
+                        to=settings.AUTH_USER_MODEL,
+                    ),
+                ),
             ],
         ),
     ]

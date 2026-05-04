@@ -34,10 +34,10 @@ jobs:
       - name: Run Django tests
         working-directory: crinkle
         env:
+          DJANGO_SECRET_KEY: ${{ secrets.DJANGO_SECRET_KEY }}
           GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
           POKEMON_PRICE_API_KEY: ${{ secrets.POKEMON_PRICE_API_KEY }}
           STRIPE_SECRET_KEY: ${{ secrets.STRIPE_SECRET_KEY }}
-          DJANGO_SECRET_KEY: ${{ secrets.DJANGO_SECRET_KEY }}
         run: |
           set -euo pipefail
           python manage.py test
@@ -65,12 +65,14 @@ jobs:
         env:
           PROD_HOST: ${{ secrets.PROD_HOST }}
           PROD_USER: ${{ secrets.PROD_USER }}
+          DJANGO_SECRET_KEY: ${{ secrets.DJANGO_SECRET_KEY }}
           GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
           POKEMON_PRICE_API_KEY: ${{ secrets.POKEMON_PRICE_API_KEY }}
           STRIPE_SECRET_KEY: ${{ secrets.STRIPE_SECRET_KEY }}
         run: |
           ssh -o BatchMode=yes -o StrictHostKeyChecking=yes "${PROD_USER}@${PROD_HOST}" \
-            "export GEMINI_API_KEY='${GEMINI_API_KEY}'; 
+            "export DJANGO_SECRET_KEY='${DJANGO_SECRET_KEY}'; 
+            export GEMINI_API_KEY='${GEMINI_API_KEY}'; 
             export POKEMON_PRICE_API_KEY='${POKEMON_PRICE_API_KEY}'; 
             export STRIPE_SECRET_KEY='${STRIPE_SECRET_KEY}'; bash -se" <<'EOF'
             set -euo pipefail

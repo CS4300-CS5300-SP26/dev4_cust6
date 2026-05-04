@@ -12,5 +12,7 @@ class CollectionSettingsForm(forms.ModelForm):
 
         widgets = {
             "sort_order": forms.Select(attrs={"class": "input-field"}),
-            "value_threshold": forms.NumberInput(attrs={"class": "input-field"}),
+            "value_threshold": forms.NumberInput(
+                attrs={"class": "input-field"}
+            ),
         }

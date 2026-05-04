@@ -17,24 +17,35 @@ import os
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
+TESTING = "test" in sys.argv or "behave" in sys.argv
 
 
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/4.2/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-#SECRET_KEY = 'django-insecure-v6apk9l#igpq(9@%stou5&o75hmsgoiezmu+wm*-(@)l%46872'
-SECRET_KEY = os.environ.get("DJANGO_SECRET_KEY")
+# DJANGO_SECRET_KEY must be provisioned from an environment variable or
+# secret manager. The fallback is only for local automated tests.
+SECRET_KEY = os.environ.get("DJANGO_SECRET_KEY", "")
+if not SECRET_KEY:
+    if TESTING:
+        SECRET_KEY = "insecure-test-only-secret-key-not-for-production"
+    else:
+        raise ImproperlyConfigured(
+            "Missing required environment variable: DJANGO_SECRET_KEY"
+        )
 
 # SECURITY WARNING: don't run with debug turned on in production!
-#DEBUG = False
+DEBUG = os.environ.get("DJANGO_DEBUG", "").lower() in {"1", "true", "yes"}
 
-#ALLOWED_HOSTS = ['20.94.201.231', 'crinkle.ink', 'www.crinkle.ink']
-
-DEBUG = False
-
-ALLOWED_HOSTS = ['20.94.201.231', 'crinkle.ink', 'www.crinkle.ink', '127.0.0.1', 'localhost']
-#ALLOWED_HOSTS = ["*"]
+ALLOWED_HOSTS = [
+    '20.94.201.231',
+    'crinkle.ink',
+    'www.crinkle.ink',
+    '127.0.0.1',
+    'localhost',
+]
+# ALLOWED_HOSTS = ["*"]
 
 # Application definition
 
@@ -104,16 +115,28 @@ DATABASES = {
 
 AUTH_PASSWORD_VALIDATORS = [
     {
-        'NAME': 'django.contrib.auth.password_validation.UserAttributeSimilarityValidator',
+        'NAME': (
+            'django.contrib.auth.password_validation.'
+            'UserAttributeSimilarityValidator'
+        ),
     },
     {
-        'NAME': 'django.contrib.auth.password_validation.MinimumLengthValidator',
+        'NAME': (
+            'django.contrib.auth.password_validation.'
+            'MinimumLengthValidator'
+        ),
     },
     {
-        'NAME': 'django.contrib.auth.password_validation.CommonPasswordValidator',
+        'NAME': (
+            'django.contrib.auth.password_validation.'
+            'CommonPasswordValidator'
+        ),
     },
     {
-        'NAME': 'django.contrib.auth.password_validation.NumericPasswordValidator',
+        'NAME': (
+            'django.contrib.auth.password_validation.'
+            'NumericPasswordValidator'
+        ),
     },
 ]
 
@@ -138,7 +161,17 @@ STATIC_ROOT = BASE_DIR / "staticfiles"
 MEDIA_URL = "/media/"
 MEDIA_ROOT = Path(os.environ.get("CRINKLE_MEDIA_ROOT", BASE_DIR / "media"))
 MEDIA_ROOT.mkdir(parents=True, exist_ok=True)
-TESTING = 'test' in sys.argv or 'behave' in sys.argv
+
+SECURE_CONTENT_TYPE_NOSNIFF = True
+SECURE_BROWSER_XSS_FILTER = True
+SESSION_COOKIE_HTTPONLY = True
+
+CACHES = {
+    'default': {
+        'BACKEND': 'django.core.cache.backends.locmem.LocMemCache',
+        'LOCATION': 'crinkle-rate-limit-cache',
+    }
+}
 
 SECURE_SSL_REDIRECT = not DEBUG and not TESTING
 SESSION_COOKIE_SECURE = not DEBUG and not TESTING
@@ -148,12 +181,16 @@ CSRF_COOKIE_SECURE = not DEBUG and not TESTING
 # https://docs.djangoproject.com/en/4.2/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
-CSRF_TRUSTED_ORIGINS = ['https://*.devedu.io', 'https://crinkle.ink', 'https://www.crinkle.ink']
+CSRF_TRUSTED_ORIGINS = [
+    'https://*.devedu.io',
+    'https://crinkle.ink',
+    'https://www.crinkle.ink',
+]
 LOGIN_URL = '/accounts/login/'
 LOGIN_REDIRECT_URL = '/accounts/profile/'
 LOGOUT_REDIRECT_URL = '/'
 GEMINI_API_KEY = os.environ.get("GEMINI_API_KEY", "")
-if not GEMINI_API_KEY:
+if not GEMINI_API_KEY and not TESTING:
     raise ImproperlyConfigured(
         "Missing required environment variable: GEMINI_API_KEY"
     )

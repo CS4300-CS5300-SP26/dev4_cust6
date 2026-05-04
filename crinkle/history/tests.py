@@ -42,7 +42,9 @@ class HistoryViewTest(TestCase):
         """create and login a test user"""
         username = "username"
         password = "p1234567890"
-        self.user = User.objects.create_user(username=username, password=password)
+        self.user = User.objects.create_user(
+            username=username, password=password
+        )
         self.client.login(username=username, password=password)
 
     def set_up_add_card(self):
@@ -89,7 +91,9 @@ class HistoryViewTest(TestCase):
         self.set_up()
         response = self.client.get(reverse("history"))
         cards = response.data["cards"]
-        self.assertGreaterEqual(cards[0]["date_scanned"], cards[-1]["date_scanned"])
+        self.assertGreaterEqual(
+            cards[0]["date_scanned"], cards[-1]["date_scanned"]
+        )
 
 
 class IndexViewTest(TestCase):

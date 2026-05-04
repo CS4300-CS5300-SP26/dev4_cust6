@@ -6,7 +6,6 @@ import django.db.models.deletion
 
 
 class Migration(migrations.Migration):
-
     initial = True
 
     dependencies = [
@@ -15,38 +14,80 @@ class Migration(migrations.Migration):
 
     operations = [
         migrations.CreateModel(
-            name='Card',
+            name="Card",
             fields=[
-                ('id', models.BigAutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
-                ('name', models.CharField(max_length=400)),
-                ('date_scanned', models.DateField()),
-                ('picture_path', models.CharField(max_length=400)),
-                ('user_notes', models.TextField()),
+                (
+                    "id",
+                    models.BigAutoField(
+                        auto_created=True,
+                        primary_key=True,
+                        serialize=False,
+                        verbose_name="ID",
+                    ),
+                ),
+                ("name", models.CharField(max_length=400)),
+                ("date_scanned", models.DateField()),
+                ("picture_path", models.CharField(max_length=400)),
+                ("user_notes", models.TextField()),
             ],
         ),
         migrations.CreateModel(
-            name='GradeReport',
+            name="GradeReport",
             fields=[
-                ('id', models.BigAutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
-                ('grade', models.TextField()),
+                (
+                    "id",
+                    models.BigAutoField(
+                        auto_created=True,
+                        primary_key=True,
+                        serialize=False,
+                        verbose_name="ID",
+                    ),
+                ),
+                ("grade", models.TextField()),
             ],
         ),
         migrations.CreateModel(
-            name='CardCollection',
+            name="CardCollection",
             fields=[
-                ('id', models.BigAutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
-                ('cards', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, to='cards.card')),
-                ('user', models.OneToOneField(on_delete=django.db.models.deletion.CASCADE, to=settings.AUTH_USER_MODEL)),
+                (
+                    "id",
+                    models.BigAutoField(
+                        auto_created=True,
+                        primary_key=True,
+                        serialize=False,
+                        verbose_name="ID",
+                    ),
+                ),
+                (
+                    "cards",
+                    models.ForeignKey(
+                        on_delete=django.db.models.deletion.CASCADE,
+                        to="cards.card",
+                    ),
+                ),
+                (
+                    "user",
+                    models.OneToOneField(
+                        on_delete=django.db.models.deletion.CASCADE,
+                        to=settings.AUTH_USER_MODEL,
+                    ),
+                ),
             ],
         ),
         migrations.AddField(
-            model_name='card',
-            name='grading_notes',
-            field=models.OneToOneField(on_delete=django.db.models.deletion.CASCADE, to='cards.gradereport'),
+            model_name="card",
+            name="grading_notes",
+            field=models.OneToOneField(
+                on_delete=django.db.models.deletion.CASCADE,
+                to="cards.gradereport",
+            ),
         ),
         migrations.AddField(
-            model_name='card',
-            name='user',
-            field=models.OneToOneField(on_delete=django.db.models.deletion.CASCADE, to=settings.AUTH_USER_MODEL),
+            model_name="card",
+            name="user",
+            field=models.OneToOneField(
+                on_delete=django.db.models.deletion.CASCADE,
+                to=settings.AUTH_USER_MODEL,
+            ),
         ),
     ]

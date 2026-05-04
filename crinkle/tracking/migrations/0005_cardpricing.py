@@ -4,24 +4,37 @@ from django.db import migrations, models
 
 
 class Migration(migrations.Migration):
-
     dependencies = [
-        ('tracking', '0004_trackedcard_sold_price_alter_trackedcard_status'),
+        ("tracking", "0004_trackedcard_sold_price_alter_trackedcard_status"),
     ]
 
     operations = [
         migrations.CreateModel(
-            name='CardPricing',
+            name="CardPricing",
             fields=[
-                ('id', models.BigAutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
-                ('card_name', models.CharField(max_length=200)),
-                ('card_set', models.CharField(blank=True, default='', max_length=200)),
-                ('grade_tier', models.CharField(max_length=10)),
-                ('price', models.DecimalField(decimal_places=2, max_digits=10)),
-                ('date_recorded', models.DateField(auto_now_add=True)),
+                (
+                    "id",
+                    models.BigAutoField(
+                        auto_created=True,
+                        primary_key=True,
+                        serialize=False,
+                        verbose_name="ID",
+                    ),
+                ),
+                ("card_name", models.CharField(max_length=200)),
+                (
+                    "card_set",
+                    models.CharField(blank=True, default="", max_length=200),
+                ),
+                ("grade_tier", models.CharField(max_length=10)),
+                (
+                    "price",
+                    models.DecimalField(decimal_places=2, max_digits=10),
+                ),
+                ("date_recorded", models.DateField(auto_now_add=True)),
             ],
             options={
-                'ordering': ['-date_recorded'],
+                "ordering": ["-date_recorded"],
             },
         ),
     ]

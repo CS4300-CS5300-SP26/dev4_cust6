@@ -6,21 +6,24 @@ import django.db.models.deletion
 
 
 class Migration(migrations.Migration):
-
     dependencies = [
         migrations.swappable_dependency(settings.AUTH_USER_MODEL),
-        ('cards', '0002_alter_cardcollection_cards'),
+        ("cards", "0002_alter_cardcollection_cards"),
     ]
 
     operations = [
         migrations.AlterField(
-            model_name='card',
-            name='date_scanned',
+            model_name="card",
+            name="date_scanned",
             field=models.DateField(auto_now=True),
         ),
         migrations.AlterField(
-            model_name='card',
-            name='user',
-            field=models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, related_name='cards', to=settings.AUTH_USER_MODEL),
+            model_name="card",
+            name="user",
+            field=models.ForeignKey(
+                on_delete=django.db.models.deletion.CASCADE,
+                related_name="cards",
+                to=settings.AUTH_USER_MODEL,
+            ),
         ),
     ]

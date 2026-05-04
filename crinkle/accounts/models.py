@@ -3,7 +3,9 @@ from django.contrib.auth.models import User
 
 
 class UserProfile(models.Model):
-    user = models.OneToOneField(User, on_delete=models.CASCADE, related_name='profile')
+    user = models.OneToOneField(
+        User, on_delete=models.CASCADE, related_name="profile"
+    )
 
     def get_initials(self):
         first = self.user.first_name

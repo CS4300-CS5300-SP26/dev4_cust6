@@ -4,15 +4,23 @@ from django.db import migrations, models
 
 
 class Migration(migrations.Migration):
-
     dependencies = [
-        ('tracking', '0005_cardpricing'),
+        ("tracking", "0005_cardpricing"),
     ]
 
     operations = [
         migrations.AlterField(
-            model_name='trackedcard',
-            name='status',
-            field=models.CharField(choices=[('watching', 'Watching'), ('submitted', 'Submitted for Grading'), ('graded', 'Graded'), ('sold', 'Sold')], default='watching', max_length=20),
+            model_name="trackedcard",
+            name="status",
+            field=models.CharField(
+                choices=[
+                    ("watching", "Watching"),
+                    ("submitted", "Submitted for Grading"),
+                    ("graded", "Graded"),
+                    ("sold", "Sold"),
+                ],
+                default="watching",
+                max_length=20,
+            ),
         ),
     ]

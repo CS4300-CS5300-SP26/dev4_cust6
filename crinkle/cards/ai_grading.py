@@ -18,9 +18,12 @@ def analyze_card_with_gemini(image_data_url):
         return _fallback_grade()
 
     header, encoded = image_data_url.split(";base64,", 1)
-    mime_type = header.replace("data:", "") if "data:" in header else "image/jpeg"
+    mime_type = (
+        header.replace("data:", "") if "data:" in header else "image/jpeg"
+    )
 
-    prompt = """You are a professional Pokemon card grader and identifier. Analyze this image and respond in two stages:
+    prompt = """You are a professional Pokemon card grader and identifier.
+Analyze this image and respond in two stages:
 
 STAGE 1 - IMAGE QUALITY CHECK:
 First, assess if the image quality is sufficient for accurate grading.
@@ -28,10 +31,12 @@ Check for:
 - Brightness: is the image too dark or overexposed?
 - Sharpness: is the image too blurry or out of focus?
 - Framing: is the card properly centered and fully visible in the frame?
-- Subject: is this actually a Pokemon card (not a screen, digital image, or non-card object)?
+- Subject: is this actually a Pokemon card, not a screen, digital image,
+  or non-card object?
 
-STAGE 2 - CARD IDENTIFICATION AND GRADING (only if quality is sufficient):
-If the image is good enough, identify and grade the card.
+STAGE 2 - CARD IDENTIFICATION AND GRADING:
+Only continue if quality is sufficient. If the image is good enough,
+identify and grade the card.
 
 Respond ONLY in this exact JSON format with no extra text:
 {
@@ -49,30 +54,34 @@ Respond ONLY in this exact JSON format with no extra text:
 
 Rules:
 - quality_ok: true if image is good enough to grade, false otherwise
-- quality_issues: empty list if quality_ok is true, otherwise list any of: "too dark", "too bright", "blurry", "card not centered", "card not fully visible", "not a physical card", "not a pokemon card"
-- If quality_ok is false, set psa_grade to null and leave other fields as null
-- card_set: the Pokemon TCG set name (e.g. "Base Set", "Jungle", "Scarlet & Violet") or "Unknown Set" if not visible
-- card_year: the year printed on the card or estimated from the set, or "Unknown" if not visible
+- quality_issues: [] if quality_ok is true; otherwise list any of:
+  "too dark", "too bright", "blurry", "card not centered",
+  "card not fully visible", "not a physical card", "not a pokemon card"
+- If quality_ok is false, set psa_grade to null and leave other fields null
+- card_set: Pokemon TCG set name, or "Unknown Set" if not visible
+- card_year: printed year, estimated set year, or "Unknown" if not visible
 - psa_grade: whole number 1-10, or null if quality_ok is false
 - All text fields should be null if quality_ok is false"""
 
-    payload = json.dumps({
-        "model": "meta-llama/llama-4-maverick",
-        "messages": [
-            {
-                "role": "user",
-                "content": [
-                    {"type": "text", "text": prompt},
-                    {
-                        "type": "image_url",
-                        "image_url": {
-                            "url": f"data:{mime_type};base64,{encoded}"
-                        }
-                    }
-                ]
-            }
-        ]
-    }).encode("utf-8")
+    payload = json.dumps(
+        {
+            "model": "meta-llama/llama-4-maverick",
+            "messages": [
+                {
+                    "role": "user",
+                    "content": [
+                        {"type": "text", "text": prompt},
+                        {
+                            "type": "image_url",
+                            "image_url": {
+                                "url": f"data:{mime_type};base64,{encoded}"
+                            },
+                        },
+                    ],
+                }
+            ],
+        }
+    ).encode("utf-8")
 
     req = urllib.request.Request(
         "https://openrouter.ai/api/v1/chat/completions",
@@ -81,7 +90,7 @@ Rules:
             "Content-Type": "application/json",
             "Authorization": f"Bearer {api_key}",
         },
-        method="POST"
+        method="POST",
     )
 
     try:
