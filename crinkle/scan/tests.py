@@ -1,5 +1,6 @@
 from django.test import TestCase
-from django.urls import reverse
+from django.urls import resolve, reverse
+
 from scan.views import scan_page
 
 
@@ -28,7 +29,6 @@ class CameraPageTests(TestCase):
         """Scan page should contain camera UI elements"""
         response = self.client.get(reverse("scan"))
         content = response.content.decode().lower()
-
         keywords = ["camera", "video", "capture", "scan"]
 
         self.assertTrue(
