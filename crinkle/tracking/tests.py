@@ -82,13 +82,18 @@ class TrackingViewsTest(TestCase):
         )
         self.client.force_login(self.user)
 
-        self.card = TrackedCard.objects.create(
+        self.card = self.create_tracked_card(
             card_name="Mewtwo",
             card_set="Base Set",
             card_year=1999,
             grade_tier="psa_10",
             status="watching",
         )
+
+    def create_tracked_card(self, **kwargs):
+        defaults = {"user": self.user}
+        defaults.update(kwargs)
+        return TrackedCard.objects.create(**defaults)
 
     def test_list_view_status(self):
         response = self.client.get(reverse("tracking:list"))
@@ -99,13 +104,13 @@ class TrackingViewsTest(TestCase):
         self.assertContains(response, "Mewtwo")
 
     def test_list_view_filter_by_status(self):
-        TrackedCard.objects.create(card_name="Pikachu", status="sold")
+        self.create_tracked_card(card_name="Pikachu", status="sold")
         response = self.client.get(reverse("tracking:list") + "?status=sold")
         self.assertContains(response, "Pikachu")
         self.assertNotContains(response, "Mewtwo")
 
     def test_list_view_filter_all(self):
-        TrackedCard.objects.create(card_name="Pikachu", status="sold")
+        self.create_tracked_card(card_name="Pikachu", status="sold")
         response = self.client.get(reverse("tracking:list"))
         self.assertContains(response, "Mewtwo")
         self.assertContains(response, "Pikachu")
@@ -139,7 +144,10 @@ class TrackingViewsTest(TestCase):
         )
         self.assertEqual(response.status_code, 302)
         self.assertTrue(
-            TrackedCard.objects.filter(card_name="Blastoise").exists()
+            TrackedCard.objects.filter(
+                user=self.user,
+                card_name="Blastoise",
+            ).exists()
         )
 
     def test_add_view_invalid(self):
@@ -191,12 +199,12 @@ class TrackingViewsTest(TestCase):
         self.assertFalse(TrackedCard.objects.filter(pk=self.card.pk).exists())
 
     def test_sold_total_in_context(self):
-        TrackedCard.objects.create(
+        self.create_tracked_card(
             card_name="Venusaur",
             status="sold",
             sold_price=150.00,
         )
-        TrackedCard.objects.create(
+        self.create_tracked_card(
             card_name="Blastoise",
             status="sold",
             sold_price=200.00,
@@ -275,13 +283,18 @@ class TrackingViewsTest(TestCase):
         self.assertEqual(response.status_code, 302)
         self.assertTrue(
             TrackedCard.objects.filter(
-                card_name="Charizard", status="watching"
+                user=self.user,
+                card_name="Charizard",
+                status="watching",
             ).exists()
         )
 
     def test_market_watch_duplicate(self):
-        TrackedCard.objects.create(
-            card_name="Charizard", card_set="Base Set", status="watching"
+        self.create_tracked_card(
+            card_name="Charizard",
+            card_set="Base Set",
+            grade_tier="near_mint",
+            status="watching",
         )
         response = self.client.post(
             reverse("tracking:market_watch"),
@@ -293,7 +306,13 @@ class TrackingViewsTest(TestCase):
         )
         self.assertEqual(response.status_code, 302)
         self.assertEqual(
-            TrackedCard.objects.filter(card_name="Charizard").count(), 1
+            TrackedCard.objects.filter(
+                user=self.user,
+                card_name="Charizard",
+                card_set="Base Set",
+                grade_tier="near_mint",
+            ).count(),
+            1,
         )
 
     def test_market_compare_page(self):
