@@ -2,6 +2,11 @@
 
 > AI-powered Pokémon card grading for collectors and traders
 
+## Demo
+
+[![Crinkle Demo](https://img.youtube.com/vi/rC0KzOLhD-I/maxresdefault.jpg)](https://www.youtube.com/watch?v=rC0KzOLhD-I)
+
+> Click the thumbnail above to watch the full demo
 ---
 
 ## What is Crinkle?
