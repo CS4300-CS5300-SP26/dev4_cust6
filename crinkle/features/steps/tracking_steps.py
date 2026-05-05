@@ -153,14 +153,24 @@ def step_redirected_to_list(context):
 
 @then('I should see "{text}" in the tracking list')
 def step_see_in_list(context, text):
-    response = _get_tracking_list(context)
-    assert text in _content(response), _debug_response(response)
+    if hasattr(context, "response"):
+        response = context.response
+    else:
+        response = context.client.get("/tracking/", follow=True)
+
+    content = response.content.decode("utf-8", errors="ignore")
+    assert text in content, (
+        f"Expected {text!r} in tracking list. "
+        f"status={response.status_code}, body={content[:500]!r}"
+    )
 
 
 @then('I should not see "{text}" in the tracking list')
 def step_not_see_in_list(context, text):
-    assert text not in _content(context.response), _debug_response(
-        context.response
+    content = context.response.content.decode("utf-8", errors="ignore")
+    assert text not in content, (
+        f"Did not expect {text!r} in tracking list. "
+        f"status={context.response.status_code}, body={content[:500]!r}"
     )
 
 
