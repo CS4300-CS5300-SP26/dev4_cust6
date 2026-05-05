@@ -4,6 +4,7 @@ import tempfile
 from unittest.mock import MagicMock, patch
 
 from django.contrib.auth.models import User
+from django.core.cache import cache
 from django.test import TestCase, override_settings
 from django.urls import reverse
 from parameterized import parameterized
@@ -226,6 +227,7 @@ TEST_CAPTURED_IMAGE = (
 @override_settings(RATELIMIT_ENABLE=False)
 class ScannedImageSaveTests(TestCase):
     def setUp(self):
+        cache.clear()
         self.temp_media = tempfile.TemporaryDirectory()
         self.override = override_settings(MEDIA_ROOT=self.temp_media.name)
         self.override.enable()
@@ -237,6 +239,7 @@ class ScannedImageSaveTests(TestCase):
     def tearDown(self):
         self.override.disable()
         self.temp_media.cleanup()
+        cache.clear()
 
     @patch("cards.views.analyze_card_with_gemini")
     def test_guest_can_view_grade_report_with_captured_image(self, mock_ai):
@@ -349,10 +352,14 @@ class ScanReportAITests(TestCase):
     """Tests for scan_report_view with AI grading"""
 
     def setUp(self):
+        cache.clear()
         self.user = User.objects.create_user(
             username="tester", password="p1234567890"
         )
         self.client.force_login(self.user)
+
+    def tearDown(self):
+        cache.clear()
 
     @patch("cards.views.analyze_card_with_gemini")
     def test_post_triggers_ai_grading(self, mock_ai):
@@ -477,10 +484,14 @@ class ScanQualityFeedbackTests(TestCase):
     """Tests for scan quality feedback feature (Sprint 4)"""
 
     def setUp(self):
+        cache.clear()
         self.user = User.objects.create_user(
             username="qualityuser", password="StrongPass123!"
         )
         self.client.force_login(self.user)
+
+    def tearDown(self):
+        cache.clear()
 
     @patch("cards.views.analyze_card_with_gemini")
     def test_poor_quality_image_shows_feedback(self, mock_ai):
@@ -554,10 +565,14 @@ class CardIdentificationTests(TestCase):
     """Tests for card identification feature - set and year"""
 
     def setUp(self):
+        cache.clear()
         self.user = User.objects.create_user(
             username="identityuser", password="StrongPass123!"
         )
         self.client.force_login(self.user)
+
+    def tearDown(self):
+        cache.clear()
 
     @patch("cards.views.analyze_card_with_gemini")
     def test_card_set_and_year_displayed(self, mock_ai):
