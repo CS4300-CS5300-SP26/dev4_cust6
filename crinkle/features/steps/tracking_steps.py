@@ -153,10 +153,13 @@ def step_redirected_to_list(context):
 
 @then('I should see "{text}" in the tracking list')
 def step_see_in_list(context, text):
-    if hasattr(context, "response"):
-        response = context.response
-    else:
+    response = getattr(context, "response", None)
+
+    if response is None:
         response = context.client.get("/tracking/", follow=True)
+    elif response.status_code in (301, 302):
+        location = response.get("Location", "/tracking/")
+        response = context.client.get(location, follow=True)
 
     content = response.content.decode("utf-8", errors="ignore")
     assert text in content, (
