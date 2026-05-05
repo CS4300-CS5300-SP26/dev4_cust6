@@ -334,4 +334,3 @@ def step_see_quality_feedback(context):
         or "Retake Photo" in content
         or "quality" in content.lower()
     )
-    
