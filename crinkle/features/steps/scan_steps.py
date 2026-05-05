@@ -6,6 +6,8 @@ from django.urls import reverse
 from cards.models import Card
 
 
+LANDING_URL = "/"
+
 TEST_CAPTURED_IMAGE = (
     "data:image/png;base64,"
     "iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR4"
@@ -39,6 +41,10 @@ MOCK_QUALITY_RESULT = {
 }
 
 
+def _scan_url():
+    return reverse("cards:scan_report")
+
+
 def _response_text(context):
     return context.response.content.decode("utf-8", errors="ignore")
 
@@ -69,12 +75,12 @@ def step_application_is_running(context):
 
 @given("I am on the landing page")
 def step_on_landing_page(context):
-    context.response = context.client.get(reverse("home"))
+    context.response = context.client.get(LANDING_URL)
 
 
 @when("I tap the scan button")
 def step_tap_scan_button(context):
-    context.response = context.client.get(reverse("cards:scan"))
+    context.response = context.client.get(_scan_url())
 
 
 @then("I should be taken to the scan page")
@@ -84,12 +90,12 @@ def step_should_be_taken_to_scan_page(context):
 
 @given("I am on the scan page")
 def step_on_scan_page(context):
-    context.response = context.client.get(reverse("cards:scan"))
+    context.response = context.client.get(_scan_url())
 
 
 @when("the scan page loads")
 def step_scan_page_loads(context):
-    context.response = context.client.get(reverse("cards:scan"))
+    context.response = context.client.get(_scan_url())
 
 
 @then("the camera should be initialised")
@@ -99,12 +105,12 @@ def step_camera_should_be_initialised(context):
 
 @given("the camera is initialised")
 def step_camera_is_initialised(context):
-    context.response = context.client.get(reverse("cards:scan"))
+    context.response = context.client.get(_scan_url())
 
 
 @when("the scan page is displayed")
 def step_scan_page_displayed(context):
-    context.response = context.client.get(reverse("cards:scan"))
+    context.response = context.client.get(_scan_url())
 
 
 @then("a frame for the card should appear")
@@ -114,7 +120,7 @@ def step_frame_for_card_should_appear(context):
 
 @given("the frame for the card is displayed")
 def step_frame_for_card_is_displayed(context):
-    context.response = context.client.get(reverse("cards:scan"))
+    context.response = context.client.get(_scan_url())
 
 
 @then("the frame should be horizontal")
@@ -134,7 +140,7 @@ def step_have_card_ready_to_scan(context):
 
 @when("I select the scan option")
 def step_select_scan_option(context):
-    context.response = context.client.get(reverse("cards:scan"))
+    context.response = context.client.get(_scan_url())
 
 
 @when("I place the card in the frame")
@@ -179,12 +185,12 @@ def step_should_be_prompted_to_log_in(context):
 
 @given("I am on the camera page")
 def step_on_camera_page(context):
-    context.response = context.client.get(reverse("cards:scan"))
+    context.response = context.client.get(_scan_url())
 
 
 @when("I tap the back button")
 def step_tap_back_button(context):
-    context.response = context.client.get(reverse("home"))
+    context.response = context.client.get(LANDING_URL)
 
 
 @then("I should be taken back to the landing page")
@@ -328,3 +334,4 @@ def step_see_quality_feedback(context):
         or "Retake Photo" in content
         or "quality" in content.lower()
     )
+    
