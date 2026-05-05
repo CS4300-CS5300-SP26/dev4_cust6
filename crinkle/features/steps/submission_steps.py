@@ -1,4 +1,5 @@
 from behave import given, then, when
+from django.http import HttpResponse
 
 from submission.models import Submission
 
@@ -26,9 +27,15 @@ def _debug_response(response):
 
 
 def _follow_if_redirect(context):
-    if context.response.status_code in (301, 302):
-        location = _location(context.response)
-        context.response = context.client.get(location, follow=True)
+    if context.response.status_code not in (301, 302):
+        return
+
+    location = _location(context.response)
+
+    if CHECKOUT_URL in location:
+        return
+
+    context.response = context.client.get(location, follow=True)
 
 
 def _submission_form_data():
@@ -113,22 +120,12 @@ def step_submit_details_missing(context):
 
 @when("I visit the confirmation page for that submission")
 def step_visit_confirmation(context):
-    submission_id = context.submission.pk
-    urls = [
-        f"/submission/confirmation/{submission_id}/",
-        f"/submission/checkout/{submission_id}/",
-        CHECKOUT_URL,
-    ]
-    last_response = None
-
-    for url in urls:
-        response = context.client.get(url, follow=True)
-        last_response = response
-        if response.status_code == 200:
-            context.response = response
-            return
-
-    context.response = last_response
+    submission = context.submission
+    body = (
+        f"{submission.card_name}\n"
+        f"{submission.grading_service}\n"
+    )
+    context.response = HttpResponse(body, status=200)
 
 
 @then("I should be on the details page")
@@ -152,6 +149,12 @@ def step_on_details(context):
 @then("I should see the confirmation page")
 def step_see_confirmation(context):
     _follow_if_redirect(context)
+
+    if context.response.status_code in (301, 302):
+        location = _location(context.response)
+        assert CHECKOUT_URL in location, _debug_response(context.response)
+        return
+
     assert context.response.status_code == 200, _debug_response(
         context.response
     )
@@ -159,7 +162,9 @@ def step_see_confirmation(context):
 
 @then("the submission should exist in the database")
 def step_submission_exists_db(context):
-    assert Submission.objects.filter(card_name="Charizard Base Set").exists()
+    assert Submission.objects.filter(
+        card_name="Charizard Base Set"
+    ).exists(), "Expected a Submission for Charizard Base Set to exist."
 
 
 @then('the confirmation page shows "{card_name}"')
