@@ -191,4 +191,3 @@ def step_stay_on_details(context):
 @then("no submission should be created")
 def step_no_submission(context):
     assert not Submission.objects.exists()
-    
