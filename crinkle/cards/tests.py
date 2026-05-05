@@ -1,15 +1,15 @@
 import json
 import os
 import tempfile
-from unittest.mock import patch, MagicMock
+from unittest.mock import MagicMock, patch
 
+from django.contrib.auth.models import User
 from django.test import TestCase, override_settings
 from django.urls import reverse
-from django.contrib.auth.models import User
 from parameterized import parameterized
 
-from .models import GradeReport, Card, CardCollection
 from .forms import CollectionSettingsForm
+from .models import Card, CardCollection, GradeReport
 
 
 class CollectionTestCase(TestCase):
@@ -218,8 +218,8 @@ class CardTestCase(TestCase):
 
 TEST_CAPTURED_IMAGE = (
     "data:image/png;base64,"
-    "iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQ"
-    "VR42mP8/x8AAwMCAO2R0xQAAAAASUVORK5CYII="
+    "iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR4"
+    "nGP4////fwAJ+wP9KobjigAAAABJRU5ErkJggg=="
 )
 
 
@@ -239,27 +239,13 @@ class ScannedImageSaveTests(TestCase):
 
     @patch("cards.views.analyze_card_with_gemini")
     def test_guest_can_view_grade_report_with_captured_image(self, mock_ai):
-        mock_ai.return_value = {
-            "quality_ok": True,
-            "quality_issues": [],
-            "psa_grade": 8,
-            "card_name": "Charizard",
-            "card_set": "Base Set",
-            "card_year": "1999",
-            "corners": "Sharp.",
-            "edges": "Clean.",
-            "centering": "Centered.",
-            "surface": "No scratches.",
-        }
         response = self.client.post(
             reverse("cards:scan_report"),
             data={"captured_image": TEST_CAPTURED_IMAGE},
         )
-        self.assertEqual(response.status_code, 200)
-        self.assertContains(response, "Scan Report")
-        self.assertContains(
-            response, "Create an account to save this scan to your collection."
-        )
+        self.assertEqual(response.status_code, 302)
+        self.assertIn(reverse("login"), response["Location"])
+        mock_ai.assert_not_called()
 
     def test_guest_cannot_save_scan_to_collection(self):
         session = self.client.session
@@ -364,6 +350,7 @@ class ScanReportAITests(TestCase):
         self.user = User.objects.create_user(
             username="tester", password="p1234567890"
         )
+        self.client.force_login(self.user)
 
     @patch("cards.views.analyze_card_with_gemini")
     def test_post_triggers_ai_grading(self, mock_ai):
@@ -486,6 +473,12 @@ class SaveReportVmMediaTests(TestCase):
 class ScanQualityFeedbackTests(TestCase):
     """Tests for scan quality feedback feature (Sprint 4)"""
 
+    def setUp(self):
+        self.user = User.objects.create_user(
+            username="qualityuser", password="StrongPass123!"
+        )
+        self.client.force_login(self.user)
+
     @patch("cards.views.analyze_card_with_gemini")
     def test_poor_quality_image_shows_feedback(self, mock_ai):
         """When quality_ok is False, quality feedback should be shown"""
@@ -554,7 +547,13 @@ class ScanQualityFeedbackTests(TestCase):
 
 
 class CardIdentificationTests(TestCase):
-    """Tests for card identification feature — set and year (Sprint 4)"""
+    """Tests for card identification feature - set and year"""
+
+    def setUp(self):
+        self.user = User.objects.create_user(
+            username="identityuser", password="StrongPass123!"
+        )
+        self.client.force_login(self.user)
 
     @patch("cards.views.analyze_card_with_gemini")
     def test_card_set_and_year_displayed(self, mock_ai):
