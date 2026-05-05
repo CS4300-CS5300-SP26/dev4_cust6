@@ -220,7 +220,6 @@ def _save_captured_image(data_url):
 GRADE_SESSION_KEY = "card_grade_result"
 
 
-@login_required
 def scan_report_view(request):
     """Show AI grading reports for authenticated users only."""
     captured_image = _captured_image_from_request(request)
