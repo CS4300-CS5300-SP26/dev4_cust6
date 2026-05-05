@@ -1,5 +1,6 @@
 from django.test import TestCase, Client
 from django.urls import reverse
+from django.contrib.auth import get_user_model
 from .models import TrackedCard, ValueSnapshot, CardPricing
 
 
@@ -72,6 +73,15 @@ class CardPricingModelTest(TestCase):
 class TrackingViewsTest(TestCase):
     def setUp(self):
         self.client = Client()
+
+        User = get_user_model()
+        self.user = User.objects.create_user(
+            username="testuser",
+            email="testuser@example.com",
+            password="testpass123",
+        )
+        self.client.force_login(self.user)
+
         self.card = TrackedCard.objects.create(
             card_name="Mewtwo",
             card_set="Base Set",
