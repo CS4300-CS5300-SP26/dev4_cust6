@@ -243,13 +243,25 @@ class ScannedImageSaveTests(TestCase):
 
     @patch("cards.views.analyze_card_with_gemini")
     def test_guest_can_view_grade_report_with_captured_image(self, mock_ai):
+        mock_ai.return_value = {
+            "quality_ok": True,
+            "quality_issues": [],
+            "psa_grade": 8,
+            "card_name": "Pikachu",
+            "card_set": "Base Set",
+            "card_year": "1999",
+            "corners": "Sharp corners.",
+            "edges": "Clean edges.",
+            "centering": "Well centered.",
+            "surface": "No scratches.",
+        }
         response = self.client.post(
             reverse("cards:scan_report"),
             data={"captured_image": TEST_CAPTURED_IMAGE},
         )
-        self.assertEqual(response.status_code, 302)
-        self.assertIn(reverse("login"), response["Location"])
-        mock_ai.assert_not_called()
+        self.assertEqual(response.status_code, 200)
+        self.assertContains(response, "Pikachu")
+        mock_ai.assert_called_once()
 
     def test_guest_cannot_save_scan_to_collection(self):
         session = self.client.session
