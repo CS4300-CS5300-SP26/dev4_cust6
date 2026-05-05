@@ -1,8 +1,9 @@
-from django.test import TestCase, Client
-from django.urls import reverse
 from django.contrib.auth.models import User
-from submission.models import Submission
+from django.test import Client, TestCase
+from django.urls import reverse
 from parameterized import parameterized
+
+from submission.models import Submission
 
 
 class SubmissionStartViewTests(TestCase):
@@ -12,6 +13,7 @@ class SubmissionStartViewTests(TestCase):
         self.user = User.objects.create_user(
             username="testuser", password="StrongPass123!"
         )
+        self.client.force_login(self.user)
 
     def test_start_page_loads(self):
         response = self.client.get(self.url)
@@ -43,7 +45,8 @@ class SubmissionStartViewTests(TestCase):
         )
         self.assertEqual(self.client.session["submission_service"], "PSA")
         self.assertEqual(
-            self.client.session["submission_card_name"], "Charizard Base Set"
+            self.client.session["submission_card_name"],
+            "Charizard Base Set",
         )
 
     @parameterized.expand(
@@ -71,6 +74,7 @@ class SubmissionDetailsViewTests(TestCase):
         self.user = User.objects.create_user(
             username="testuser", password="StrongPass123!"
         )
+        self.client.force_login(self.user)
         self.valid_data = {
             "card_name": "Charizard Base Set",
             "grading_service": "PSA",
@@ -98,7 +102,10 @@ class SubmissionDetailsViewTests(TestCase):
     def test_valid_submission_creates_record(self):
         self.client.post(self.url, self.valid_data)
         self.assertTrue(
-            Submission.objects.filter(card_name="Charizard Base Set").exists()
+            Submission.objects.filter(
+                user=self.user,
+                card_name="Charizard Base Set",
+            ).exists()
         )
 
     def test_valid_submission_redirects_to_checkout(self):
@@ -111,15 +118,20 @@ class SubmissionDetailsViewTests(TestCase):
         )
 
     def test_submission_links_to_logged_in_user(self):
-        self.client.login(username="testuser", password="StrongPass123!")
         self.client.post(self.url, self.valid_data)
         submission = Submission.objects.get(card_name="Charizard Base Set")
         self.assertEqual(submission.user, self.user)
 
     def test_submission_no_user_when_guest(self):
-        self.client.post(self.url, self.valid_data)
-        submission = Submission.objects.get(card_name="Charizard Base Set")
-        self.assertIsNone(submission.user)
+        self.client.logout()
+        response = self.client.post(self.url, self.valid_data)
+        self.assertEqual(response.status_code, 302)
+        self.assertIn(reverse("login"), response["Location"])
+        self.assertFalse(
+            Submission.objects.filter(
+                card_name="Charizard Base Set"
+            ).exists()
+        )
 
     def test_invalid_submission_missing_fields(self):
         response = self.client.post(self.url, {})
@@ -175,7 +187,8 @@ class SubmissionDetailsViewTests(TestCase):
         )
         self.assertFalse(
             Submission.objects.filter(
-                card_name=card_name, address=address
+                card_name=card_name,
+                address=address,
             ).exists()
         )
 
@@ -186,7 +199,9 @@ class SubmissionConfirmationViewTests(TestCase):
         self.user = User.objects.create_user(
             username="testuser", password="StrongPass123!"
         )
+        self.client.force_login(self.user)
         self.submission = Submission.objects.create(
+            user=self.user,
             card_name="Charizard Base Set",
             grading_service="PSA",
             full_name="Naz Siavash",
