@@ -1,6 +1,6 @@
 from django.test import TestCase
-from django.urls import reverse, resolve
-from home.views import scan_page
+from django.urls import reverse
+from scan.views import scan_page
 
 
 class CameraPageTests(TestCase):
