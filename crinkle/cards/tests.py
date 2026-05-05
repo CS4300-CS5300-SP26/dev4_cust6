@@ -223,6 +223,7 @@ TEST_CAPTURED_IMAGE = (
 )
 
 
+@override_settings(RATELIMIT_ENABLE=False)
 class ScannedImageSaveTests(TestCase):
     def setUp(self):
         self.temp_media = tempfile.TemporaryDirectory()
@@ -343,6 +344,7 @@ class AIGradingModuleTests(TestCase):
         self.assertEqual(result["card_name"], "Unknown Card")
 
 
+@override_settings(RATELIMIT_ENABLE=False)
 class ScanReportAITests(TestCase):
     """Tests for scan_report_view with AI grading"""
 
@@ -470,6 +472,7 @@ class SaveReportVmMediaTests(TestCase):
         self.assertContains(response, saved_card.name)
 
 
+@override_settings(RATELIMIT_ENABLE=False)
 class ScanQualityFeedbackTests(TestCase):
     """Tests for scan quality feedback feature (Sprint 4)"""
 
@@ -546,6 +549,7 @@ class ScanQualityFeedbackTests(TestCase):
         self.assertContains(response, "Retake Photo")
 
 
+@override_settings(RATELIMIT_ENABLE=False)
 class CardIdentificationTests(TestCase):
     """Tests for card identification feature - set and year"""
 
