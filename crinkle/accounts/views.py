@@ -1,3 +1,5 @@
+import hashlib
+
 from django.contrib import messages
 from django.contrib.auth import login, logout
 from django.contrib.auth.decorators import login_required
@@ -13,6 +15,10 @@ LOGIN_FAILURE_LIMIT = 5
 LOGIN_FAILURE_WINDOW_SECONDS = 15 * 60
 
 
+def _safe_cache_part(value):
+    return hashlib.sha256(str(value).encode("utf-8")).hexdigest()
+
+
 def _client_ip(request):
     """Return the best available client IP for lightweight throttling."""
     forwarded_for = request.META.get("HTTP_X_FORWARDED_FOR")
@@ -23,7 +29,9 @@ def _client_ip(request):
 
 def _login_cache_key(request, username):
     normalized_username = (username or "").strip().lower() or "unknown"
-    return f"login-failures:{_client_ip(request)}:{normalized_username}"
+    ip_part = _safe_cache_part(_client_ip(request))
+    username_part = _safe_cache_part(normalized_username)
+    return f"login-failures:{ip_part}:{username_part}"
 
 
 def _too_many_login_attempts(request, username):
@@ -73,7 +81,12 @@ def login_view(request):
                 "Too many failed login attempts. Please try again later.",
             )
             form = LoginForm(request, data=request.POST)
-            return render(request, "accounts/login.html", {"form": form}, status=429)
+            return render(
+                request,
+                "accounts/login.html",
+                {"form": form},
+                status=429,
+            )
 
         form = LoginForm(request, data=request.POST)
         if form.is_valid():
