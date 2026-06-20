@@ -9,7 +9,7 @@ coverage==7.13.4
 cucumber-expressions==19.0.0
 cucumber-tag-expressions==9.1.0
 Django==4.2.28
-djangorestframework==3.16.1
+djangorestframework==3.17.1
 gunicorn==25.3.0
 idna==3.12
 packaging==26.0
